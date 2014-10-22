@@ -37,6 +37,8 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mTitle = mDrawerTitle = getTitle();
+
         ArrayAdapter<String> ad = new ArrayAdapter<String>(getActionBar().getThemedContext(), android.R.layout.simple_list_item_1, listContent);
 
         final DrawerLayout drawer = (DrawerLayout)findViewById(R.id.drawer_layout);
@@ -44,6 +46,7 @@ public class MainActivity extends FragmentActivity {
 
         FragmentTransaction transition = getSupportFragmentManager().beginTransaction();
         transition.replace(R.id.main, Fragment.instantiate(MainActivity.this, fragments[0]));
+        getActionBar().setTitle(listContent[0]);
         transition.commit();
 
         list.setAdapter(ad);
@@ -56,6 +59,7 @@ public class MainActivity extends FragmentActivity {
                         super.onDrawerClosed(drawerView);
                         FragmentTransaction transition = getSupportFragmentManager().beginTransaction();
                         transition.replace(R.id.main, Fragment.instantiate(MainActivity.this, fragments[position]));
+                        getActionBar().setTitle(listContent[position]);
                         transition.commit();
                     }
                 });
@@ -75,7 +79,7 @@ public class MainActivity extends FragmentActivity {
             /** Called when a drawer has settled in a completely closed state. */
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
-                getActionBar().setTitle(mTitle);
+
             }
 
             /** Called when a drawer has settled in a completely open state. */
