@@ -9,6 +9,7 @@ public class Workout {
 
     public String Name;
     public List<Exercise> exercices;
+    public Boolean isPaid;
 
     public enum MuscleGroup{
         ARMS, BACK, CHEST, SHOULDERS, ABS, LEGS;
