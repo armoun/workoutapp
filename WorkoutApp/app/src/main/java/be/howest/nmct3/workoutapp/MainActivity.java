@@ -41,6 +41,11 @@ public class MainActivity extends FragmentActivity {
 
         final DrawerLayout drawer = (DrawerLayout)findViewById(R.id.drawer_layout);
         final ListView list = (ListView) findViewById(R.id.drawer);
+
+        FragmentTransaction transition = getSupportFragmentManager().beginTransaction();
+        transition.replace(R.id.main, Fragment.instantiate(MainActivity.this, fragments[0]));
+        transition.commit();
+
         list.setAdapter(ad);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
