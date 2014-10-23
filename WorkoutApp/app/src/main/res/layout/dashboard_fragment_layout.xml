@@ -1,14 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent" android:layout_height="fill_parent" android:orientation="vertical" android:background="#ffe8e3e4">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Dashboard"
-        android:id="@+id/textView"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        //vlak achter foto en naam
+        <LinearLayout
+            android:layout_weight="0.80"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="#fff5f5f5"
+            android:orientation="vertical"
+            android:layout_marginBottom="15dp">
 
-</RelativeLayout>
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="20dp"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:scaleType="center"
+                android:src="@drawable/ic_launcher"/>
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="40dp"
+                android:text="Voornaam Naam"
+                android:gravity="center"
+                android:layout_margin="5dp" />
+
+        </LinearLayout>
+
+        //today workout
+       <LinearLayout
+           android:layout_weight="1"
+           android:layout_width="fill_parent"
+           android:layout_height="fill_parent"
+           android:orientation="horizontal"
+           android:layout_marginBottom="15dp"
+           android:layout_marginLeft="15dp"
+           android:layout_marginRight="15dp">
+
+           <TextView
+               android:layout_weight="2.5"
+               android:layout_width="fill_parent"
+               android:layout_height="fill_parent"
+               android:text="TODAY"
+               android:gravity="center"
+               android:background="#ffcb3129"
+               android:textColor="#F5F5F5"/>
+
+           <TextView
+               android:layout_weight="1"
+               android:layout_width="fill_parent"
+               android:layout_height="fill_parent"
+               android:text="Workout Name"
+               android:gravity="center"
+               android:background="#F5F5F5"/>
+
+       </LinearLayout>
+
+     //bmi
+    <LinearLayout
+        android:layout_weight="1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="horizontal"
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp">
+
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="65 kg"
+            android:gravity="center"
+            android:background="#F5F5F5"/>
+
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="178 cm"
+            android:gravity="center"
+            android:background="#F5F5F5"/>
+
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="20 BMI"
+            android:gravity="center"
+            android:background="#F5F5F5"/>
+
+    </LinearLayout>
+
+    //grafiek
+    <LinearLayout
+        android:layout_weight="0.85"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp">
+
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="GRAFIEK"
+            android:gravity="center"
+            android:background="#F5F5F5"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>
