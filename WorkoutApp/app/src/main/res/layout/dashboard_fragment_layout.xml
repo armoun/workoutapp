@@ -1,29 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent" android:layout_height="fill_parent" android:orientation="vertical" android:background="#ffe8e3e4">
+    android:layout_width="fill_parent" android:layout_height="fill_parent" android:orientation="vertical" android:background="#ffe9e9e9">
 
         //vlak achter foto en naam
         <LinearLayout
             android:layout_weight="0.80"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:background="#fff5f5f5"
+            android:background="#FFF"
             android:orientation="vertical"
             android:layout_marginBottom="15dp">
 
-            <ImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginTop="20dp"
-                android:layout_centerInParent="true"
-                android:layout_gravity="center"
-                android:scaleType="center"
-                android:src="@drawable/ic_launcher"/>
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_centerHorizontal="true"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"/>
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:layout_marginTop="15dp"
+                    android:id="@+id/profile_image"
+                    android:layout_weight="1.1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:src="@drawable/default_profile"
+                    app:border_width="2dp"
+                    app:border_color="#ffe9e9e9" />
+
+                <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"/>
+
+            </LinearLayout>
+
 
             <TextView
+                android:layout_weight="3"
                 android:layout_width="fill_parent"
-                android:layout_height="40dp"
+                android:layout_height="fill_parent"
                 android:text="Voornaam Naam"
                 android:gravity="center"
                 android:layout_margin="5dp" />
@@ -46,8 +69,8 @@
                android:layout_height="fill_parent"
                android:text="TODAY"
                android:gravity="center"
-               android:background="#ffcb3129"
-               android:textColor="#F5F5F5"/>
+               android:background="@color/headcolor"
+               android:textColor="#FFF"/>
 
            <TextView
                android:layout_weight="1"
@@ -55,7 +78,7 @@
                android:layout_height="fill_parent"
                android:text="Workout Name"
                android:gravity="center"
-               android:background="#F5F5F5"/>
+               android:background="#FFF"/>
 
        </LinearLayout>
 
@@ -75,7 +98,8 @@
             android:layout_height="fill_parent"
             android:text="65 kg"
             android:gravity="center"
-            android:background="#F5F5F5"/>
+            android:background="#FFF"
+            android:layout_marginRight="1dp"/>
 
         <TextView
             android:layout_weight="1"
@@ -83,7 +107,8 @@
             android:layout_height="fill_parent"
             android:text="178 cm"
             android:gravity="center"
-            android:background="#F5F5F5"/>
+            android:background="#FFF"
+            android:layout_marginRight="1dp"/>
 
         <TextView
             android:layout_weight="1"
@@ -91,7 +116,7 @@
             android:layout_height="fill_parent"
             android:text="20 BMI"
             android:gravity="center"
-            android:background="#F5F5F5"/>
+            android:background="#FFF"/>
 
     </LinearLayout>
 
@@ -110,7 +135,7 @@
             android:layout_height="fill_parent"
             android:text="GRAFIEK"
             android:gravity="center"
-            android:background="#F5F5F5"/>
+            android:background="#FFF"/>
 
     </LinearLayout>
 
