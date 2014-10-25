@@ -16,6 +16,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <provider
+            android:authorities="be.howest.nmct3.workoutapp"
+            android:name=".data.Provider"
+            android:enabled="true"
+            android:exported="true"
+            android:syncable="true">
+        </provider>
+
     </application>
 
 </manifest>

@@ -3,6 +3,7 @@ package be.howest.nmct3.workoutapp.data;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * Created by nielslammens on 22/10/14.
@@ -31,7 +32,8 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-
+        createWorkoutsTableV1(sqLiteDatabase);
+        createWorkoutExercisesTableV1(sqLiteDatabase);
     }
 
     @Override
@@ -50,6 +52,9 @@ public class DatabaseHelper extends SQLiteOpenHelper{
                 + Contract.WorkoutColumns.ISPAID    + " INTEGER"
                 + ");";
 
+        Log.d(getClass().getCanonicalName(), "CREATE TABLE VOOR WORKOUTS");
+
+
         db.execSQL(SQL);
     }
 
@@ -60,5 +65,8 @@ public class DatabaseHelper extends SQLiteOpenHelper{
                 + Contract.WorkoutExerciseColumns.EXERCISE_ID   + " INTEGER, "
                 + Contract.WorkoutExerciseColumns.REPS          + " TEXT"
                 + ");";
+        db.execSQL(SQL);
+
+        SQL = "INSERT INTO " + Contract.WorkoutExercises.CONTENT_DIRECTORY;
     }
 }
