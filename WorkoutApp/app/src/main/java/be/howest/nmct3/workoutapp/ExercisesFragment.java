@@ -80,6 +80,11 @@ public class ExercisesFragment extends Fragment {
 
             return row;
         }
+
+        @Override
+        public int getCount() {
+            return MuscleGroupTitles.length;
+        }
     }
 
 
