@@ -28,7 +28,7 @@ import be.howest.nmct3.workoutapp.data.Exercise;
  */
 public class ExercisesFragment extends Fragment {
 
-    public final String[] MuscleGroups = {"ARMS", "BACK", "CHEST", "SHOULDERS", "ABS", "LEGS"};
+    public final String[] MuscleGroups = {"CHEST", "BACK", "ARMS", "SHOULDERS", "ABS", "LEGS"};
     private ListAdapter myListAdapter;
 
 
@@ -58,7 +58,7 @@ public class ExercisesFragment extends Fragment {
 
 
 
-    class MuscleGroupAdapter extends ArrayAdapter<Exercise>
+    class MuscleGroupAdapter extends ArrayAdapter<String>
     {
         private String[] MuscleGroupTitles;
 
@@ -66,6 +66,7 @@ public class ExercisesFragment extends Fragment {
         {
             super(getActivity(), R.layout.exercises_grid_musclegroup_item_layout, R.id.grid_item_text);
             MuscleGroupTitles = MuscleGroups;
+            this.addAll(MuscleGroupTitles);
         }
 
         @Override
