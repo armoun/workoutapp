@@ -8,6 +8,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import java.lang.Override;
 
 
 /**
@@ -16,6 +22,8 @@ import android.view.ViewGroup;
  */
 public class WorkoutsFragment extends Fragment {
 
+    public final String[] Workouts = {"Workout 1", "Workout 2", "Workout 3"};
+    private ListAdapter myWorkoutListAdapter;
 
     public WorkoutsFragment() {
         // Required empty public constructor
@@ -31,7 +39,37 @@ public class WorkoutsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.workouts_fragment_layout, null);
+
+        myWorkoutListAdapter = new WorkoutsAdapter();
+        ListView listView = (ListView) root.findViewById(R.id.workout_list);
+        listView.setAdapter(myWorkoutListAdapter);
+
         return root;
+    }
+
+    class WorkoutsAdapter extends ArrayAdapter<String> {
+
+        private String[] WorkoutTitles;
+
+        public WorkoutsAdapter() {
+            super(getActivity(), R.layout.workouts_list_workout_item_rowlayout, R.id.workout_item_title);
+            WorkoutTitles = Workouts;
+            this.addAll(WorkoutTitles);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent)
+        {
+            View row = super.getView(position, convertView, parent);
+
+            String WorkoutTitle = WorkoutTitles[position];
+
+            TextView txtWorkoutTitle = (TextView) row.findViewById(R.id.workout_item_title);
+            txtWorkoutTitle.setText(WorkoutTitle);
+
+            return row;
+        }
+
     }
 
 
