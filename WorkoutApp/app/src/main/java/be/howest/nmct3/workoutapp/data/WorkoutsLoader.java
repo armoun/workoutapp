@@ -26,14 +26,15 @@ public class WorkoutsLoader extends AsyncTaskLoader<Cursor> {
                 new String[]{
                         Contract.WorkoutColumns._ID,
                         Contract.WorkoutColumns.NAME,
-                        Contract.WorkoutColumns.ISPAID,
-                        "COUNT(*) AS " + Contract.WorkoutColumns._COUNT},
+                        Contract.WorkoutColumns.ISPAID},
                 null,
                 null,
                 null,
                 null,
                 Contract.WorkoutColumns.ISPAID + " ASC"
         );
+
+        //mData = db.rawQuery("SELECT * FROM " + Contract.Workouts.CONTENT_DIRECTORY ,null);
 
         mData.getCount();
 
