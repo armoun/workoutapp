@@ -8,9 +8,11 @@ import java.util.List;
 public class Exercise {
     public Integer Id;
     public String Name;
-    public Integer MuscleGroupId;
+    public String Description;
+    public String MuscleGroup;
     public List<Integer> Reps;
 
+    //                                      0       1       2           3         4       5
     public final String[] MuscleGroups = {"ARMS", "BACK", "CHEST", "SHOULDERS", "ABS", "LEGS"};
     public enum MuscleGroup{
         ARMS, BACK, CHEST, SHOULDERS, ABS, LEGS;
