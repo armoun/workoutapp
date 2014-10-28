@@ -32,20 +32,21 @@ public class Provider extends ContentProvider{
     private static final UriMatcher sUriMatcher;
     static {
         sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-        sUriMatcher.addURI(Contract.AUTHORITY, "workouts", WORKOUTS);
-        sUriMatcher.addURI(Contract.AUTHORITY, "workouts/#", WORKOUT_ID);
-        sUriMatcher.addURI(Contract.AUTHORITY, "workoutexercises", WORKOUTEXERCISES);
-        sUriMatcher.addURI(Contract.AUTHORITY, "workoutexercises/#", WORKOUTEXERCISE_ID);
+        sUriMatcher.addURI(Contract.AUTHORITY, "workouts",              WORKOUTS);
+        sUriMatcher.addURI(Contract.AUTHORITY, "workouts/#",            WORKOUT_ID);
+        sUriMatcher.addURI(Contract.AUTHORITY, "workoutexercises",      WORKOUTEXERCISES);
+        sUriMatcher.addURI(Contract.AUTHORITY, "workoutexercises/#",    WORKOUTEXERCISE_ID);
 
         sWorkoutsProjectionMap = new HashMap<String, String>();
-        sWorkoutsProjectionMap.put(Contract.Workouts._ID, Contract.Workouts._ID);
-        sWorkoutsProjectionMap.put(Contract.Workouts.NAME, Contract.Workouts.NAME);
-        sWorkoutsProjectionMap.put(Contract.Workouts.ISPAID, Contract.Workouts.ISPAID);
+        sWorkoutsProjectionMap.put(Contract.Workouts._ID,       Contract.Workouts._ID);
+        sWorkoutsProjectionMap.put(Contract.Workouts.NAME,      Contract.Workouts.NAME);
+        sWorkoutsProjectionMap.put(Contract.Workouts.ISPAID,    Contract.Workouts.ISPAID);
 
         sWorkoutExercisesProjectionMap = new HashMap<String, String>();
-        sWorkoutExercisesProjectionMap.put(Contract.WorkoutExercises._ID, Contract.WorkoutExercises._ID);
-        sWorkoutExercisesProjectionMap.put(Contract.WorkoutExercises.WORKOUT_ID, Contract.WorkoutExercises.WORKOUT_ID);
-        sWorkoutExercisesProjectionMap.put(Contract.WorkoutExercises.EXERCISE_ID, Contract.WorkoutExercises.EXERCISE_ID);
+        sWorkoutExercisesProjectionMap.put(Contract.WorkoutExercises._ID,           Contract.WorkoutExercises._ID);
+        sWorkoutExercisesProjectionMap.put(Contract.WorkoutExercises.WORKOUT_ID,    Contract.WorkoutExercises.WORKOUT_ID);
+        sWorkoutExercisesProjectionMap.put(Contract.WorkoutExercises.EXERCISE_ID,   Contract.WorkoutExercises.EXERCISE_ID);
+        sWorkoutExercisesProjectionMap.put(Contract.WorkoutExercises.REPS,          Contract.WorkoutExercises.REPS);
     }
 
     public Provider(){
@@ -54,10 +55,9 @@ public class Provider extends ContentProvider{
     @Override
     public boolean onCreate() {
         mOpenHelper = DatabaseHelper.getInstance(getContext());
+        mOpenHelper.getWritableDatabase();
 
-        Log.d(getClass().getCanonicalName(), "GET WRITABLE DATABASE");
-
-        SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+        Log.d(getClass().getCanonicalName(), "GET WRITABLE DATABASE____________________________________________________________");
 
         return true;
     }
@@ -143,7 +143,7 @@ public class Provider extends ContentProvider{
     public Uri insert(Uri uri, ContentValues values) {
         SQLiteDatabase db = mOpenHelper.getWritableDatabase();
 
-        Log.d(getClass().getCanonicalName(), "INSERT VALUES NOW IN PROVIDER");
+        Log.d(getClass().getCanonicalName(), "INSERT VALUES NOW IN PROVIDER__________________________________________________");
 
         long rowId;
         switch (sUriMatcher.match(uri)){
