@@ -16,7 +16,9 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     public static final String DB_NAME = "workoutapp.db";
     public static final int DB_VERSION = 1;
 
-    public DatabaseHelper(Context context){super(context, DB_NAME, null, DB_VERSION);}
+    public DatabaseHelper(Context context){
+        super(context, DB_NAME, null, DB_VERSION);
+    }
 
     public static DatabaseHelper getInstance(Context context) {
         if(INSTANCE == null){
@@ -26,20 +28,22 @@ public class DatabaseHelper extends SQLiteOpenHelper{
                 }
             }
         }
-
         return INSTANCE;
     }
 
     @Override
-    public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        createWorkoutsTableV1(sqLiteDatabase);
-        createWorkoutExercisesTableV1(sqLiteDatabase);
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL("DROP TABLE IF EXISTS " + Contract.Workouts.CONTENT_DIRECTORY);
+        db.execSQL("DROP TABLE IF EXISTS " + Contract.WorkoutExercises.CONTENT_DIRECTORY);
+
+        createWorkoutsTableV1(db);
+        createWorkoutExercisesTableV1(db);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE " + Contract.Workouts.CONTENT_DIRECTORY);
-        db.execSQL("DROP TABLE " + Contract.WorkoutExercises.CONTENT_DIRECTORY);
+        db.execSQL("DROP TABLE IF EXISTS " + Contract.Workouts.CONTENT_DIRECTORY);
+        db.execSQL("DROP TABLE IF EXISTS " + Contract.WorkoutExercises.CONTENT_DIRECTORY);
 
         createWorkoutsTableV1(db);
         createWorkoutExercisesTableV1(db);
@@ -52,7 +56,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
                 + Contract.WorkoutColumns.ISPAID    + " INTEGER"
                 + ");";
 
-        Log.d(getClass().getCanonicalName(), "CREATE TABLE VOOR WORKOUTS");
+        Log.d(getClass().getCanonicalName(), "CREATE TABLE VOOR WORKOUTS__________________________________________________");
 
 
         db.execSQL(SQL);
