@@ -25,9 +25,10 @@ public class Exercises_Musclegroup_Fragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        TextView textView = new TextView(getActivity());
-        textView.setText(R.string.hello_blank_fragment);
-        return textView;
+
+        ViewGroup root = (ViewGroup) inflater.inflate(R.layout.exercises_musclegroup_fragment_layout, null);
+
+        return root;
     }
 
 
