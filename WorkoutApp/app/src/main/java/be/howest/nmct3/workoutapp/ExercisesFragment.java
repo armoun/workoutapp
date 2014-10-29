@@ -5,6 +5,7 @@ package be.howest.nmct3.workoutapp;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +52,27 @@ public class ExercisesFragment extends Fragment {
         myListAdapter = new MuscleGroupAdapter();
         GridView gridView = (GridView) root.findViewById(R.id.gridview_musclegroups);
         gridView.setAdapter(myListAdapter);
+
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id)
+            {
+                //Toast.makeText(getActivity().getBaseContext(), "pic" + (position + 1) +" selected", Toast.LENGTH_SHORT).show();
+
+                Fragment newFragment = Fragment.instantiate(getActivity().getApplicationContext(), "be.howest.nmct3.workoutapp.Exercises_Musclegroup_Fragment");
+                // consider using Java coding conventions (upper first char class names!!!)
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+                // Replace whatever is in the fragment_container view with this fragment,
+                // and add the transaction to the back stack
+                transaction.replace(R.id.main, newFragment);
+                transaction.addToBackStack(null);
+
+                // Commit the transaction
+                transaction.commit();
+            }
+        });
+
 
 
         return root;

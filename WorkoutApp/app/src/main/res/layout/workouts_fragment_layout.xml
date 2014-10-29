@@ -4,18 +4,14 @@
     android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical">
 
     <ListView
-<<<<<<< Updated upstream
         android:id="@+id/workout_list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_gravity="start"
         android:choiceMode="singleChoice"
-        />
-=======
-        android:layout_weight="1"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_weight="1">
+
     </ListView>
->>>>>>> Stashed changes
+
 
 </LinearLayout>
