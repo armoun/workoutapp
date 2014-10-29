@@ -28,7 +28,7 @@ import be.howest.nmct3.workoutapp.data.WorkoutsLoader;
  */
 public class WorkoutsFragment extends Fragment {
 
-    public final String[] Workouts = {"Workout 1", "Workout 2", "Workout 3"};
+    //public final String[] Workouts = {"Workout 1", "Workout 2", "Workout 3"};
     private CursorAdapter myWorkoutCursorAdapter;
 
     public WorkoutsFragment() {

@@ -29,7 +29,7 @@ import be.howest.nmct3.workoutapp.data.Exercise;
  */
 public class ExercisesFragment extends Fragment {
 
-    public final String[] MuscleGroups = {"CHEST", "BACK", "ARMS", "SHOULDERS", "ABS", "LEGS"};
+    private static String[] MuscleGroups = Exercise.MuscleGroups;
     private ListAdapter myListAdapter;
 
 
