@@ -23,6 +23,7 @@ public class MainActivity extends FragmentActivity {
     private ActionBarDrawerToggle mDrawerToggle;
     private ListView mDrawerList;
     private CharSequence mTitle;
+    Menu menu;
 
     ActionBarDrawerToggle icon;
 
@@ -144,9 +145,6 @@ public class MainActivity extends FragmentActivity {
         }
 
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -155,9 +153,9 @@ public class MainActivity extends FragmentActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         // If the nav drawer is open, hide action items related to the content view
         boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
-        menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
+        //menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
+        //menu.findItem(R.id.action_add).setVisible(!drawerOpen);
         return super.onPrepareOptionsMenu(menu);
     }
-
 
 }
