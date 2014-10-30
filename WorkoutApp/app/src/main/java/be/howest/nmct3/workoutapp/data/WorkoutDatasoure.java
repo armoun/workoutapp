@@ -28,13 +28,18 @@ public class WorkoutDatasoure {
 
         Integer workout_id = c.getInt(c.getColumnIndex(c.getColumnName(0)));
 
+        if (exercises != null){
+
+
         for (int i = 0; i < exercises.size(); i++) {
             ContentValues values2 = new ContentValues();
             values2.put(Contract.WorkoutExercises.WORKOUT_ID, workout_id);
             values2.put(Contract.WorkoutExercises.EXERCISE_ID, exercises.get(i).Id);
             values2.put(Contract.WorkoutExercises.REPS, repsToString(exercises.get(i).Reps));
+            Uri uri2 = context.getContentResolver().insert(Contract.WorkoutExercises.CONTENT_URI, values2);
+            Log.d("be.howest.nmct3.workoutapp", uri.toString() + "________________________________________");
         }
-
+        }
     }
 
     public String repsToString(List<Integer> repList){
@@ -48,5 +53,6 @@ public class WorkoutDatasoure {
 
         return reps;
     }
+
 
 }
