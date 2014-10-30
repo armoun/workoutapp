@@ -58,13 +58,25 @@ public class ExercisesLoader extends JsonLoader {
             reader.endObject();
             Log.d("", "endObject() " + id + ";" + name + ";" + musclegroup + ";" + target + ";" + description + " __________________________________________________");
 
-            MatrixCursor.RowBuilder row = cursor.newRow();
-            row.add(id);
-            row.add(id);
-            row.add(name);
-            row.add(musclegroup);
-            row.add(target);
-            row.add(description);
+            if (mMuscleGroup != ""){
+                if (musclegroup.equalsIgnoreCase(musclegroup)){
+                    MatrixCursor.RowBuilder row = cursor.newRow();
+                    row.add(id);
+                    row.add(id);
+                    row.add(name);
+                    row.add(musclegroup);
+                    row.add(target);
+                    row.add(description);
+                }
+            }else{
+                MatrixCursor.RowBuilder row = cursor.newRow();
+                row.add(id);
+                row.add(id);
+                row.add(name);
+                row.add(musclegroup);
+                row.add(target);
+                row.add(description);
+            }
 
         }
 
