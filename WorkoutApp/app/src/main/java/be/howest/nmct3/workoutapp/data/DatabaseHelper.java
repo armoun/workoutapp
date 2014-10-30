@@ -1,5 +1,6 @@
 package be.howest.nmct3.workoutapp.data;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -38,6 +39,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
         createWorkoutsTableV1(db);
         createWorkoutExercisesTableV1(db);
+        createDefaultRecords(db);
     }
 
     @Override
@@ -47,6 +49,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
         createWorkoutsTableV1(db);
         createWorkoutExercisesTableV1(db);
+        createDefaultRecords(db);
     }
 
     private void createWorkoutsTableV1(SQLiteDatabase db){
@@ -58,8 +61,8 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
         Log.d(getClass().getCanonicalName(), "CREATE TABLE VOOR WORKOUTS__________________________________________________");
 
-
         db.execSQL(SQL);
+
     }
 
     private void createWorkoutExercisesTableV1(SQLiteDatabase db){
@@ -71,6 +74,48 @@ public class DatabaseHelper extends SQLiteOpenHelper{
                 + ");";
         db.execSQL(SQL);
 
-        SQL = "INSERT INTO " + Contract.WorkoutExercises.CONTENT_DIRECTORY;
+    }
+
+    private void createDefaultRecords(SQLiteDatabase db){
+
+        // Sample workout 1: chest, bench press, free
+
+        ContentValues v1 = new ContentValues();
+        v1.put(Contract.Workouts.NAME, "Chest day");
+        v1.put(Contract.Workouts.ISPAID, 0);
+        Long id = db.insert(Contract.Workouts.CONTENT_DIRECTORY, "", v1);
+
+        ContentValues v1e = new ContentValues();
+        v1e.put(Contract.WorkoutExercises.WORKOUT_ID, id);
+        v1e.put(Contract.WorkoutExercises.EXERCISE_ID, 2);
+        v1e.put(Contract.WorkoutExercises.REPS, "12,10,8");
+        id = db.insert(Contract.WorkoutExercises.CONTENT_DIRECTORY, "", v1e);
+
+        // Sample workout 2: legs, squat, free
+
+        ContentValues v2 = new ContentValues();
+        v2.put(Contract.Workouts.NAME, "Leg day");
+        v2.put(Contract.Workouts.ISPAID, 0);
+        id = db.insert(Contract.Workouts.CONTENT_DIRECTORY, "", v2);
+
+        ContentValues v2e = new ContentValues();
+        v2e.put(Contract.WorkoutExercises.WORKOUT_ID, id);
+        v2e.put(Contract.WorkoutExercises.EXERCISE_ID, 1);
+        v2e.put(Contract.WorkoutExercises.REPS, "12,10,8");
+        id = db.insert(Contract.WorkoutExercises.CONTENT_DIRECTORY, "", v2e);
+
+        // Sample workout 3: arms, bicep curl, paid
+
+        ContentValues v3 = new ContentValues();
+        v3.put(Contract.Workouts.NAME, "Arm day");
+        v3.put(Contract.Workouts.ISPAID, 1);
+        id = db.insert(Contract.Workouts.CONTENT_DIRECTORY, "", v3);
+
+        ContentValues v3e = new ContentValues();
+        v3e.put(Contract.WorkoutExercises.WORKOUT_ID, id);
+        v3e.put(Contract.WorkoutExercises.EXERCISE_ID, 5);
+        v3e.put(Contract.WorkoutExercises.REPS, "12,10,8");
+        id = db.insert(Contract.WorkoutExercises.CONTENT_DIRECTORY, "", v3e);
+
     }
 }
