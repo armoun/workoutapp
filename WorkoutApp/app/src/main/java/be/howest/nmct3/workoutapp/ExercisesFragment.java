@@ -29,7 +29,6 @@ import be.howest.nmct3.workoutapp.data.Exercise;
  */
 public class ExercisesFragment extends Fragment {
 
-    private static String[] MuscleGroups = Exercise.MuscleGroups;
     private ListAdapter myListAdapter;
 
 
@@ -57,7 +56,8 @@ public class ExercisesFragment extends Fragment {
         {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id)
             {
-                //Toast.makeText(getActivity().getBaseContext(), "pic" + (position + 1) +" selected", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity().getBaseContext(), "Musclegroup " + MainActivity.MuscleGroups[position] + " selected", Toast.LENGTH_SHORT).show();
+                MainActivity.EXTRA_SELECTED_MUSCLEGROUP = MainActivity.MuscleGroups[position];
 
                 Fragment newFragment = Fragment.instantiate(getActivity().getApplicationContext(), "be.howest.nmct3.workoutapp.Exercises_Musclegroup_Fragment");
                 // consider using Java coding conventions (upper first char class names!!!)
@@ -87,7 +87,7 @@ public class ExercisesFragment extends Fragment {
         public MuscleGroupAdapter()
         {
             super(getActivity(), R.layout.exercises_grid_musclegroup_item_layout, R.id.grid_item_text);
-            MuscleGroupTitles = MuscleGroups;
+            MuscleGroupTitles = MainActivity.MuscleGroups;
             this.addAll(MuscleGroupTitles);
         }
 

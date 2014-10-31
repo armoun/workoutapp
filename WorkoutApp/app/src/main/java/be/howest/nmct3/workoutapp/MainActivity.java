@@ -16,8 +16,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import be.howest.nmct3.workoutapp.data.Exercise;
+
 
 public class MainActivity extends FragmentActivity {
+
+    public static String EXTRA_SELECTED_MUSCLEGROUP = "";
+    public static String[] MuscleGroups = Exercise.MuscleGroups;
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
