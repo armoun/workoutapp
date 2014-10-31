@@ -47,7 +47,7 @@ public class WorkoutsFragment extends Fragment {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.workouts_fragment_layout, null);
 
         String[] columns = new String[] { "name" };
-        int[] viewIds = new int[] { android.R.id.text1 };
+        int[] viewIds = new int[] { R.id.workout_item_title };
 
         WorkoutsLoader wl = new WorkoutsLoader(getActivity());
         Cursor cursor = wl.loadInBackground();
