@@ -31,7 +31,7 @@ public class Exercises_Musclegroup_Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        ViewGroup root = (ViewGroup) inflater.inflate(R.layout.exercises_musclegroup_fragment_layout, null);
+        ViewGroup root = (ViewGroup) inflater.inflate(R.layout.exercises_musclegroup_list_fragment_layout, null);
 
 
 
