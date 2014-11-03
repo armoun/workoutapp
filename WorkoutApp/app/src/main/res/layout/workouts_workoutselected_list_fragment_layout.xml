@@ -4,12 +4,14 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/list_musclegroup_item_text"
+    <ListView
+        android:id="@+id/workoutselected_list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:padding="10dp"
-        android:text="exercise name">
-    </TextView>
+        android:layout_gravity="start"
+        android:choiceMode="singleChoice"
+        android:layout_weight="1">
+
+    </ListView>
 
 </LinearLayout>
