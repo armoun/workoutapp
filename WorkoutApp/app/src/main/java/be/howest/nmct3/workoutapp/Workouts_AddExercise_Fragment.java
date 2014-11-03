@@ -15,23 +15,22 @@ import android.widget.TextView;
  * A simple {@link Fragment} subclass.
  *
  */
-public class Workouts_SelectedWorkoutList_Fragment extends Fragment {
+public class Workouts_AddExercise_Fragment extends Fragment {
 
 
-    public Workouts_SelectedWorkoutList_Fragment() {
+    public Workouts_AddExercise_Fragment() {
         // Required empty public constructor
     }
 
     public static android.support.v4.app.Fragment newInstance(Context context) {
-        Workouts_SelectedWorkoutList_Fragment frag = new Workouts_SelectedWorkoutList_Fragment();
+        Workouts_AddExercise_Fragment frag = new Workouts_AddExercise_Fragment();
         return frag;
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        ViewGroup root = (ViewGroup) inflater.inflate(R.layout.workouts_addexercise_list_layout, null);
+        ViewGroup root = (ViewGroup) inflater.inflate(R.layout.workouts_workoutselected_list_fragment_layout, null);
 
 
 
