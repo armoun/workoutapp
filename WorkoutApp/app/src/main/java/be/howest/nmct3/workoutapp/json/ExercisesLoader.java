@@ -18,10 +18,12 @@ import be.howest.nmct3.workoutapp.R;
 public class ExercisesLoader extends JsonLoader {
 
     private final String mMuscleGroup;
+    private final int[] mWorkoutExercises;
 
-    public ExercisesLoader(Context context, String muscleGroup) {
+    public ExercisesLoader(Context context, String muscleGroup, int[] workoutExercises) {
         super(context, "exercises", new String[]{BaseColumns._ID, "id", "name", "musclegroup", "target", "description"}, R.raw.exercises);
         this.mMuscleGroup = muscleGroup;
+        this.mWorkoutExercises = workoutExercises;
     }
 
     @Override
@@ -58,8 +60,8 @@ public class ExercisesLoader extends JsonLoader {
             reader.endObject();
             Log.d("", "endObject() " + id + ";" + name + ";" + musclegroup + ";" + target + ";" + description + " __________________________________________________");
 
-            if (mMuscleGroup != ""){
-                if (musclegroup.equalsIgnoreCase(musclegroup)){
+            if (mMuscleGroup != "") {
+                if (musclegroup.equalsIgnoreCase(musclegroup)) {
                     MatrixCursor.RowBuilder row = cursor.newRow();
                     row.add(id);
                     row.add(id);
@@ -67,6 +69,19 @@ public class ExercisesLoader extends JsonLoader {
                     row.add(musclegroup);
                     row.add(target);
                     row.add(description);
+                }
+            }else if (mWorkoutExercises != null){
+                int length = mWorkoutExercises.length;
+                for(int i = 0; i < length; i++){
+                    if(mWorkoutExercises[i] == id){
+                        MatrixCursor.RowBuilder row = cursor.newRow();
+                        row.add(id);
+                        row.add(id);
+                        row.add(name);
+                        row.add(musclegroup);
+                        row.add(target);
+                        row.add(description);
+                    }
                 }
             }else{
                 MatrixCursor.RowBuilder row = cursor.newRow();
