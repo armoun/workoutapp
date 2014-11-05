@@ -7,15 +7,18 @@ import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CursorAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.lang.Override;
 
@@ -50,11 +53,35 @@ public class WorkoutsFragment extends Fragment {
         int[] viewIds = new int[] { R.id.workout_item_title };
 
         WorkoutsLoader wl = new WorkoutsLoader(getActivity());
-        Cursor cursor = wl.loadInBackground();
+        final Cursor cursor = wl.loadInBackground();
 
-        ListView listView = (ListView) root.findViewById(R.id.workout_list);
+        final ListView listView = (ListView) root.findViewById(R.id.workout_list);
         myWorkoutCursorAdapter = new SimpleCursorAdapter(getActivity(),R.layout.workouts_list_workout_item_rowlayout, cursor, columns, viewIds, 0);
         listView.setAdapter(myWorkoutCursorAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position,
+                                    long id) {
+                cursor.moveToPosition(position);
+                String workoutId = cursor.getString(cursor.getColumnIndex("_id"));
+                Toast.makeText(getActivity().getBaseContext(), "" + workoutId, Toast.LENGTH_SHORT).show();
+
+
+                Fragment newFragment = Fragment.instantiate(getActivity().getApplicationContext(), "be.howest.nmct3.workoutapp.Workouts_SelectedWorkoutList_Fragment");
+                // consider using Java coding conventions (upper first char class names!!!)
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+                // Replace whatever is in the fragment_container view with this fragment,
+                // and add the transaction to the back stack
+                transaction.replace(R.id.main, newFragment);
+                transaction.addToBackStack(null);
+
+                // Commit the transaction
+                transaction.commit();
+
+            }
+        });
 
         return root;
     }
