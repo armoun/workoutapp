@@ -71,7 +71,7 @@ public class MainActivity extends FragmentActivity {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.main, frag).commit();
         getActionBar().setTitle(listTitles[0]);
-        
+
         //remove ic_launcher icon from actionbar
         getActionBar().setIcon(new ColorDrawable(getResources().getColor(android.R.color.transparent)));
 
