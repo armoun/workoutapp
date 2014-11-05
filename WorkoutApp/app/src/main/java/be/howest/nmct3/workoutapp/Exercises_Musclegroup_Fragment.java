@@ -7,15 +7,19 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.Toast;
 
+import be.howest.nmct3.workoutapp.data.Contract;
 import be.howest.nmct3.workoutapp.json.ExercisesLoader;
 
 
@@ -28,6 +32,8 @@ public class Exercises_Musclegroup_Fragment extends Fragment implements LoaderMa
     String mMuscleGroup = "";
     private CursorAdapter mAdapter;
     private ListView list;
+
+    private Cursor mCursor;
 
     public Exercises_Musclegroup_Fragment() {
         // Required empty public constructor
@@ -57,6 +63,31 @@ public class Exercises_Musclegroup_Fragment extends Fragment implements LoaderMa
 
         list.setAdapter(mAdapter);
 
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position,
+                                    long id) {
+                mCursor.moveToPosition(position);
+                String exerciseId = mCursor.getString(mCursor.getColumnIndex("id"));
+                Toast.makeText(getActivity().getBaseContext(), "" + exerciseId, Toast.LENGTH_SHORT).show();
+
+                MainActivity.WORKOUT_ID = mCursor.getInt(mCursor.getColumnIndex(Contract.WorkoutColumns._ID));
+
+                Fragment newFragment = Fragment.instantiate(getActivity().getApplicationContext(), "be.howest.nmct3.workoutapp.Exercises_Detail_Fragment");
+                // consider using Java coding conventions (upper first char class names!!!)
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+                // Replace whatever is in the fragment_container view with this fragment,
+                // and add the transaction to the back stack
+                transaction.replace(R.id.main, newFragment);
+                transaction.addToBackStack(null);
+
+                // Commit the transaction
+                transaction.commit();
+
+            }
+        });
+
         return root;
     }
 
@@ -80,6 +111,7 @@ public class Exercises_Musclegroup_Fragment extends Fragment implements LoaderMa
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
         mAdapter.swapCursor(cursor);
+        mCursor = cursor;
     }
 
     @Override

@@ -30,7 +30,7 @@ public class Exercises_Detail_Fragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        ViewGroup root = (ViewGroup) inflater.inflate(R.layout.exercises_musclegroup_list_fragment_layout, null);
+        ViewGroup root = (ViewGroup) inflater.inflate(R.layout.exercises_detail_fragment_layout, null);
 
 
 
