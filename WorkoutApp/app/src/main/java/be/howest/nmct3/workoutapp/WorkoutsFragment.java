@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import java.lang.Override;
 
+import be.howest.nmct3.workoutapp.data.Contract;
 import be.howest.nmct3.workoutapp.data.WorkoutsLoader;
 
 
@@ -67,6 +68,7 @@ public class WorkoutsFragment extends Fragment {
                 String workoutId = cursor.getString(cursor.getColumnIndex("_id"));
                 Toast.makeText(getActivity().getBaseContext(), "" + workoutId, Toast.LENGTH_SHORT).show();
 
+                MainActivity.WORKOUT_ID = cursor.getInt(cursor.getColumnIndex(Contract.WorkoutColumns._ID));
 
                 Fragment newFragment = Fragment.instantiate(getActivity().getApplicationContext(), "be.howest.nmct3.workoutapp.Workouts_SelectedWorkoutList_Fragment");
                 // consider using Java coding conventions (upper first char class names!!!)
