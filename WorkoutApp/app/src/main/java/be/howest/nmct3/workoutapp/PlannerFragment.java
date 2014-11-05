@@ -16,6 +16,9 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.Calendar;
 
 import be.howest.nmct3.workoutapp.data.WorkoutsLoader;
 
@@ -53,6 +56,18 @@ public class PlannerFragment extends Fragment {
         final ListView listView = (ListView) root.findViewById(R.id.plannerList);
         myPlannerAdapter = new SimpleCursorAdapter(getActivity(),R.layout.planner_list_row_layout, cursor, columns, viewIds, 0);
         listView.setAdapter(myPlannerAdapter);
+
+        CalendarView planner = (CalendarView) root.findViewById(R.id.planner);
+        final TextView plannerCurrentDate = (TextView) root.findViewById(R.id.plannerCurrentDate);
+
+        plannerCurrentDate.setText("Workouts for today");
+
+        planner.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(CalendarView calendarView, int year, int month, int dayOfMonth) {
+                plannerCurrentDate.setText("Workouts for " + dayOfMonth + "/" + month + "/" + year);
+            }
+        });
 
         return root;
     }

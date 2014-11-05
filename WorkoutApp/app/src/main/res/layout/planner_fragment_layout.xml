@@ -15,7 +15,8 @@
 
     <TextView
         android:layout_weight="2"
-        android:text="Workouts for 12 October"
+        android:text=""
+        android:id="@+id/plannerCurrentDate"
         android:textColor="#FFF"
         android:gravity="center"
         android:layout_width="fill_parent"
