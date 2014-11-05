@@ -43,25 +43,27 @@ public class ExercisesLoader extends JsonLoader {
 
             reader.nextName();
             id = reader.nextInt();
-            Log.d("", id + " id __________________________________________________");
+            //Log.d("", id + " id __________________________________________________");
             reader.nextName();
             name = reader.nextString();
-            Log.d("", name + " name __________________________________________________");
+            //Log.d("", name + " name __________________________________________________");
             reader.nextName();
             musclegroup = reader.nextString();
-            Log.d("", musclegroup + " musclegroup __________________________________________________");
+            //Log.d("", musclegroup + " musclegroup __________________________________________________");
             reader.nextName();
             target = reader.nextString();
-            Log.d("", target + " target __________________________________________________");
+            //Log.d("", target + " target __________________________________________________");
             reader.nextName();
             description = reader.nextString();
-            Log.d("", description + " description __________________________________________________");
+            //Log.d("", description + " description __________________________________________________");
 
             reader.endObject();
-            Log.d("", "endObject() " + id + ";" + name + ";" + musclegroup + ";" + target + ";" + description + " __________________________________________________");
+
 
             if (mMuscleGroup != "") {
-                if (musclegroup.equalsIgnoreCase(musclegroup)) {
+                Log.d("", mMuscleGroup + "__________________________________________________");
+                if (mMuscleGroup.equalsIgnoreCase(musclegroup)) {
+                    Log.d("", mMuscleGroup + " vgl met " + musclegroup + " is " + musclegroup.equalsIgnoreCase(musclegroup) + "__________________________________________________");
                     MatrixCursor.RowBuilder row = cursor.newRow();
                     row.add(id);
                     row.add(id);
@@ -69,6 +71,9 @@ public class ExercisesLoader extends JsonLoader {
                     row.add(musclegroup);
                     row.add(target);
                     row.add(description);
+
+                    Log.d("", "endObject() " + id + ";" + name + ";" + musclegroup + ";" + target + ";" + description + " __________________________________________________");
+
                 }
             }else if (mWorkoutExercises != null){
                 int length = mWorkoutExercises.length;
@@ -81,6 +86,7 @@ public class ExercisesLoader extends JsonLoader {
                         row.add(musclegroup);
                         row.add(target);
                         row.add(description);
+                        Log.d("", "endObject() " + id + ";" + name + ";" + musclegroup + ";" + target + ";" + description + " __________________________________________________");
                     }
                 }
             }else{
@@ -91,6 +97,7 @@ public class ExercisesLoader extends JsonLoader {
                 row.add(musclegroup);
                 row.add(target);
                 row.add(description);
+                Log.d("", "endObject() " + id + ";" + name + ";" + musclegroup + ";" + target + ";" + description + " __________________________________________________");
             }
 
         }
