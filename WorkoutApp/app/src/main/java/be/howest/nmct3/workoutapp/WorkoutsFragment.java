@@ -60,6 +60,14 @@ public class WorkoutsFragment extends Fragment {
         myWorkoutCursorAdapter = new SimpleCursorAdapter(getActivity(),R.layout.workouts_list_workout_item_rowlayout, cursor, columns, viewIds, 0);
         listView.setAdapter(myWorkoutCursorAdapter);
 
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> FETCH_HEAD
+>>>>>>> Stashed changes
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
@@ -112,7 +120,10 @@ public class WorkoutsFragment extends Fragment {
         }
 
     }*/
+>>>>>>> FETCH_HEAD
 
 
+        return root;
+    }
 
 }

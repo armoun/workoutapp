@@ -11,7 +11,9 @@ public class Workout {
     public List<Exercise> exercices;
     public Boolean isPaid;
 
-    public enum MuscleGroup{
+    /*public enum MuscleGroup{
         ARMS, BACK, CHEST, SHOULDERS, ABS, LEGS;
-    }
+    }*/
+
+
 }

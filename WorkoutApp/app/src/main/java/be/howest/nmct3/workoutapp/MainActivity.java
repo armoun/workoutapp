@@ -1,6 +1,7 @@
 package be.howest.nmct3.workoutapp;
 
 
+import android.graphics.Color;
 import android.support.v4.app.FragmentManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -12,9 +13,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import be.howest.nmct3.workoutapp.data.Exercise;
 
@@ -41,6 +45,8 @@ public class MainActivity extends FragmentActivity {
             "be.howest.nmct3.workoutapp.PlannerFragment",
             "be.howest.nmct3.workoutapp.SettingsFragment"};
 
+    private CustomDrawerlayoutAdapter customDrawerLayoutAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,10 +56,14 @@ public class MainActivity extends FragmentActivity {
         mDrawerList = (ListView) findViewById(R.id.drawer);
 
         //set adapter
-        mDrawerList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listTitles));
+        customDrawerLayoutAdapter = new CustomDrawerlayoutAdapter();
+        mDrawerList.setAdapter(customDrawerLayoutAdapter);
 
         //set list click listener
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+
+        //set background color
+        mDrawerList.setBackgroundColor(Color.parseColor("#FFFFFF"));
 
         // Create and set the start fragment (Dashboard)
         Fragment frag = Fragment.instantiate(MainActivity.this, fragments[0]);
@@ -162,6 +172,29 @@ public class MainActivity extends FragmentActivity {
         //menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
         //menu.findItem(R.id.action_add).setVisible(!drawerOpen);
         return super.onPrepareOptionsMenu(menu);
+    }
+
+    class CustomDrawerlayoutAdapter extends ArrayAdapter<String> {
+
+        public CustomDrawerlayoutAdapter() {
+            super(getBaseContext(), R.layout.navdrawer_row_layout, R.id.navdrawer_title);
+            this.addAll(listTitles);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View row = super.getView(position, convertView, parent);
+
+            String NavDrawerTitle = listTitles[position];
+
+            TextView txtNavDrawerTitle = (TextView) row.findViewById(R.id.navdrawer_title);
+            txtNavDrawerTitle.setText(NavDrawerTitle);
+
+            ImageView imgNavDrawerIcon = (ImageView) row.findViewById(R.id.navdrawer_icon);
+            imgNavDrawerIcon.setImageResource(getResources().getIdentifier(listTitles[position].toLowerCase(),"drawable",getPackageName()));
+
+            return row;
+        }
     }
 
 }
