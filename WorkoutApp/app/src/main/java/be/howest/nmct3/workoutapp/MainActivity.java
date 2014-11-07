@@ -20,6 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import be.howest.nmct3.workoutapp.data.Exercise;
 
@@ -35,6 +36,8 @@ public class MainActivity extends FragmentActivity {
     private ListView mDrawerList;
     private CharSequence mTitle;
     Menu menu;
+
+    public Fragment activeFragment;
 
     ActionBarDrawerToggle icon;
 
@@ -71,6 +74,8 @@ public class MainActivity extends FragmentActivity {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.main, frag).commit();
         getActionBar().setTitle(listTitles[0]);
+
+        activeFragment = frag;
 
         //remove ic_launcher icon from actionbar
         getActionBar().setIcon(new ColorDrawable(getResources().getColor(android.R.color.transparent)));
@@ -119,6 +124,8 @@ public class MainActivity extends FragmentActivity {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.main, frag).commit();
 
+        activeFragment = frag;
+        //Toast.makeText(getBaseContext(), frag.getClass().getSimpleName(),Toast.LENGTH_SHORT).show();
 
         // Highlight the selected item, update the title, and close the drawer
         mDrawerList.setItemChecked(position, true);
@@ -150,8 +157,35 @@ public class MainActivity extends FragmentActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.my, menu);
-        return true;
+        for(int i=0;i<fragments.length;i++)
+        {
+            if(fragments[i].equals(activeFragment.getClass().getName()))
+            {
+                switch (i)
+                {
+                    case 0:
+                        getMenuInflater().inflate(R.menu.my, menu);
+                        break;
+                    case 1:
+                        getMenuInflater().inflate(R.menu.exercises, menu);
+                        break;
+                    case 2:
+                        getMenuInflater().inflate(R.menu.workout, menu);
+                        break;
+                    case 3:
+                        getMenuInflater().inflate(R.menu.planner, menu);
+                        break;
+                    case 4:
+                        getMenuInflater().inflate(R.menu.settings, menu);
+                        break;
+                    default:
+                        getMenuInflater().inflate(R.menu.my, menu);
+                        break;
+                }
+            }
+        }
+
+        return super.onCreateOptionsMenu(menu);
     }
 
 
