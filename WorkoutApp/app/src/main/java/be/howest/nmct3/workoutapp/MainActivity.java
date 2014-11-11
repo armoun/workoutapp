@@ -1,6 +1,7 @@
 package be.howest.nmct3.workoutapp;
 
 
+import android.app.DialogFragment;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.FragmentManager;
@@ -11,12 +12,15 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -48,6 +52,8 @@ public class MainActivity extends FragmentActivity {
             "be.howest.nmct3.workoutapp.WorkoutsFragment",
             "be.howest.nmct3.workoutapp.PlannerFragment",
             "be.howest.nmct3.workoutapp.SettingsFragment"};
+    final String[] actionFragments ={
+            "be.howest.nmct3.workoutapp.AddNewWorkoutFragment"};
 
     private CustomDrawerlayoutAdapter customDrawerLayoutAdapter;
 
@@ -199,7 +205,31 @@ public class MainActivity extends FragmentActivity {
         }
 
         int id = item.getItemId();
-        return super.onOptionsItemSelected(item);
+        OpenNewWorkoutFragment();
+
+        switch(id) {
+            case R.menu.my:
+
+                return true;
+            case R.menu.workout:
+                return true;
+            case R.menu.planner:
+
+                return true;
+            case R.menu.settings:
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void OpenNewWorkoutFragment() {
+        // Create and set the start fragment (Dashboard)
+        Fragment frag = Fragment.instantiate(MainActivity.this, actionFragments[0]);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.main, frag).commit();
+        getActionBar().setTitle("Add new workout");
     }
 
     //hides the action menu icons when drawer is open
@@ -234,5 +264,4 @@ public class MainActivity extends FragmentActivity {
             return row;
         }
     }
-
 }
