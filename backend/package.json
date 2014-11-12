@@ -1,0 +1,24 @@
+{
+  "name": "workoutapp",
+  "version": "1.0.0",
+  "description": "android app backend",
+  "main": "index.js",
+  "scripts": {
+    "test": "var test = 5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "workoutapp"
+  },
+  "keywords": [
+    "app",
+    "android",
+    "workout",
+    "gym"
+  ],
+  "author": "viktor tim niels",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.10.2"
+  }
+}
