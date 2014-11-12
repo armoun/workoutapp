@@ -1,43 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/add_workout"
-    android:layout_width="fill_parent" android:layout_height="fill_parent"
-    android:layout_gravity="center" android:orientation="vertical"
-    android:background="#ffe9e9e9" android:padding="15dp">
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-
-    <LinearLayout
-        android:layout_width="fill_parent" android:layout_height="fill_parent"
-        android:layout_gravity="center" android:orientation="vertical" android:layout_marginTop="0dp"
-        android:layout_weight="1">
-        <TextView
-            android:id="@+id/lbl_exercises_new_workout" android:text="Exercises for this workout"
-            android:layout_width="fill_parent" android:layout_height="wrap_content"
-            android:padding="15dp" android:textAppearance="?android:attr/textAppearanceLarge"
-            android:gravity="center"
-            android:background="#ff5d5b5b"
-            android:textColor="#fff"/>
-
-        <ListView
-            android:id="@+id/lst_exercises_new_workout"
-            android:layout_width="fill_parent"  android:layout_height="fill_parent"
-            android:background="#FFF" android:padding="5dp"
-            android:choiceMode="multipleChoice" />
-
-    </LinearLayout>
-    <LinearLayout
+    <ListView
+        android:id="@+id/addexercise_list"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center" android:orientation="vertical" android:layout_marginTop="20dp">
+        android:layout_height="fill_parent"
+        android:layout_gravity="start"
+        android:choiceMode="singleChoice"
+        android:layout_weight="1">
+    </ListView>
 
-        <Button
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:text="SAVE" android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="#FFF"
-            android:gravity="center"
-            android:padding="15dp"
-            android:background="@color/headcolor"/>
-    </LinearLayout>
 </LinearLayout>

@@ -3,7 +3,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="0dp">
+    android:padding="20dp">
 
     <TextView
         android:id="@+id/workoutselected_item_title"
@@ -11,8 +11,7 @@
         android:layout_height="wrap_content"
         android:text="Exercise Title"
         android:background="#FFF"
-        android:textSize="25dp"
-        android:padding="10dp">
+        android:textSize="25dp">
     </TextView>
 
     <TextView
@@ -20,10 +19,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="10, 10, 10"
-        android:background="#FFF"
-        android:paddingLeft="10dp"
-        android:paddingTop="0dp"
-        android:paddingBottom="10dp">
+        android:background="#FFF">
     </TextView>
 
 </LinearLayout>
