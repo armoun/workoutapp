@@ -214,9 +214,8 @@ public class MainActivity extends FragmentActivity {
         int id = item.getItemId();
         Log.d("", "id: " + id);
 
-        if(id == 2131427360) {
+
             OpenNewWorkoutFragment();
-        }
 
         return super.onOptionsItemSelected(item);
     }
