@@ -8,15 +8,18 @@
 
     <TextView
         android:id="@+id/new_workout_list_exercises_item_text"
-        android:layout_width="250dp"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:layout_weight="1"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="exercise name">
     </TextView>
 
     <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="9" />
 
 </LinearLayout>

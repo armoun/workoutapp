@@ -39,7 +39,6 @@ public class MainActivity extends FragmentActivity {
     private ActionBarDrawerToggle mDrawerToggle;
     private ListView mDrawerList;
     private CharSequence mTitle;
-    Menu menu;
 
     public Fragment activeFragment;
 
@@ -51,8 +50,7 @@ public class MainActivity extends FragmentActivity {
             "be.howest.nmct3.workoutapp.ExercisesFragment",
             "be.howest.nmct3.workoutapp.WorkoutsFragment",
             "be.howest.nmct3.workoutapp.PlannerFragment",
-            "be.howest.nmct3.workoutapp.SettingsFragment"};
-    final String[] actionFragments ={
+            "be.howest.nmct3.workoutapp.SettingsFragment",
             "be.howest.nmct3.workoutapp.AddNewWorkoutFragment"};
 
     private CustomDrawerlayoutAdapter customDrawerLayoutAdapter;
@@ -169,20 +167,29 @@ public class MainActivity extends FragmentActivity {
             {
                 switch (i)
                 {
+                    //Dashboard
                     case 0:
                         getMenuInflater().inflate(R.menu.my, menu);
                         break;
+                    //Exercises
                     case 1:
                         getMenuInflater().inflate(R.menu.exercises, menu);
                         break;
+                    //Workouts
                     case 2:
                         getMenuInflater().inflate(R.menu.workout, menu);
                         break;
+                    //Planner
                     case 3:
                         getMenuInflater().inflate(R.menu.planner, menu);
                         break;
+                    //Settings
                     case 4:
                         getMenuInflater().inflate(R.menu.settings, menu);
+                        break;
+                    //Add New Workout
+                    case 5:
+                        getMenuInflater().inflate(R.menu.my, menu);
                         break;
                     default:
                         getMenuInflater().inflate(R.menu.my, menu);
@@ -207,27 +214,15 @@ public class MainActivity extends FragmentActivity {
         int id = item.getItemId();
         OpenNewWorkoutFragment();
 
-        switch(id) {
-            case R.menu.my:
-
-                return true;
-            case R.menu.workout:
-                return true;
-            case R.menu.planner:
-
-                return true;
-            case R.menu.settings:
-
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void OpenNewWorkoutFragment() {
-        // Create and set the start fragment (Dashboard)
-        Fragment frag = Fragment.instantiate(MainActivity.this, actionFragments[0]);
+        // Create and set the start fragment
+        Fragment frag = Fragment.instantiate(MainActivity.this, fragments[5]);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        activeFragment = frag;
+        Log.d("","" + activeFragment.getClass().getName());
         transaction.replace(R.id.main, frag).commit();
         getActionBar().setTitle("Add new workout");
     }
