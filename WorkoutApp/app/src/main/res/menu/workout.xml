@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
         <item android:id="@+id/action_add"
-            android:icon="@drawable/add_icon"
+            android:icon="@drawable/ic_action_add"
             android:title="Add new workout"
-            android:showAsAction="ifRoom" />
+            android:showAsAction="ifRoom|collapseActionView" />
 </menu>
