@@ -52,6 +52,8 @@ $app->get(
 
 		?>
 
+		<h1>Table output</h1>
+
 		<table>
 
 		<?php foreach ($data as $user) { ?>
@@ -66,7 +68,11 @@ $app->get(
 
 		</table>
 
+		<h1>JSON output</h1>
+
 		<?php
+
+		echo json_encode($data);
 
         /*$template = <<<EOT
 EOT;
