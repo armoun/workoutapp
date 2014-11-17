@@ -3,11 +3,19 @@ package be.howest.nmct3.workoutapp;
 
 
 import android.content.Context;
+import android.database.Cursor;
+import android.database.DatabaseUtils;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import be.howest.nmct3.workoutapp.data.Contract;
+import be.howest.nmct3.workoutapp.data.DatabaseHelper;
 
 
 /**
@@ -16,6 +24,8 @@ import android.view.ViewGroup;
  */
 public class Exercises_Detail_Fragment extends Fragment {
 
+    TextView exercise_title;
+    TextView exercise_description;
 
     public Exercises_Detail_Fragment() {
         // Required empty public constructor
@@ -31,8 +41,27 @@ public class Exercises_Detail_Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.exercises_detail_fragment_layout, null);
+        String ex_id = ""+ MainActivity.EXERCICE_ID;
+        String[] projection = new String[]{Contract.Exercises._ID, Contract.Exercises.EXERCISE_NAME, Contract.Exercises.MUSCLE_GROUP, Contract.Exercises.TARGET, Contract.Exercises.DESCRIPTION, Contract.Exercises.IMAGE_NAME};
+
+        Cursor c = getActivity().getContentResolver().query(
+                Contract.Exercises.CONTENT_URI,
+                projection,
+                "(" + Contract.Exercises._ID + "=?)",
+                new String[]{ex_id},
+                null);
+
+        c.moveToFirst();
+
+        Log.d("", "_-_-_-_-_-_ ID : " + MainActivity.EXERCICE_ID);
+        Log.d("","_-_-_-_-_-_ rows: " + c.getCount() + " " + DatabaseUtils.dumpCursorToString(c));
 
 
+        exercise_title = (TextView) root.findViewById(R.id.exercise_title);
+        exercise_title.setText(c.getString(c.getColumnIndex(Contract.Exercises.EXERCISE_NAME)));
+
+        exercise_description = (TextView) root.findViewById(R.id.exercise_description);
+        exercise_description.setText(c.getString(c.getColumnIndex(Contract.Exercises.DESCRIPTION)));
 
         return root;
     }

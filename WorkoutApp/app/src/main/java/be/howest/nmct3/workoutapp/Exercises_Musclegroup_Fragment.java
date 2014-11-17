@@ -20,7 +20,8 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
 import be.howest.nmct3.workoutapp.data.Contract;
-import be.howest.nmct3.workoutapp.json.ExercisesLoader;
+import be.howest.nmct3.workoutapp.data.ExercisesLoader;
+import be.howest.nmct3.workoutapp.json.ExercisesLoaderJson;
 
 
 /**
@@ -68,10 +69,10 @@ public class Exercises_Musclegroup_Fragment extends Fragment implements LoaderMa
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
                 mCursor.moveToPosition(position);
-                String exerciseId = mCursor.getString(mCursor.getColumnIndex("id"));
+                String exerciseId = ""+ mCursor.getInt(mCursor.getColumnIndex(Contract.Exercises._ID));
                 Toast.makeText(getActivity().getBaseContext(), "" + exerciseId, Toast.LENGTH_SHORT).show();
 
-                MainActivity.WORKOUT_ID = mCursor.getInt(mCursor.getColumnIndex(Contract.WorkoutColumns._ID));
+                MainActivity.EXERCICE_ID = mCursor.getInt(mCursor.getColumnIndex(Contract.Exercises._ID));
 
                 Fragment newFragment = Fragment.instantiate(getActivity().getApplicationContext(), "be.howest.nmct3.workoutapp.Exercises_Detail_Fragment");
                 // consider using Java coding conventions (upper first char class names!!!)
@@ -105,7 +106,8 @@ public class Exercises_Musclegroup_Fragment extends Fragment implements LoaderMa
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        return new ExercisesLoader(getActivity(), mMuscleGroup, null);
+        //return new ExercisesLoaderJson(getActivity(), mMuscleGroup, null);
+        return  new ExercisesLoader(getActivity(), mMuscleGroup);
     }
 
     @Override

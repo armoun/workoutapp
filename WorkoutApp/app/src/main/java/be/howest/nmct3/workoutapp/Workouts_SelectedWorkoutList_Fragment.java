@@ -15,9 +15,8 @@ import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
 
-import be.howest.nmct3.workoutapp.json.ExercisesLoader;
+import be.howest.nmct3.workoutapp.json.ExercisesLoaderJson;
 
 
 /**
@@ -73,7 +72,7 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        return new ExercisesLoader(getActivity(), "", null);
+        return new ExercisesLoaderJson(getActivity(), "", null);
     }
 
     @Override
