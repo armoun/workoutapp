@@ -15,13 +15,13 @@ import be.howest.nmct3.workoutapp.R;
 /**
  * Created by nielslammens on 28/10/14.
  */
-public class ExercisesLoader extends JsonLoader {
+public class ExercisesLoaderJson extends JsonLoader {
 
     private final String mMuscleGroup;
     private final int[] mWorkoutExercises;
 
-    public ExercisesLoader(Context context, String muscleGroup, int[] workoutExercises) {
-        super(context, "exercises", new String[]{BaseColumns._ID, "id", "name", "musclegroup", "target", "description"}, R.raw.exercises);
+    public ExercisesLoaderJson(Context context, String muscleGroup, int[] workoutExercises) {
+        super(context, "exercises", new String[]{BaseColumns._ID, "name", "musclegroup", "target", "description"}, R.raw.exercises);
         this.mMuscleGroup = muscleGroup;
         this.mWorkoutExercises = workoutExercises;
     }
@@ -29,7 +29,7 @@ public class ExercisesLoader extends JsonLoader {
     @Override
     protected void parse(JsonReader reader, MatrixCursor cursor) throws IOException {
 
-        int id = 0;
+        int id = -1;
         String name = "";
         String musclegroup = "";
         String target = "";
@@ -39,11 +39,10 @@ public class ExercisesLoader extends JsonLoader {
 
         while (reader.hasNext()){
 
+            id++;
+
             reader.beginObject();
 
-            reader.nextName();
-            id = reader.nextInt();
-            //Log.d("", id + " id __________________________________________________");
             reader.nextName();
             name = reader.nextString();
             //Log.d("", name + " name __________________________________________________");
@@ -66,7 +65,6 @@ public class ExercisesLoader extends JsonLoader {
                     Log.d("", mMuscleGroup + " vgl met " + musclegroup + " is " + musclegroup.equalsIgnoreCase(musclegroup) + "__________________________________________________");
                     MatrixCursor.RowBuilder row = cursor.newRow();
                     row.add(id);
-                    row.add(id);
                     row.add(name);
                     row.add(musclegroup);
                     row.add(target);
@@ -81,7 +79,6 @@ public class ExercisesLoader extends JsonLoader {
                     if(mWorkoutExercises[i] == id){
                         MatrixCursor.RowBuilder row = cursor.newRow();
                         row.add(id);
-                        row.add(id);
                         row.add(name);
                         row.add(musclegroup);
                         row.add(target);
@@ -91,7 +88,6 @@ public class ExercisesLoader extends JsonLoader {
                 }
             }else{
                 MatrixCursor.RowBuilder row = cursor.newRow();
-                row.add(id);
                 row.add(id);
                 row.add(name);
                 row.add(musclegroup);

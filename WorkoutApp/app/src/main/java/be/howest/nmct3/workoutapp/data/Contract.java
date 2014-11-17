@@ -48,6 +48,25 @@ public class Contract {
     }
 
 
+    public interface ExerciseColumns extends BaseColumns{
+        public static final String EXERCISE_NAME = "name";
+        public static final String MUSCLE_GROUP = "muscle_group";
+        public static final String TARGET = "target";
+        public static final String DESCRIPTION = "description";
+        public static final String IMAGE_NAME = "image_name";
+    }
+
+    public static final class Exercises implements ExerciseColumns{
+        public static final String CONTENT_DIRECTORY = "exercises";
+        public static final String DEFAULT_SORT_ORDER = EXERCISE_NAME + " ASC";
+        public static final int EXERCISE_ID_PATH_POSITION = 1;
+        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.howest.exercise";
+        public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.howest.exercise";
+        public static final String ITEM_CONTENT_PATH = "/" + CONTENT_DIRECTORY +"/";
+        public static final Uri ITEM_CONTENT_URI = Uri.parse("content://" + AUTHORITY + ITEM_CONTENT_PATH);
+        public static final String CONTENT_PATH = "/" + CONTENT_DIRECTORY;
+        public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + CONTENT_PATH);
+    }
 
 
 }

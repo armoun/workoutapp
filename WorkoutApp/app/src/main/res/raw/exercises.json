@@ -1,42 +1,36 @@
 {
   "exercises":[
     {
-        "id": 0,
         "name" : "deadlift",
         "musclegroup":"back",
         "target":"lower back",
         "description":"Stand in front of a loaded barbell. ..."
     },
     {
-        "id": 1,
         "name":"squat",
         "musclegroup":"legs",
         "target":"quadriceps",
         "description":"This exercise is best performed inside a squat rack for safety purposes. ..."
     },
     {
-        "id": 2,
         "name":"Bench press",
         "musclegroup":"chest",
         "target":"chest",
         "description":"Lie back on a flat bench. ..."
     },
     {
-        "id": 3,
         "name":"Overhead press",
         "musclegroup":"shoulders",
         "target":"shoulders",
         "description":"Start by placing a barbell that is about chest high on a squat rack. ..."
     },
     {
-        "id": 4,
         "name":"Bicycle crunch",
         "musclegroup":"abs",
         "target":"abs",
         "description":"Lie flat on the floor with your lower back pressed to the ground. ..."
     },
     {
-        "id": 5,
         "name":"Bicep curl",
         "musclegroup":"arms",
         "target":"biceps",

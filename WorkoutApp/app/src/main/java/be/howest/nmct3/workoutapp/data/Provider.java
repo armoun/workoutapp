@@ -20,12 +20,15 @@ import java.util.HashMap;
 public class Provider extends ContentProvider{
 
     private static HashMap<String, String> sWorkoutsProjectionMap;
+    private static HashMap<String, String> sExercisesProjectionMap;
     private static HashMap<String, String> sWorkoutExercisesProjectionMap;
 
     private static final int WORKOUTS = 1;
     private static final int WORKOUT_ID = 2;
-    private static final int WORKOUTEXERCISES = 3;
-    private static final int WORKOUTEXERCISE_ID = 4;
+    private static final int EXERCISES = 3;
+    private static final int EXERCISE_ID = 4;
+    private static final int WORKOUTEXERCISES = 5;
+    private static final int WORKOUTEXERCISE_ID = 6;
 
     private DatabaseHelper mOpenHelper;
 
@@ -34,13 +37,23 @@ public class Provider extends ContentProvider{
         sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         sUriMatcher.addURI(Contract.AUTHORITY, "workouts",              WORKOUTS);
         sUriMatcher.addURI(Contract.AUTHORITY, "workouts/#",            WORKOUT_ID);
+        sUriMatcher.addURI(Contract.AUTHORITY, "exercises",             EXERCISES);
+        sUriMatcher.addURI(Contract.AUTHORITY, "exercises/#",           EXERCISE_ID);
         sUriMatcher.addURI(Contract.AUTHORITY, "workoutexercises",      WORKOUTEXERCISES);
         sUriMatcher.addURI(Contract.AUTHORITY, "workoutexercises/#",    WORKOUTEXERCISE_ID);
 
         sWorkoutsProjectionMap = new HashMap<String, String>();
-        sWorkoutsProjectionMap.put(Contract.Workouts._ID,       Contract.Workouts._ID);
-        sWorkoutsProjectionMap.put(Contract.Workouts.NAME,      Contract.Workouts.NAME);
-        sWorkoutsProjectionMap.put(Contract.Workouts.ISPAID,    Contract.Workouts.ISPAID);
+        sWorkoutsProjectionMap.put(Contract.Workouts._ID,                           Contract.Workouts._ID);
+        sWorkoutsProjectionMap.put(Contract.Workouts.NAME,                          Contract.Workouts.NAME);
+        sWorkoutsProjectionMap.put(Contract.Workouts.ISPAID,                        Contract.Workouts.ISPAID);
+
+        sExercisesProjectionMap = new HashMap<String, String>();
+        sExercisesProjectionMap.put(Contract.Exercises._ID,                         Contract.Exercises._ID);
+        sExercisesProjectionMap.put(Contract.Exercises.EXERCISE_NAME,               Contract.Exercises.EXERCISE_NAME);
+        sExercisesProjectionMap.put(Contract.Exercises.MUSCLE_GROUP,                Contract.Exercises.MUSCLE_GROUP);
+        sExercisesProjectionMap.put(Contract.Exercises.TARGET,                      Contract.Exercises.TARGET);
+        sExercisesProjectionMap.put(Contract.Exercises.DESCRIPTION,                 Contract.Exercises.DESCRIPTION);
+        sExercisesProjectionMap.put(Contract.Exercises.IMAGE_NAME,                  Contract.Exercises.IMAGE_NAME);
 
         sWorkoutExercisesProjectionMap = new HashMap<String, String>();
         sWorkoutExercisesProjectionMap.put(Contract.WorkoutExercises._ID,           Contract.WorkoutExercises._ID);
@@ -83,6 +96,23 @@ public class Provider extends ContentProvider{
                 );
                 if (TextUtils.isEmpty(sortOrder)){
                     orderBy = Contract.Workouts.DEFAULT_SORT_ORDER;
+                }
+                break;
+            case EXERCISES:
+                qb.setTables(Contract.Exercises.CONTENT_DIRECTORY);
+                qb.setProjectionMap(sExercisesProjectionMap);
+                if (TextUtils.isEmpty(sortOrder)){
+                    orderBy = Contract.Exercises.DEFAULT_SORT_ORDER;
+                }
+                break;
+            case EXERCISE_ID:
+                qb.setTables(Contract.Exercises.CONTENT_DIRECTORY);
+                qb.setProjectionMap(sExercisesProjectionMap);
+                qb.appendWhere(
+                        "(" + Contract.Exercises._ID + "=" + uri.getPathSegments().get(Contract.Exercises.EXERCISE_ID_PATH_POSITION) + ")"
+                );
+                if (TextUtils.isEmpty(sortOrder)){
+                    orderBy = Contract.Exercises.DEFAULT_SORT_ORDER;
                 }
                 break;
             case WORKOUTEXERCISES:
@@ -130,6 +160,10 @@ public class Provider extends ContentProvider{
                 return Contract.Workouts.CONTENT_TYPE;
             case WORKOUT_ID:
                 return Contract.Workouts.CONTENT_ITEM_TYPE;
+            case EXERCISES:
+                return Contract.Exercises.CONTENT_TYPE;
+            case EXERCISE_ID:
+                return Contract.Exercises.CONTENT_ITEM_TYPE;
             case WORKOUTEXERCISES:
                 return Contract.WorkoutExercises.CONTENT_TYPE;
             case WORKOUTEXERCISE_ID:
@@ -161,6 +195,22 @@ public class Provider extends ContentProvider{
                     Uri workoutUri = ContentUris.withAppendedId(Contract.Workouts.ITEM_CONTENT_URI, rowId);
                     getContext().getContentResolver().notifyChange(workoutUri, null);
                     return workoutUri;
+                }
+                break;
+            case EXERCISES:
+                if (!values.containsKey(Contract.Exercises.EXERCISE_NAME))
+                    throw  new IllegalArgumentException(Contract.Exercises.EXERCISE_NAME + " is required for " + Contract.Exercises.CONTENT_DIRECTORY);
+
+                rowId = db.insert(
+                        Contract.Exercises.CONTENT_DIRECTORY,
+                        Contract.Exercises.EXERCISE_NAME,
+                        values
+                );
+
+                if (rowId > 0){
+                    Uri exerciseUri = ContentUris.withAppendedId(Contract.Exercises.ITEM_CONTENT_URI, rowId);
+                    getContext().getContentResolver().notifyChange(exerciseUri, null);
+                    return exerciseUri;
                 }
                 break;
             case WORKOUTEXERCISES:
@@ -212,6 +262,28 @@ public class Provider extends ContentProvider{
 
                 count = db.delete(
                         Contract.Workouts.CONTENT_DIRECTORY,
+                        finalWhere,
+                        whereArgs
+                );
+                break;
+            case EXERCISES:
+                count = db.delete(
+                        Contract.Exercises.CONTENT_DIRECTORY,
+                        where,
+                        whereArgs
+                );
+                break;
+
+            case EXERCISE_ID:
+                String exerciseId = uri.getPathSegments().get(Contract.Exercises.EXERCISE_ID_PATH_POSITION);
+                finalWhere = Contract.Exercises._ID + "=" + exerciseId;
+
+                if (where != null) {
+                    finalWhere = DatabaseUtils.concatenateWhere(finalWhere, where);
+                }
+
+                count = db.delete(
+                        Contract.Exercises.CONTENT_DIRECTORY,
                         finalWhere,
                         whereArgs
                 );
@@ -272,6 +344,29 @@ public class Provider extends ContentProvider{
 
                 count = db.update(
                         Contract.Workouts.CONTENT_DIRECTORY,
+                        values,
+                        finalWhere,
+                        whereArgs
+                );
+                break;
+            case EXERCISES:
+                count = db.update(
+                        Contract.Exercises.CONTENT_DIRECTORY,
+                        values,
+                        where,
+                        whereArgs
+                );
+                break;
+
+            case EXERCISE_ID:
+                String exerciseId = uri.getPathSegments().get(Contract.Exercises.EXERCISE_ID_PATH_POSITION);
+                finalWhere = Contract.WorkoutExercises._ID + "=" + exerciseId;
+                if (where != null) {
+                    finalWhere = DatabaseUtils.concatenateWhere(finalWhere, where);
+                }
+
+                count = db.update(
+                        Contract.Exercises.CONTENT_DIRECTORY,
                         values,
                         finalWhere,
                         whereArgs
