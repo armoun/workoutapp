@@ -16,6 +16,9 @@ import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
+import be.howest.nmct3.workoutapp.data.Contract;
+import be.howest.nmct3.workoutapp.data.ExercisesLoader;
+import be.howest.nmct3.workoutapp.data.SpecificWorkoutLoader;
 import be.howest.nmct3.workoutapp.json.ExercisesLoaderJson;
 
 
@@ -47,7 +50,7 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
 
         mWorkoutId = MainActivity.WORKOUT_ID;
 
-        String[] columns = new String[] { "name", "target" };
+        String[] columns = new String[] {Contract.Exercises.EXERCISE_NAME, Contract.WorkoutExercises.REPS };
         int[] viewIds = new int[] { R.id.workoutselected_item_title, R.id.workoutselected_item_reps };
 
         mAdapter = new SimpleCursorAdapter(getActivity(),
@@ -72,7 +75,7 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        return new ExercisesLoaderJson(getActivity(), "", null);
+        return new SpecificWorkoutLoader(getActivity(), ""+mWorkoutId);
     }
 
     @Override
