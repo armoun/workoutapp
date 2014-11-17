@@ -24,16 +24,33 @@ public class ExercisesLoader extends AsyncTaskLoader<Cursor> {
 
         SQLiteDatabase db = helper.getReadableDatabase();
 
-        mData = db.query(Contract.Exercises.CONTENT_DIRECTORY,
-                new String[]{
-                        Contract.ExerciseColumns._ID,
-                        Contract.ExerciseColumns.EXERCISE_NAME},
-                Contract.ExerciseColumns.MUSCLE_GROUP + "= ?",
-                new String[]{mMuscleGroup.toLowerCase()},
-                null,
-                null,
-                Contract.ExerciseColumns._ID + " ASC"
-        );
+        if(mMuscleGroup.equalsIgnoreCase("") || mMuscleGroup == null){
+            //  no muscle group given, load all exercises
+            mData = db.query(Contract.Exercises.CONTENT_DIRECTORY,
+                    new String[]{
+                            Contract.ExerciseColumns._ID,
+                            Contract.ExerciseColumns.EXERCISE_NAME,
+                            Contract.ExerciseColumns.TARGET},
+                    null,
+                    null,
+                    null,
+                    null,
+                    Contract.ExerciseColumns._ID + " ASC"
+            );
+        }else{
+
+            mData = db.query(Contract.Exercises.CONTENT_DIRECTORY,
+                    new String[]{
+                            Contract.ExerciseColumns._ID,
+                            Contract.ExerciseColumns.EXERCISE_NAME,
+                            Contract.ExerciseColumns.TARGET},
+                    Contract.ExerciseColumns.MUSCLE_GROUP + "= ?",
+                    new String[]{mMuscleGroup.toLowerCase()},
+                    null,
+                    null,
+                    Contract.ExerciseColumns._ID + " ASC"
+            );
+        }
 
         //mData = db.rawQuery("SELECT * FROM " + Contract.Workouts.CONTENT_DIRECTORY ,null);
 
