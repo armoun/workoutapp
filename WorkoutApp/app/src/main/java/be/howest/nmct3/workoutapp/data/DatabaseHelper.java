@@ -167,7 +167,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         Long id3 = db.insert(Contract.Workouts.CONTENT_DIRECTORY, "", v2);
 
         ContentValues v2e = new ContentValues();
-        v2e.put(Contract.WorkoutExercises.WORKOUT_ID, id);
+        v2e.put(Contract.WorkoutExercises.WORKOUT_ID, id3);
         v2e.put(Contract.WorkoutExercises.EXERCISE_ID, squatId);
         v2e.put(Contract.WorkoutExercises.REPS, "12,10,8");
         Long id4 = db.insert(Contract.WorkoutExercises.CONTENT_DIRECTORY, "", v2e);
@@ -180,7 +180,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         Long id5 = db.insert(Contract.Workouts.CONTENT_DIRECTORY, "", v3);
 
         ContentValues v3e = new ContentValues();
-        v3e.put(Contract.WorkoutExercises.WORKOUT_ID, id);
+        v3e.put(Contract.WorkoutExercises.WORKOUT_ID, id5);
         v3e.put(Contract.WorkoutExercises.EXERCISE_ID, bicepCurlId);
         v3e.put(Contract.WorkoutExercises.REPS, "12,10,8");
         Long id6 = db.insert(Contract.WorkoutExercises.CONTENT_DIRECTORY, "", v3e);
