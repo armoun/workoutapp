@@ -24,6 +24,7 @@ import be.howest.nmct3.workoutapp.data.WorkoutsLoader;
 public class AddNewWorkoutFragment extends android.support.v4.app.Fragment {
 
     private SimpleCursorAdapter myExercisesAdapter;
+    public static String actionBarTitle = "Add new workout";
 
     public AddNewWorkoutFragment() {
         // Required empty public constructor

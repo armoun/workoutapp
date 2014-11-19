@@ -1,10 +1,9 @@
 package be.howest.nmct3.workoutapp;
 
 
-import android.app.DialogFragment;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.support.v4.app.FragmentManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -13,20 +12,18 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import be.howest.nmct3.workoutapp.data.Exercise;
+import be.howest.nmct3.workoutapp.data.WorkoutsLoader;
 
 
 public class MainActivity extends FragmentActivity {
@@ -41,18 +38,22 @@ public class MainActivity extends FragmentActivity {
     private ListView mDrawerList;
     private CharSequence mTitle;
 
-    public Fragment activeFragment;
+    public static Fragment activeFragment;
+
+    public static Cursor plannerWorkoutCursor;
+    public static int plannerSelectedWorkoutId = -1;
 
     ActionBarDrawerToggle icon;
 
     final String[] listTitles ={"Dashboard","Exercises","Workouts","Planner","Settings"};
-    final String[] fragments ={
+    static final String[] fragments ={
             "be.howest.nmct3.workoutapp.DashboardFragment",
             "be.howest.nmct3.workoutapp.ExercisesFragment",
             "be.howest.nmct3.workoutapp.WorkoutsFragment",
             "be.howest.nmct3.workoutapp.PlannerFragment",
             "be.howest.nmct3.workoutapp.SettingsFragment",
-            "be.howest.nmct3.workoutapp.AddNewWorkoutFragment"};
+            "be.howest.nmct3.workoutapp.AddNewWorkoutFragment",
+            "be.howest.nmct3.workoutapp.AddWorkoutToPlannerFragment"};
 
     private CustomDrawerlayoutAdapter customDrawerLayoutAdapter;
 
@@ -112,6 +113,12 @@ public class MainActivity extends FragmentActivity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
 
+        loadWorkouts();
+    }
+
+    private void loadWorkouts() {
+        WorkoutsLoader wl = new WorkoutsLoader(MainActivity.this);
+        MainActivity.plannerWorkoutCursor = wl.loadInBackground();
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
@@ -192,6 +199,10 @@ public class MainActivity extends FragmentActivity {
                     case 5:
                         getMenuInflater().inflate(R.menu.my, menu);
                         break;
+                    //Add Workout To Planner
+                    case 6:
+                        getMenuInflater().inflate(R.menu.my, menu);
+                        break;
                     default:
                         getMenuInflater().inflate(R.menu.my, menu);
                         break;
@@ -215,20 +226,28 @@ public class MainActivity extends FragmentActivity {
         int id = item.getItemId();
         Log.d("", "id: " + id);
 
+        Log.d("", "ACTIVE FRAGMENT: " + activeFragment.getClass().getName());
 
-            OpenNewWorkoutFragment();
+        //5 verschillende basis fragments (dashboard, exercises, ...), de andere zijn "actie" fragments
+        for(int i=0;i<5;i++) {
+            if(activeFragment.getClass().getName().equals(fragments[i])) {
+                OpenSpecificActionFragment(i);
+            }
+        }
 
         return super.onOptionsItemSelected(item);
     }
 
-    private void OpenNewWorkoutFragment() {
+    private void OpenSpecificActionFragment(int fragmentId) {
         // Create and set the start fragment
-        Fragment frag = Fragment.instantiate(MainActivity.this, fragments[5]);
+        // add fragment zit 3 fragments na de basis fragment in de array (TIJDELIJK)
+        String selectedActionFragment = fragments[fragmentId+3];
+        Fragment frag = Fragment.instantiate(MainActivity.this, selectedActionFragment);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         activeFragment = frag;
         Log.d("","" + activeFragment.getClass().getName());
         transaction.replace(R.id.main, frag).commit();
-        getActionBar().setTitle("Add new workout");
+        //getActionBar().setTitle();
     }
 
     //hides the action menu icons when drawer is open

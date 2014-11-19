@@ -75,7 +75,7 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        return new SpecificWorkoutLoader(getActivity(), ""+mWorkoutId);
+        return new SpecificWorkoutLoader(getActivity(), ""+ mWorkoutId);
     }
 
     @Override
