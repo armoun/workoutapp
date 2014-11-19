@@ -18,6 +18,9 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
+import java.util.List;
+import java.util.Set;
+
 
 /**
  * A simple {@link android.support.v4.app.Fragment} subclass.
@@ -27,6 +30,7 @@ public class SettingsFragment extends Fragment {
 
     private ListAdapter myListAdapter;
 
+    public static final String[] Settings = {"Name", "Gender", "Date of Birth", "E-mail", "Picture", "Units"};
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -54,21 +58,25 @@ public class SettingsFragment extends Fragment {
 
         public CustomSettingsAdapter() {
             super(getActivity(), R.layout.settings_list_item_layout, R.id.list_settings_item_text);
+            this.addAll(Settings);
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View row = super.getView(position, convertView, parent);
 
-            TextView txtNavDrawerTitle = (TextView) row.findViewById(R.id.list_settings_item_text);
-            txtNavDrawerTitle.setText("test");
+            TextView textSettingsTitle = (TextView) row.findViewById(R.id.list_settings_item_text);
+            textSettingsTitle.setText(Settings[position]);
+
+            TextView textSettingsPreview = (TextView) row.findViewById(R.id.list_settings_item_text_preview);
+            textSettingsPreview.setText("preview");
 
             return row;
         }
 
         @Override
         public int getCount() {
-            return 0;
+            return Settings.length;
         }
     }
 
