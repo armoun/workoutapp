@@ -21,6 +21,8 @@ import android.widget.TextView;
 import java.util.List;
 import java.util.Set;
 
+import be.howest.nmct3.workoutapp.data.SettingsAdmin;
+
 
 /**
  * A simple {@link android.support.v4.app.Fragment} subclass.
@@ -69,7 +71,8 @@ public class SettingsFragment extends Fragment {
             textSettingsTitle.setText(Settings[position]);
 
             TextView textSettingsPreview = (TextView) row.findViewById(R.id.list_settings_item_text_preview);
-            textSettingsPreview.setText("preview");
+            String value = SettingsAdmin.getInstance(getContext()).getValueForSetting(position);
+            textSettingsPreview.setText(value);
 
             return row;
         }
