@@ -9,7 +9,7 @@ import android.provider.BaseColumns;
 public class Contract {
 
     public static final String AUTHORITY = "be.howest.nmct3.workoutapp";
-    public static final String ACCOUNT_TYPE = "be.howest.nmct3.account";
+    public static final String ACCOUNT_TYPE = "be.howest.nmct3.workoutapp.account";
 
     public interface WorkoutColumns extends BaseColumns{
         public static final String NAME = "name";
