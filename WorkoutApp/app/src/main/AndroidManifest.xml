@@ -36,6 +36,18 @@
             android:syncable="true">
         </provider>
 
+        <service android:name=".Account.AccountAuthenticatorService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/account_authenticator"/>
+        </service>
+
         <service android:name=".sync.SyncService"
             android:enabled="true"
             android:exported="true">
