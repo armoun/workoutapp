@@ -25,6 +25,7 @@
 						$achternaam = $_POST["achternaam"];
 						$username = $_POST["username"];
 						$password = $_POST["password"];
+						$passwordHash = sha1($password);
 
 						//ingevulde username ophalen en kijken of hij bestaat
 						$sql1 = "SELECT username, password FROM mad_users WHERE username = '$username'";
@@ -37,7 +38,7 @@
 						else
 						{
 							// USER AANMAKEN INDIEN USERNAME NOG NIET BESTAAT
-							$sql = "INSERT INTO mad_users (firstname,lastname,username,password) VALUES ('$voornaam','$achternaam','$username','$password')";
+							$sql = "INSERT INTO mad_users (firstname,lastname,username,password) VALUES ('$voornaam','$achternaam','$username','$passwordHash')";
 
 							if ($conn->query($sql) === TRUE) 
 							{

@@ -18,7 +18,7 @@
 		$username=$row['username']; 
 		$password=$row['password']; 
 
-		$hashedPassword = md5($password);
+		$hashedPassword = $password;
 
 	$posts[] = array('id'=> $id, 'firstname'=> $firstname, 'lastname'=> $lastname, 'username'=> $username, 'password'=> $hashedPassword);
 

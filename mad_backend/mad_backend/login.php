@@ -36,6 +36,8 @@
 
 				    $conn->close();
 
+				    $passwordForm = sha1($passwordForm);
+
 				    if($passwordForm == $passwordDB)
 				    {
 				    	header('Location: http://www.viktordebock.be/mad_backend');
