@@ -13,6 +13,8 @@
 <a href="api/index.php">Api</a>
 <br>
 <a href="add/index.php">Add</a>
+<br>
+<a href="delete/index.php">Delete</a>
 
 </body>
 </html>

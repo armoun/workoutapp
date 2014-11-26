@@ -10,41 +10,80 @@
 	if (!empty($_GET)) 
 	{
 		//workouts ophalen
-		$result = mysqli_query($conn, "SELECT id, name, owner_username FROM mad_workouts WHERE owner_username = '$usernameFromURL'"); 
+		//$result = mysqli_query($conn, "SELECT id, name, owner_username FROM mad_workouts WHERE owner_username = '$usernameFromURL'"); 
+		if(!($stmt = $conn->prepare("SELECT id, name, owner_username FROM mad_workouts WHERE owner_username = ?"))) {
+             echo "Prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
+        }
+        
+        if (!$stmt->bind_param("s", $usernameFromURL)) {
+            echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+        }
 
+        if (!$stmt->execute()) {
+            echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+        }
+
+        $res = $stmt->get_result();
+        
 		$response = array();
 		$posts = array();
 
-		$row_cnt = $result->num_rows;
+		$row_cnt = $res->num_rows;
 
 		if($row_cnt > 0 )
 		{
-			while($row=mysqli_fetch_array($result)) 
+			while($row = $res->fetch_assoc()) 
 			{ 
 				$id=$row['id']; 
 				$name=$row['name']; 
 				$owner_username=$row['owner_username']; 
 
-				$result1 = mysqli_query($conn, "SELECT id, workout_id, exercise_id, reps FROM mad_workouts_exercises WHERE workout_id = '$id'");
+                if(!($stmt1 = $conn->prepare("SELECT id, workout_id, exercise_id, reps FROM mad_workouts_exercises WHERE workout_id = ?"))) {
+                     echo "Prepare failed: (" . $conn->errno . ") " . $conn->error;
+                }
 
-				$row_cnt1 = $result1->num_rows;
+                if (!$stmt1->bind_param("i", $id)) {
+                    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+                }
+
+                if (!$stmt1->execute()) {
+                    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+                }
+
+                $res1 = $stmt1->get_result();
+
+				$row_cnt1 = $res1->num_rows;
+                
 				if($row_cnt1 > 0 )
 				{
-					while($row1=mysqli_fetch_array($result1))
+					while($row1=$res1->fetch_assoc())
 					{
 						$exercise_id_temp=$row1['exercise_id']; 
-						$result2 = mysqli_query($conn, "SELECT name FROM mad_exercises WHERE id = '$exercise_id_temp'"); 
+                        
+                            if(!($stmt2 = $conn->prepare("SELECT name FROM mad_exercises WHERE id = ?"))) {
+                                 echo "Prepare failed: (" . $conn->errno . ") " . $conn->error;
+                            }
 
-						$row2=mysqli_fetch_array($result2);
-						
-						$id_row=$row1['id']; 
-						$workout_id=$row1['workout_id']; 
-						$exercise_id=$row1['exercise_id'];
-						$reps=$row1['reps'];
-						$exercise_name=$row2['name'];
+                        if (!$stmt2->bind_param("i", $exercise_id_temp)) {
+                            echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+                        }
 
-						$exercises[] = array('id_row'=> $id_row, 'workout_id'=> $workout_id, 'exercise_id'=> $exercise_id, 'exercise_name'=> $exercise_name, 'reps'=> $reps);
-						
+                        if (!$stmt2->execute()) {
+                            echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+                        }
+
+                        $res2 = $stmt2->get_result();
+                        
+                        while($row2=$res2->fetch_assoc())
+                        {   
+                            $id_row=$row1['id']; 
+                            $workout_id=$row1['workout_id']; 
+                            $exercise_id=$row1['exercise_id'];
+                            $reps=$row1['reps'];
+                            $exercise_name=$row2['name'];
+
+                            $exercises[] = array('id_row'=> $id_row, 'workout_id'=> $workout_id, 'exercise_id'=> $exercise_id, 'exercise_name'=> $exercise_name, 'reps'=> $reps);
+                        }
 					}
 				}
 

@@ -10,8 +10,11 @@
 	if (!empty($_GET)) 
 	{
 		//exercises workouts ophalen
-		$result = mysqli_query($conn, "SELECT id, workout_id, exercise_id FROM mad_workouts_exercises WHERE workout_id = '$workoutidFromURL'"); 
-
+		/*$stmt = $conn->prepare("SELECT id, workout_id, exercise_id FROM mad_workouts_exercises WHERE workout_id = ?"); 
+        $stmt->bindParam(1,$workoutidFromURL);
+        $stmt->execute();*/
+        printf("workout id:", $workoutidFromURL);
+        
 		$response = array();
 		$posts = array();
 		

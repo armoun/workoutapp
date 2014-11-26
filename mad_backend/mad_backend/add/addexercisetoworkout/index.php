@@ -18,7 +18,19 @@
 		$reps = "10, 10, 10";
 
 		//workout inputten
-		$result = mysqli_query($conn, "INSERT INTO mad_workouts_exercises (workout_id, exercise_id, reps) VALUES ('$workoutidFromURL', '$exerciseidFromURL', '$reps')"); 
+		//$result = mysqli_query($conn, "INSERT INTO mad_workouts_exercises (workout_id, exercise_id, reps) VALUES ('$workoutidFromURL', '$exerciseidFromURL', '$reps')"); 
+        
+        if(!($stmt = $conn->prepare("INSERT INTO mad_workouts_exercises (workout_id, exercise_id, reps) VALUES (?,?,?)"))) {
+                             echo "Prepare failed: (" . $conn->errno . ") " . $conn->error;
+                        }
+
+        if (!$stmt->bind_param("iii", $workoutidFromURL, $exerciseidFromURL, $reps)) {
+                            echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+                        }
+
+        if (!$stmt->execute()) {
+                            echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+                        }
 
 		echo('exercise added');
 	}

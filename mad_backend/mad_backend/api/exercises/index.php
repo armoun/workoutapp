@@ -19,7 +19,7 @@
 		$target=$row['target']; 
 		$musclegroup=$row['musclegroup'];
 
-	$posts[] = array('id'=> $id, 'name'=> $name, 'description'=> $description, 'image'=> $image, 'target'=> $target, 'musclegroup'=> $musclegroup);
+	$posts[] = array('id'=> $id, 'name'=> $name, 'musclegroup'=> $musclegroup,'target'=> $target, 'description'=> $description, 'image'=> $image);
 
 	} 
 
