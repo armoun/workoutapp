@@ -214,6 +214,7 @@ public class Provider extends ContentProvider{
                 }
                 break;
             case WORKOUTEXERCISES:
+                values.get(Contract.WorkoutExercises.WORKOUT_ID);
                 if (!values.containsKey(Contract.WorkoutExercises.WORKOUT_ID))
                     throw  new IllegalArgumentException(Contract.WorkoutExercises.WORKOUT_ID + " is required for " + Contract.WorkoutExercises.CONTENT_DIRECTORY);
 

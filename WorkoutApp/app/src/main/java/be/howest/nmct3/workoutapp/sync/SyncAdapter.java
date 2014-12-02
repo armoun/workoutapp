@@ -58,7 +58,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     @Override
     public void onPerformSync(Account account, Bundle bundle, String s, ContentProviderClient contentProviderClient, SyncResult syncResult) {
         downloadExercises(contentProviderClient, syncResult);
-        //downloadWorkouts(contentProviderClient, syncResult);
+        downloadWorkouts(contentProviderClient, syncResult);
     }
 
     private void downloadExercises(ContentProviderClient contentProviderClient, SyncResult syncResult){
@@ -315,17 +315,18 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
                 Log.d("", "CONTENTVALUES FORMED " + e_id + ";" + workout_id + ";" + exercsise_id + ";" + reps);
 
-                Uri uriEx = Contract.WorkoutExercises.ITEM_CONTENT_URI.buildUpon().appendEncodedPath(values.getAsString(Contract.WorkoutExercises._ID)).build();
+                Uri uriEx = Contract.WorkoutExercises.ITEM_CONTENT_URI.buildUpon().appendEncodedPath(valuesExercise.getAsString(Contract.WorkoutExercises._ID)).build();
                 Cursor cursor = contentProviderClient.query(
                         uriEx,
                         new String[]{Contract.WorkoutExercises._ID}, null, null, null);
 
                 if (cursor.getCount() > 0) {
-                    values.remove(Contract.WorkoutExercises._ID);
-                    contentProviderClient.update(uriEx, values, null, null);
+                    valuesExercise.remove(Contract.WorkoutExercises._ID);
+                    contentProviderClient.update(uriEx, valuesExercise, null, null);
                     Log.d("", "UPDATED " + e_id + ";" + workout_id + ";" + exercsise_id + ";" + reps);
                 } else {
-                    contentProviderClient.insert(Contract.Workouts.CONTENT_URI, values);
+                    Log.d("","TO INSERT: " + valuesExercise.get(Contract.WorkoutExercises.WORKOUT_ID));
+                    contentProviderClient.insert(Contract.WorkoutExercises.CONTENT_URI, valuesExercise);
                     Log.d("", "INSERTED " + e_id + ";" + workout_id + ";" + exercsise_id + ";" + reps);
                 }
             }
