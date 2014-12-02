@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical">
 
     <ListView
         android:id="@+id/settings_list"
@@ -9,5 +9,13 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
     </ListView>
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="6"
+        android:text="LOGOUT"
+        android:background="#ff5d5b5b"
+        android:textColor="#FFF"
+        android:id="@+id/LogOutID"/>
 
 </LinearLayout>
