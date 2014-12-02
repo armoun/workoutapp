@@ -1,11 +1,13 @@
 package be.howest.nmct3.workoutapp;
 
 
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -21,6 +23,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import be.howest.nmct3.workoutapp.data.Exercise;
 import be.howest.nmct3.workoutapp.data.WorkoutsLoader;
@@ -114,6 +117,13 @@ public class MainActivity extends FragmentActivity {
         getActionBar().setHomeButtonEnabled(true);
 
         loadWorkouts();
+
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String name = preferences.getString("USERNAME","");
+
+        Toast.makeText(getApplicationContext(), name,
+                Toast.LENGTH_LONG).show();
     }
 
     private void loadWorkouts() {
