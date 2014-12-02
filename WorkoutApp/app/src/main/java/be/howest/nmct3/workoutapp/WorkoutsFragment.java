@@ -66,10 +66,11 @@ public class WorkoutsFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
                 cursor.moveToPosition(position);
-                String workoutId = cursor.getString(cursor.getColumnIndex("_id"));
+                String workoutId = cursor.getString(cursor.getColumnIndex(Contract.WorkoutColumns._ID));
+
                 Toast.makeText(getActivity().getBaseContext(), "" + workoutId, Toast.LENGTH_SHORT).show();
 
-                MainActivity.WORKOUT_ID = cursor.getInt(cursor.getColumnIndex(Contract.WorkoutColumns._ID));
+                MainActivity.WORKOUT_ID = Integer.parseInt(workoutId);
 
                 Fragment newFragment = Fragment.instantiate(getActivity().getApplicationContext(), "be.howest.nmct3.workoutapp.Workouts_SelectedWorkoutList_Fragment");
                 // consider using Java coding conventions (upper first char class names!!!)

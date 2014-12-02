@@ -1,7 +1,14 @@
 package be.howest.nmct3.workoutapp;
 
 
+<<<<<<< HEAD
 import android.content.SharedPreferences;
+=======
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.content.ContentResolver;
+import android.content.Context;
+>>>>>>> FETCH_HEAD
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -48,6 +55,16 @@ public class MainActivity extends FragmentActivity {
 
     ActionBarDrawerToggle icon;
 
+    // The authority for the sync adapter's content provider
+    public static final String AUTHORITY = "be.howest.nmct3.workoutapp";
+    // An account type, in the form of a domain name
+    public static final String ACCOUNT_TYPE = "be.howest.nmct3.workoutapp.account";
+    // The account name
+    public static final String ACCOUNT = "dummyaccount";
+    // Instance fields
+    Account mAccount;
+
+
     final String[] listTitles ={"Dashboard","Exercises","Workouts","Planner","Settings"};
     static final String[] fragments ={
             "be.howest.nmct3.workoutapp.DashboardFragment",
@@ -63,6 +80,10 @@ public class MainActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //mAccount = CreateSyncAccount(this);
+
+
         setContentView(R.layout.activity_main);
 
         mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
@@ -118,12 +139,30 @@ public class MainActivity extends FragmentActivity {
 
         loadWorkouts();
 
+<<<<<<< HEAD
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String name = preferences.getString("USERNAME","");
 
         Toast.makeText(getApplicationContext(), name,
                 Toast.LENGTH_LONG).show();
+=======
+    }
+
+    private void runSyncAdapter(){
+
+        Log.d("","_________________ runSyncAdapter()");
+        Bundle settingsBundle = new Bundle();
+        settingsBundle.putBoolean(
+                ContentResolver.SYNC_EXTRAS_MANUAL, true);
+        settingsBundle.putBoolean(
+                ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+        /*
+         * Request the sync for the default account, authority, and
+         * manual sync settings
+         */
+        ContentResolver.requestSync(mAccount, AUTHORITY, settingsBundle);
+>>>>>>> FETCH_HEAD
     }
 
     private void loadWorkouts() {
@@ -292,4 +331,18 @@ public class MainActivity extends FragmentActivity {
             return row;
         }
     }
+
+
+    public static Account CreateSyncAccount(Context context){
+        Account newAccount = new Account(ACCOUNT, ACCOUNT_TYPE);
+        AccountManager accountManager= (AccountManager) context.getSystemService(ACCOUNT_SERVICE);
+
+        if(accountManager.addAccountExplicitly(newAccount, null, null)){
+            return newAccount;
+        }else{
+            Log.d("","_______________ Error Creating sync account");
+            return newAccount;
+        }
+    }
+
 }

@@ -42,7 +42,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         createWorkoutExercisesTableV1(db);
         createExercisesTableV1(db);
 
-        createDefaultRecords(db);
+        //createDefaultRecords(db);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         createWorkoutExercisesTableV1(db);
         createExercisesTableV1(db);
 
-        createDefaultRecords(db);
+        //createDefaultRecords(db);
     }
 
     private void createWorkoutsTableV1(SQLiteDatabase db){
