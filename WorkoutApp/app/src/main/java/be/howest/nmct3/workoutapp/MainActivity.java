@@ -64,14 +64,15 @@ public class MainActivity extends FragmentActivity {
 
 
     final String[] listTitles ={"Dashboard","Exercises","Workouts","Planner","Settings"};
-    static final String[] fragments ={
+    static final String[] fragments = {
             "be.howest.nmct3.workoutapp.DashboardFragment",
             "be.howest.nmct3.workoutapp.ExercisesFragment",
             "be.howest.nmct3.workoutapp.WorkoutsFragment",
             "be.howest.nmct3.workoutapp.PlannerFragment",
             "be.howest.nmct3.workoutapp.SettingsFragment",
             "be.howest.nmct3.workoutapp.AddNewWorkoutFragment",
-            "be.howest.nmct3.workoutapp.AddWorkoutToPlannerFragment"};
+            "be.howest.nmct3.workoutapp.AddWorkoutToPlannerFragment"
+    };
 
     private CustomDrawerlayoutAdapter customDrawerLayoutAdapter;
 
@@ -260,7 +261,6 @@ public class MainActivity extends FragmentActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -270,26 +270,39 @@ public class MainActivity extends FragmentActivity {
             return true;
         }
 
-        int id = item.getItemId();
-        Log.d("", "id: " + id);
+        switch (item.getItemId()) {
 
-        Log.d("", "ACTIVE FRAGMENT: " + activeFragment.getClass().getName());
-
-        //5 verschillende basis fragments (dashboard, exercises, ...), de andere zijn "actie" fragments
-        for(int i=0;i<5;i++) {
-            if(activeFragment.getClass().getName().equals(fragments[i])) {
-                OpenSpecificActionFragment(i);
-            }
+            //Geklikt op "+" bij workouts
+            case R.id.action_add_workout:
+                //Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
+                OpenAddNewWorkoutFragment();
+                break;
+            //Geklikt op "search" bij exercises
+            case R.id.action_search:
+                //Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
+                break;
+            //Geklikt op "+" bij exercises
+            case R.id.action_add_exercise:
+                //Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
+                break;
+            //Geklikt op "+" bij planner
+            case R.id.action_add_workout_to_planner:
+                //Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                //Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
+                break;
         }
+
+        //Log.d("", "ACTIVE FRAGMENT: " + activeFragment.getClass().getName());
 
         return super.onOptionsItemSelected(item);
     }
 
-    private void OpenSpecificActionFragment(int fragmentId) {
+    private void OpenAddNewWorkoutFragment() {
         // Create and set the start fragment
         // add fragment zit 3 fragments na de basis fragment in de array (TIJDELIJK)
-        String selectedActionFragment = fragments[fragmentId+3];
-        Fragment frag = Fragment.instantiate(MainActivity.this, selectedActionFragment);
+        Fragment frag = Fragment.instantiate(MainActivity.this, "be.howest.nmct3.workoutapp.AddNewWorkoutFragment");
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         activeFragment = frag;
         Log.d("","" + activeFragment.getClass().getName());

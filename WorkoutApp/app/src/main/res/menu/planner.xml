@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity" >
 
-    <item android:id="@+id/action_add"
+    <item android:id="@+id/action_add_workout_to_planner"
         android:icon="@drawable/ic_action_add"
         android:title="Add workout to planner"
         android:showAsAction="ifRoom|collapseActionView" />

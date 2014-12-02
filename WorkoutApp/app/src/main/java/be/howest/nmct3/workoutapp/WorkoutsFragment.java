@@ -50,14 +50,14 @@ public class WorkoutsFragment extends Fragment {
                              Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.workouts_fragment_layout, null);
 
-        String[] columns = new String[] { "name" };
-        int[] viewIds = new int[] { R.id.workout_item_title };
+        String[] columns = new String[]{"name"};
+        int[] viewIds = new int[]{R.id.workout_item_title};
 
         WorkoutsLoader wl = new WorkoutsLoader(getActivity());
         final Cursor cursor = wl.loadInBackground();
 
         final ListView listView = (ListView) root.findViewById(R.id.workout_list);
-        myWorkoutCursorAdapter = new SimpleCursorAdapter(getActivity(),R.layout.workouts_list_workout_item_rowlayout, cursor, columns, viewIds, 0);
+        myWorkoutCursorAdapter = new SimpleCursorAdapter(getActivity(), R.layout.workouts_list_workout_item_rowlayout, cursor, columns, viewIds, 0);
         listView.setAdapter(myWorkoutCursorAdapter);
 
 
@@ -89,33 +89,6 @@ public class WorkoutsFragment extends Fragment {
 
         return root;
     }
-
-    /*class WorkoutsAdapter extends CursorAdapter {
-
-        private String[] WorkoutTitles;
-
-        public WorkoutsAdapter() {
-            super(getActivity(), R.layout.workouts_list_workout_item_rowlayout, R.id.workout_item_title);
-            WorkoutTitles = Workouts;
-            this.addAll(WorkoutTitles);
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent)
-        {
-            View row = super.getView(position, convertView, parent);
-
-            String WorkoutTitle = WorkoutTitles[position];
-
-            TextView txtWorkoutTitle = (TextView) row.findViewById(R.id.workout_item_title);
-            txtWorkoutTitle.setText(WorkoutTitle);
-
-            return row;
-        }
-
-    }*/
-
-
 
     }
 
