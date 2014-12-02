@@ -133,4 +133,12 @@ public class LoginActivity extends Activity {
         LoginActivity.this.startActivity(myIntent);
     }
 
+    public void LoginGuestButton(View v)
+    {
+        // DOORSTUREN NAAR APP
+        Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
+        //myIntent.putExtra("key", value); //Optional parameters
+        LoginActivity.this.startActivity(myIntent);
+    }
+
 }

@@ -18,6 +18,14 @@
             android:onClick="goToRegister"
             />
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="Login as Guest"
+            android:onClick="LoginGuestButton"
+            />
+
     </LinearLayout>
 
     <EditText
