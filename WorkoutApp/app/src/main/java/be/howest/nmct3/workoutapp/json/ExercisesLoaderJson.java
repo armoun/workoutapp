@@ -21,7 +21,7 @@ public class ExercisesLoaderJson extends JsonLoader {
     private final int[] mWorkoutExercises;
 
     public ExercisesLoaderJson(Context context, String muscleGroup, int[] workoutExercises) {
-        super(context, "exercises", new String[]{BaseColumns._ID, "name", "musclegroup", "target", "description"}, R.raw.exercises);
+        super(context, "exercises", new String[]{BaseColumns._ID, "name", "musclegroup", "target", "description", "image"}, R.raw.exercises);
         this.mMuscleGroup = muscleGroup;
         this.mWorkoutExercises = workoutExercises;
     }
@@ -34,6 +34,7 @@ public class ExercisesLoaderJson extends JsonLoader {
         String musclegroup = "";
         String target = "";
         String description = "";
+        String image = "";
 
         reader.beginArray();
 
@@ -44,17 +45,22 @@ public class ExercisesLoaderJson extends JsonLoader {
             reader.beginObject();
 
             reader.nextName();
+            id = reader.nextInt();
+
+            reader.nextName();
             name = reader.nextString();
-            //Log.d("", name + " name __________________________________________________");
+
             reader.nextName();
             musclegroup = reader.nextString();
-            //Log.d("", musclegroup + " musclegroup __________________________________________________");
+
             reader.nextName();
             target = reader.nextString();
-            //Log.d("", target + " target __________________________________________________");
+
             reader.nextName();
             description = reader.nextString();
-            //Log.d("", description + " description __________________________________________________");
+
+            reader.nextName();
+            image = reader.nextString();
 
             reader.endObject();
 

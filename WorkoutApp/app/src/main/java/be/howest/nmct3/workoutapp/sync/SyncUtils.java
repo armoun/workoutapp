@@ -28,7 +28,7 @@ public class SyncUtils {
     private final String mServer;
     private final Context mContext;
     public static final String CONTENT_AUTHORITY = Contract.AUTHORITY;
-    private static final long SYNC_FREQUENCY = 60; // 60 seconds
+    private static final long SYNC_FREQUENCY = 10; // 60 seconds
     private static final String PREF_SETUP_COMPLETE = "setup_complete";
 
     public SyncUtils(Context ctx){
