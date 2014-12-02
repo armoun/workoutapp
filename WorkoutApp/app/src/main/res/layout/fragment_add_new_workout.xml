@@ -12,18 +12,17 @@
         android:layout_gravity="center" android:orientation="vertical" android:layout_marginTop="0dp"
         android:layout_weight="1">
         <TextView
-            android:id="@+id/lbl_exercises_new_workout" android:text="Exercises for this workout"
+            android:id="@+id/lbl_exercises_new_workout" android:text="Name for your workout"
             android:layout_width="fill_parent" android:layout_height="wrap_content"
             android:padding="15dp" android:textAppearance="?android:attr/textAppearanceLarge"
             android:gravity="center"
             android:background="#ff5d5b5b"
             android:textColor="#fff"/>
 
-        <ListView
+        <EditText
             android:id="@+id/lst_exercises_new_workout"
-            android:layout_width="fill_parent"  android:layout_height="fill_parent"
-            android:background="#FFF" android:padding="5dp"
-            android:choiceMode="multipleChoice" />
+            android:layout_width="fill_parent"  android:layout_height="wrap_content"
+            android:background="#FFF" android:padding="5dp" android:hint="Name" android:height="50dp" android:layout_marginTop="20dp"/>
 
     </LinearLayout>
     <LinearLayout
@@ -34,10 +33,11 @@
         <Button
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:text="SAVE" android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="NEXT" android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="#FFF"
             android:gravity="center"
             android:padding="15dp"
-            android:background="@color/headcolor"/>
+            android:background="@color/headcolor"
+            android:id="@+id/workoutNameIsChosenNextButton"/>
     </LinearLayout>
 </LinearLayout>

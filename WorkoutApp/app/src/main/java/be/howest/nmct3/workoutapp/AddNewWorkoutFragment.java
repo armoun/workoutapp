@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
@@ -23,8 +24,6 @@ import be.howest.nmct3.workoutapp.data.WorkoutsLoader;
 
 public class AddNewWorkoutFragment extends android.support.v4.app.Fragment {
 
-    private SimpleCursorAdapter myExercisesAdapter;
-    public static String actionBarTitle = "Add new workout";
 
     public AddNewWorkoutFragment() {
         // Required empty public constructor
@@ -41,25 +40,31 @@ public class AddNewWorkoutFragment extends android.support.v4.app.Fragment {
                              Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_add_new_workout, null);
 
-        String[] columns = new String[] { "name" };
-        int[] viewIds = new int[] { R.id.new_workout_list_exercises_item_text };
-
-        WorkoutsLoader wl = new WorkoutsLoader(getActivity());
-        final Cursor cursor = wl.loadInBackground();
-
-        final ListView listView = (ListView) root.findViewById(R.id.lst_exercises_new_workout);
-        myExercisesAdapter = new SimpleCursorAdapter(getActivity(),R.layout.new_workout_exercises_row_layout, cursor, columns, viewIds, 0);
-        listView.setAdapter(myExercisesAdapter);
-        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        //GO TO NEXT
+        final Button logoutButton = (Button) root.findViewById(R.id.workoutNameIsChosenNextButton);
+        logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                listView.setItemChecked(position, true);
+            public void onClick(final View v) {
+                goNextButton(v);
             }
         });
 
+
         return root;
+    }
+
+    public void goNextButton(View v)
+    {
+
+        //OPEN NEXT FRAGMENT
+        android.support.v4.app.Fragment newFragment = android.support.v4.app.Fragment.instantiate(getActivity().getApplicationContext(), "be.howest.nmct3.workoutapp.Exercises_Musclegroup_Fragment");
+
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.main, newFragment);
+        transaction.addToBackStack(null);
+
+        // Commit the transaction
+        transaction.commit();
     }
 
 

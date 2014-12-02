@@ -302,12 +302,22 @@ public class MainActivity extends FragmentActivity {
     private void OpenAddNewWorkoutFragment() {
         // Create and set the start fragment
         // add fragment zit 3 fragments na de basis fragment in de array (TIJDELIJK)
+        //Fragment frag = Fragment.instantiate(MainActivity.this, "be.howest.nmct3.workoutapp.AddNewWorkoutFragment");
+        //FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        //activeFragment = frag;
+        //Log.d("","" + activeFragment.getClass().getName());
+        //transaction.replace(R.id.main, frag).commit();
+        //getActionBar().setTitle();
+
+
         Fragment frag = Fragment.instantiate(MainActivity.this, "be.howest.nmct3.workoutapp.AddNewWorkoutFragment");
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        activeFragment = frag;
-        Log.d("","" + activeFragment.getClass().getName());
-        transaction.replace(R.id.main, frag).commit();
-        //getActionBar().setTitle();
+
+        transaction.replace(R.id.main, frag);
+        transaction.addToBackStack(null);
+
+        // Commit the transaction
+        transaction.commit();
     }
 
     //hides the action menu icons when drawer is open
