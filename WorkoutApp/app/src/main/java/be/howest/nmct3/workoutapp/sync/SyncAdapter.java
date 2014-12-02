@@ -50,6 +50,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     public static final String TAG = "";
     private static final String FEED_URL_EXERCISES = "https://viktordebock.be/mad_backend/api/exercises/index.php";
     private static final String FEED_URL_WORKOUTS = "http://www.viktordebock.be/mad_backend/api/workoutsbyuser/index.php?username=viktordebock";
+    private static final String UPLOAD_URL_WORKOUTS = "http://www.viktordebock.be/mad_backend/add/addworkoutbyusername/index.php?";
+    //username=nielslammens&name=chest
 
     private static final int NET_CONNECT_TIMEOUT_MILLIS = 15000;  // 15 seconds
 
@@ -57,8 +59,65 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
     @Override
     public void onPerformSync(Account account, Bundle bundle, String s, ContentProviderClient contentProviderClient, SyncResult syncResult) {
-        downloadExercises(contentProviderClient, syncResult);
-        downloadWorkouts(contentProviderClient, syncResult);
+        //downloadExercises(contentProviderClient, syncResult);
+        //downloadWorkouts(contentProviderClient, syncResult);
+        //uploadWorkouts(contentProviderClient, syncResult);
+    }
+
+    private void uploadWorkouts(ContentProviderClient contentProviderClient, SyncResult syncResult){
+        Log.d(TAG, "On perform sync is called");
+        Log.d(TAG, "Beginning network synchronization");
+
+        try {
+            final URL location = new URL(UPLOAD_URL_WORKOUTS + "username=nielslammens&name=chest");
+            InputStream stream = null;
+
+            try {
+                Log.d(TAG, "Streaming data from network: " + location);
+
+
+                try {
+                    Log.d(TAG,"Trying to SYNC Exercises");
+
+                    URL url = new URL(UPLOAD_URL_WORKOUTS + "username=nielslammens&name=chest1");
+
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                    connection.setReadTimeout(NET_READ_TIMEOUT_MILLIS);
+                    connection.setConnectTimeout(NET_CONNECT_TIMEOUT_MILLIS);
+                    connection.setRequestMethod("GET");
+                    connection.setRequestProperty("Accept", "application/json");
+                    connection.setRequestProperty("charset", "utf-8");
+                    connection.setDoInput(true);
+
+                    connection.connect();
+
+                    Log.d("","_____________________________response code : "+ connection.getResponseCode());
+                    Log.d("","______________CONNECTION: ");
+                    InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+
+                    Log.d("","" + getStringFromInputStream(connection.getInputStream()));
+
+                    connection.disconnect();
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+
+
+            } finally {
+                if (stream != null) {
+                    stream.close();
+                }
+            }
+        } catch (MalformedURLException e) {
+            Log.d(TAG, "Feed URL is malformed", e);
+            syncResult.stats.numParseExceptions++;
+            return;
+        } catch (IOException e) {
+            Log.d(TAG, "Error reading from network: " + e.toString());
+            syncResult.stats.numIoExceptions++;
+            return;
+        }
+        Log.d(TAG, "Network synchronization complete");
     }
 
     private void downloadExercises(ContentProviderClient contentProviderClient, SyncResult syncResult){
