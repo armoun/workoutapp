@@ -7,14 +7,17 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.Toast;
 
 import be.howest.nmct3.workoutapp.data.Contract;
 import be.howest.nmct3.workoutapp.data.ExercisesLoader;
@@ -30,6 +33,7 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
 
     int mWorkoutId = 0;
     private CursorAdapter mAdapter;
+    private Cursor mCursor;
     private ListView list;
 
     public Workouts_SelectedWorkoutList_Fragment() {
@@ -59,6 +63,33 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
 
         list.setAdapter(mAdapter);
 
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position,
+                                    long id) {
+                mCursor.moveToPosition(position);
+                String exerciseId   = "" + mCursor.getInt(0);
+                String workoutId    = "" + mCursor.getInt(3);
+                Toast.makeText(getActivity().getBaseContext(), "ex_id " + exerciseId + " wo_id " + workoutId, Toast.LENGTH_SHORT).show();
+
+                MainActivity.EXERCICE_ID = mCursor.getInt(0);
+                MainActivity.WORKOUT_ID = mCursor.getInt(3);
+
+                Fragment newFragment = Fragment.instantiate(getActivity().getApplicationContext(), "be.howest.nmct3.workoutapp.RepList");
+                // consider using Java coding conventions (upper first char class names!!!)
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+                // Replace whatever is in the fragment_container view with this fragment,
+                // and add the transaction to the back stack
+                transaction.replace(R.id.main, newFragment);
+                transaction.addToBackStack(null);
+
+                // Commit the transaction
+                transaction.commit();
+
+            }
+        });
+
         return root;
     }
 
@@ -81,6 +112,7 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
         mAdapter.swapCursor(cursor);
+        mCursor = cursor;
     }
 
     @Override
