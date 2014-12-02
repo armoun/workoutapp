@@ -59,8 +59,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
     @Override
     public void onPerformSync(Account account, Bundle bundle, String s, ContentProviderClient contentProviderClient, SyncResult syncResult) {
-        //downloadExercises(contentProviderClient, syncResult);
-        //downloadWorkouts(contentProviderClient, syncResult);
+        downloadExercises(contentProviderClient, syncResult);
+        downloadWorkouts(contentProviderClient, syncResult);
         //uploadWorkouts(contentProviderClient, syncResult);
     }
 

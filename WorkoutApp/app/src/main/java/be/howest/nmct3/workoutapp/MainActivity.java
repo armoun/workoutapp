@@ -2,6 +2,7 @@ package be.howest.nmct3.workoutapp;
 
 
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -29,6 +30,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 import be.howest.nmct3.workoutapp.data.Exercise;
 import be.howest.nmct3.workoutapp.data.WorkoutsLoader;
@@ -62,6 +65,8 @@ public class MainActivity extends FragmentActivity {
     // Instance fields
     Account mAccount;
 
+    //add new workout (lijst opvullen met exercises)
+    public static ArrayList<String> selectedExercises = new ArrayList<String>();
 
     final String[] listTitles ={"Dashboard","Exercises","Workouts","Planner","Settings"};
     static final String[] fragments = {
@@ -71,6 +76,8 @@ public class MainActivity extends FragmentActivity {
             "be.howest.nmct3.workoutapp.PlannerFragment",
             "be.howest.nmct3.workoutapp.SettingsFragment",
             "be.howest.nmct3.workoutapp.AddNewWorkoutFragment",
+            "be.howest.nmct3.workoutapp.AddNewWorkoutSelectedExercisesList",
+            "be.howest.nmct3.workoutapp.NewWorkoutExercisesList",
             "be.howest.nmct3.workoutapp.AddWorkoutToPlannerFragment"
     };
 
@@ -81,7 +88,6 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
 
         //mAccount = CreateSyncAccount(this);
-
 
         setContentView(R.layout.activity_main);
 
@@ -138,8 +144,6 @@ public class MainActivity extends FragmentActivity {
 
         loadWorkouts();
 
-
-
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String name = preferences.getString("USERNAME","");
 
@@ -185,7 +189,7 @@ public class MainActivity extends FragmentActivity {
         transaction.replace(R.id.main, frag).commit();
 
         activeFragment = frag;
-        //Toast.makeText(getBaseContext(), frag.getClass().getSimpleName(),Toast.LENGTH_SHORT).show();
+        Toast.makeText(getBaseContext(), frag.getClass().getSimpleName(),Toast.LENGTH_SHORT).show();
 
         // Highlight the selected item, update the title, and close the drawer
         mDrawerList.setItemChecked(position, true);
@@ -247,8 +251,16 @@ public class MainActivity extends FragmentActivity {
                     case 5:
                         getMenuInflater().inflate(R.menu.my, menu);
                         break;
-                    //Add Workout To Planner
+                    //New Workout Selected Exercises List
                     case 6:
+                        getMenuInflater().inflate(R.menu.new_workout_selected_exercises, menu);
+                        break;
+                    //New Workout Exercises List
+                    case 7:
+                        getMenuInflater().inflate(R.menu.new_workout_all_exercises, menu);
+                        break;
+                    //Add Workout To Planner
+                    case 8:
                         getMenuInflater().inflate(R.menu.my, menu);
                         break;
                     default:
@@ -274,23 +286,32 @@ public class MainActivity extends FragmentActivity {
 
             //Geklikt op "+" bij workouts
             case R.id.action_add_workout:
-                //Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
                 OpenAddNewWorkoutFragment();
+                break;
+            //Geklikt op "+" bij new workout selected exercises list
+            case R.id.action_add_exercise_new_workout_selected_exercises:
+                Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
+                OpenNewWorkoutExercisesList();
+                break;
+            //Geklikt op "search" bij new workout selected exercises list
+            case R.id.action_search_new_workout_selected_exercises:
+                Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
                 break;
             //Geklikt op "search" bij exercises
             case R.id.action_search:
-                //Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
                 break;
             //Geklikt op "+" bij exercises
             case R.id.action_add_exercise:
-                //Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
                 break;
             //Geklikt op "+" bij planner
             case R.id.action_add_workout_to_planner:
-                //Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
                 break;
             default:
-                //Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
                 break;
         }
 
@@ -301,17 +322,24 @@ public class MainActivity extends FragmentActivity {
 
     private void OpenAddNewWorkoutFragment() {
         // Create and set the start fragment
-        // add fragment zit 3 fragments na de basis fragment in de array (TIJDELIJK)
-        //Fragment frag = Fragment.instantiate(MainActivity.this, "be.howest.nmct3.workoutapp.AddNewWorkoutFragment");
-        //FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        //activeFragment = frag;
-        //Log.d("","" + activeFragment.getClass().getName());
-        //transaction.replace(R.id.main, frag).commit();
-        //getActionBar().setTitle();
-
-
         Fragment frag = Fragment.instantiate(MainActivity.this, "be.howest.nmct3.workoutapp.AddNewWorkoutFragment");
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+        activeFragment = frag;
+
+        transaction.replace(R.id.main, frag);
+        transaction.addToBackStack(null);
+
+        // Commit the transaction
+        transaction.commit();
+    }
+
+    private void OpenNewWorkoutExercisesList() {
+        // Create and set the start fragment
+        Fragment frag = Fragment.instantiate(MainActivity.this, "be.howest.nmct3.workoutapp.NewWorkoutExercisesList");
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+        activeFragment = frag;
 
         transaction.replace(R.id.main, frag);
         transaction.addToBackStack(null);
