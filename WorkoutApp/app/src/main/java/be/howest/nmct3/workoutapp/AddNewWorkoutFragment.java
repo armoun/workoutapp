@@ -57,7 +57,7 @@ public class AddNewWorkoutFragment extends android.support.v4.app.Fragment {
     {
 
         //OPEN NEXT FRAGMENT
-        android.support.v4.app.Fragment newFragment = android.support.v4.app.Fragment.instantiate(getActivity().getApplicationContext(), "be.howest.nmct3.workoutapp.Exercises_Musclegroup_Fragment");
+        android.support.v4.app.Fragment newFragment = android.support.v4.app.Fragment.instantiate(getActivity().getApplicationContext(), "be.howest.nmct3.workoutapp.NewWorkoutExercisesList");
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.main, newFragment);
