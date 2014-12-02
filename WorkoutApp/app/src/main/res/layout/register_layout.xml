@@ -7,34 +7,50 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="3"
-        android:orientation="horizontal">
+        android:layout_weight="2.5" >
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:text="Register here"
-            android:onClick="goToRegister"
+            android:text="Login here"
+            android:onClick="goToLogin"
             />
 
     </LinearLayout>
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.2"
+        android:layout_marginTop="30dp"
+        android:id="@+id/RegisterFirstNameTextbox"
+        android:hint="First Name"
+        />
 
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.2"
         android:layout_marginTop="30dp"
-        android:id="@+id/LoginUsernameTextbox"
+        android:id="@+id/RegisterLastNameTextbox"
+        android:hint="Last Name"
+        />
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.2"
+        android:layout_marginTop="30dp"
+        android:id="@+id/RegisterUsernameTextbox"
         android:hint="Username"
-    />
+        />
 
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.2"
         android:layout_marginTop="30dp"
-        android:id="@+id/LoginPasswordTextbox"
+        android:id="@+id/RegisterPasswordTextbox"
         android:hint="Password"
         />
 
@@ -42,12 +58,12 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="LOGIN"
+        android:text="REGISTER"
         android:layout_marginTop="30dp"
         android:background="#ff5d5b5b"
         android:textColor="#FFF"
-        android:onClick="LoginButton"
-    />
+        android:onClick="RegisterButton"
+        />
 
 
 </LinearLayout>

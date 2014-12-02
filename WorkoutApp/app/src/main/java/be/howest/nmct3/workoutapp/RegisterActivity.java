@@ -1,18 +1,15 @@
 package be.howest.nmct3.workoutapp;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import org.apache.http.HttpEntity;
@@ -21,44 +18,23 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
 
 import java.io.IOException;
 
 
-public class LoginActivity extends Activity {
-
+public class RegisterActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_layout);
-
-        // CHECK IF THERE IS A SHARED PREFERENCE USERNAME
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String username = preferences.getString("USERNAME","");
-        if(!(username.equals("")))
-        {
-            //AL REEDS INGELOGD
-
-            //DOORSTUREN NAAR APP
-            Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
-            //myIntent.putExtra("key", value); //Optional parameters
-            LoginActivity.this.startActivity(myIntent);
-        }
-        else if(username == null)
-        {
-            //NOG NIET INGELOGD
-        }
+        setContentView(R.layout.register_layout);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.login, menu);
+        getMenuInflater().inflate(R.menu.register, menu);
         return true;
     }
 
@@ -74,13 +50,18 @@ public class LoginActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void LoginButton(View v) {
+    public void RegisterButton(View v) {
 
-        EditText Username = (EditText) findViewById(R.id.LoginUsernameTextbox);
-        EditText Password = (EditText) findViewById(R.id.LoginPasswordTextbox);
 
-        String LoginUsername = Username.getText().toString();
-        String LoginPassword = Password.getText().toString();
+        EditText FirstName = (EditText) findViewById(R.id.RegisterFirstNameTextbox);
+        EditText LastName = (EditText) findViewById(R.id.RegisterLastNameTextbox);
+        EditText Username = (EditText) findViewById(R.id.RegisterUsernameTextbox);
+        EditText Password = (EditText) findViewById(R.id.RegisterPasswordTextbox);
+
+        String RegisterFirstName = FirstName.getText().toString();
+        String RegisterLastName = LastName.getText().toString();
+        String RegisterUsername = Username.getText().toString();
+        String RegisterPassword = Password.getText().toString();
 
         Integer ResponseCode = 404;
 
@@ -88,7 +69,7 @@ public class LoginActivity extends Activity {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
             try {
-                HttpGet httpRequest = new HttpGet("http://www.viktordebock.be/mad_backend/loginURL.php?username=" + LoginUsername + "&password=" + LoginPassword);
+                HttpGet httpRequest = new HttpGet("http://www.viktordebock.be/mad_backend/registerURL.php?firstname="+ RegisterFirstName +"&lastname=" + RegisterLastName + "&username="+ RegisterUsername +"&password=" + RegisterPassword);
                 HttpEntity httpEntity = null;
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpResponse response = httpclient.execute(httpRequest);
@@ -101,36 +82,34 @@ public class LoginActivity extends Activity {
             }
         }
 
-        if(ResponseCode == 201)
-        {
+        if (ResponseCode == 201) {
             // USERNANE IN SHARED PREFRENCES ZETTEN
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
             SharedPreferences.Editor editor = preferences.edit();
-            editor.putString("USERNAME", LoginPassword);
+            editor.putString("USERNAME", RegisterUsername);
+            editor.putString("FIRSTNAME", RegisterFirstName);
+            editor.putString("LASTNAME", RegisterLastName);
             editor.apply();
 
 
             // DOORSTUREN NAAR APP
-            Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
+            Intent myIntent = new Intent(RegisterActivity.this, MainActivity.class);
             //myIntent.putExtra("key", value); //Optional parameters
-            LoginActivity.this.startActivity(myIntent);
-        }
-        else
-        {
+            RegisterActivity.this.startActivity(myIntent);
+
+        } else {
             Toast.makeText(getApplicationContext(), "TRY AGAIN",
                     Toast.LENGTH_LONG).show();
         }
 
     }
 
-
-
-    public void goToRegister(View v)
+    public void goToLogin(View v)
     {
-        // DOORSTUREN NAAR REGISTER
-        Intent myIntent = new Intent(LoginActivity.this, RegisterActivity.class);
+        // DOORSTUREN NAAR LOGIN
+        Intent myIntent = new Intent(RegisterActivity.this, LoginActivity.class);
         //myIntent.putExtra("key", value); //Optional parameters
-        LoginActivity.this.startActivity(myIntent);
+        RegisterActivity.this.startActivity(myIntent);
     }
 
 }

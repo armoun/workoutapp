@@ -8,5 +8,6 @@
     <string name="workout_item_title">Workout item title</string>
     <string name="action_add">Add</string>
     <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_register">RegisterActivity</string>
 
 </resources>
