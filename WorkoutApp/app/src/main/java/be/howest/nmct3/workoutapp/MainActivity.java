@@ -1,14 +1,12 @@
 package be.howest.nmct3.workoutapp;
 
 
-<<<<<<< HEAD
+
 import android.content.SharedPreferences;
-=======
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.ContentResolver;
 import android.content.Context;
->>>>>>> FETCH_HEAD
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -139,14 +137,14 @@ public class MainActivity extends FragmentActivity {
 
         loadWorkouts();
 
-<<<<<<< HEAD
+
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String name = preferences.getString("USERNAME","");
 
-        Toast.makeText(getApplicationContext(), name,
+        Toast.makeText(getApplicationContext(), "Logged in as: " + name,
                 Toast.LENGTH_LONG).show();
-=======
+
     }
 
     private void runSyncAdapter(){
@@ -162,7 +160,7 @@ public class MainActivity extends FragmentActivity {
          * manual sync settings
          */
         ContentResolver.requestSync(mAccount, AUTHORITY, settingsBundle);
->>>>>>> FETCH_HEAD
+
     }
 
     private void loadWorkouts() {
