@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -55,10 +56,30 @@ public class AddNewWorkoutSelectedExercisesList extends Fragment {
 
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_add_new_workout_selected_exercises_list, null);
 
+
+
+
+        //Save new workout button
+        Button buttonSaveNewWorkout = (Button) root.findViewById(R.id.button_save_new_workout);
+        buttonSaveNewWorkout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(MainActivity.selectedExercises.size() > 0) {
+                    Toast.makeText(getActivity().getBaseContext(), "Nieuwe workout wordt opgeslagen ...", Toast.LENGTH_SHORT).show();
+
+                    //workout wegschrijven naar de database
+
+                } else {
+                    Toast.makeText(getActivity().getBaseContext(), "Gelieve eerst oefeningen toe te voegen aan de nieuwe workout.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
+
         Bundle args = getArguments();
         if (args  != null && args.containsKey("selected_exercise")) {
             String selectedExercise = args.getString("selected_exercise");
-            //Toast.makeText(getActivity().getBaseContext(), "Exercise met id: '" + selectedExercise + "' wordt toegevoegd aan deze nieuwe workout ...", Toast.LENGTH_SHORT).show();
 
             MainActivity.selectedExercises.add(selectedExercise);
         }
@@ -72,4 +93,6 @@ public class AddNewWorkoutSelectedExercisesList extends Fragment {
 
         return root;
     }
+
+
 }

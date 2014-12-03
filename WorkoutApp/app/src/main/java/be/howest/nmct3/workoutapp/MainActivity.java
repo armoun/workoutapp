@@ -189,7 +189,7 @@ public class MainActivity extends FragmentActivity {
         transaction.replace(R.id.main, frag).commit();
 
         activeFragment = frag;
-        Toast.makeText(getBaseContext(), frag.getClass().getSimpleName(),Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getBaseContext(), "Active fragment: " + frag.getClass().getSimpleName(),Toast.LENGTH_SHORT).show();
 
         // Highlight the selected item, update the title, and close the drawer
         mDrawerList.setItemChecked(position, true);
@@ -286,32 +286,32 @@ public class MainActivity extends FragmentActivity {
 
             //Geklikt op "+" bij workouts
             case R.id.action_add_workout:
-                Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
                 OpenAddNewWorkoutFragment();
                 break;
             //Geklikt op "+" bij new workout selected exercises list
             case R.id.action_add_exercise_new_workout_selected_exercises:
-                Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
                 OpenNewWorkoutExercisesList();
                 break;
             //Geklikt op "search" bij new workout selected exercises list
             case R.id.action_search_new_workout_selected_exercises:
-                Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
                 break;
             //Geklikt op "search" bij exercises
             case R.id.action_search:
-                Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
                 break;
             //Geklikt op "+" bij exercises
             case R.id.action_add_exercise:
-                Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
                 break;
             //Geklikt op "+" bij planner
             case R.id.action_add_workout_to_planner:
-                Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
                 break;
             default:
-                Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
                 break;
         }
 
@@ -326,6 +326,7 @@ public class MainActivity extends FragmentActivity {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
         activeFragment = frag;
+        selectedExercises = new ArrayList<String>();
 
         transaction.replace(R.id.main, frag);
         transaction.addToBackStack(null);

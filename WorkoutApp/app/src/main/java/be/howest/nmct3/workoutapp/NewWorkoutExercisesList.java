@@ -71,6 +71,7 @@ public class NewWorkoutExercisesList extends Fragment implements LoaderManager.L
                 mCursor.moveToPosition(position);
                 String exerciseId = ""+ mCursor.getInt(mCursor.getColumnIndex(Contract.Exercises._ID));
                 //Toast.makeText(getActivity().getBaseContext(), "" + exerciseId, Toast.LENGTH_SHORT).show();
+                String exerciseName = ""+mCursor.getString(mCursor.getColumnIndex(Contract.Exercises.EXERCISE_NAME));
 
                 MainActivity.EXERCICE_ID = mCursor.getInt(mCursor.getColumnIndex(Contract.Exercises._ID));
 
@@ -82,7 +83,7 @@ public class NewWorkoutExercisesList extends Fragment implements LoaderManager.L
 
                 //geef de geselecteerde exercise door aan AddNewWorkoutSelectedExercisesList
                 final Bundle bundle = new Bundle();
-                bundle.putString("selected_exercise", exerciseId);
+                bundle.putString("selected_exercise", exerciseName);
                 newFragment.setArguments(bundle);
 
                 // Replace whatever is in the fragment_container view with this fragment,

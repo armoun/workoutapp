@@ -1,7 +1,8 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     tools:context="be.howest.nmct3.workoutapp.AddNewWorkoutSelectedExercisesList">
 
     <ListView
@@ -10,8 +11,21 @@
         android:layout_height="fill_parent"
         android:layout_gravity="start"
         android:choiceMode="singleChoice"
-        android:layout_weight="1">
+        android:layout_weight="0.2">
 
     </ListView>
 
-</FrameLayout>
+
+    <Button
+        android:id="@+id/button_save_new_workout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:text="Save new workout"
+        android:layout_marginTop="30dp"
+        android:background="#ff5d5b5b"
+        android:textColor="#FFF"
+        android:onClick="saveNewWorkout"
+        />
+
+</LinearLayout>
