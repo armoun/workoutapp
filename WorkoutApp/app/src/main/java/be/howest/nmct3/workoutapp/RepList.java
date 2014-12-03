@@ -89,7 +89,7 @@ public class RepList extends Fragment {
 
             Log.d("RepList", DatabaseUtils.dumpCursorToString(c));
 
-            reps = c.getString(c.getColumnIndex(Contract.WorkoutExercises.REPS)).split(",");
+            reps = c.getString(c.getColumnIndex(Contract.WorkoutExercises.REPS)).split(" ");
 
             this.addAll(reps);
         }
