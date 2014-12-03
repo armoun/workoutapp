@@ -165,5 +165,14 @@ public class SettingsAdmin {
         return units;
     }
 
+    public void setUsername(String value){
+        prefs.edit().putString("USERNAME", value).apply();
+    }
+
+    public String getUsername(){
+        String name = prefs.getString("USERNAME","");
+        return name;
+    }
+
 
 }
