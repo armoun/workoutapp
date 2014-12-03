@@ -1,5 +1,6 @@
 package be.howest.nmct3.workoutapp;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -82,6 +83,15 @@ public class Workout_Add_Exercise_List extends Fragment implements LoaderManager
                 final Bundle bundle = new Bundle();
                 bundle.putString("selected_exercise", exerciseName);
                 newFragment.setArguments(bundle);
+
+                int ex_id = mCursor.getInt(mCursor.getColumnIndex(Contract.Exercises._ID));
+                int wo_id = MainActivity.WORKOUT_ID;
+
+                ContentValues values = new ContentValues();
+                values.put(Contract.WorkoutExercises.WORKOUT_ID, wo_id);
+                values.put(Contract.WorkoutExercises.EXERCISE_ID, ex_id);
+                values.put(Contract.WorkoutExercises.REPS, "12 12 12");
+                getActivity().getContentResolver().insert(Contract.WorkoutExercises.CONTENT_URI, values);
 
                 // Replace whatever is in the fragment_container view with this fragment,
                 // and add the transaction to the back stack

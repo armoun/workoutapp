@@ -1,6 +1,7 @@
 package be.howest.nmct3.workoutapp;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -16,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CursorAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
@@ -26,6 +28,7 @@ import be.howest.nmct3.workoutapp.data.WorkoutsLoader;
 
 public class AddNewWorkoutFragment extends android.support.v4.app.Fragment {
 
+    EditText nameEditText;
 
     public AddNewWorkoutFragment() {
         // Required empty public constructor
@@ -41,17 +44,30 @@ public class AddNewWorkoutFragment extends android.support.v4.app.Fragment {
                              Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_add_new_workout, null);
 
+        nameEditText = (EditText) root.findViewById(R.id.name_new_workout_editText);
+
         //GO TO NEXT
         final Button logoutButton = (Button) root.findViewById(R.id.workoutNameIsChosenNextButton);
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
+                insertWorkoutName();
                 goNextButton(v);
             }
         });
 
 
         return root;
+    }
+
+    private void insertWorkoutName(){
+
+        String name = nameEditText.getText().toString();
+
+        ContentValues values = new ContentValues();
+        values.put(Contract.Workouts.NAME, name);
+        values.put(Contract.Workouts.ISPAID, 0);
+        getActivity().getContentResolver().insert(Contract.Workouts.CONTENT_URI, values);
     }
 
     public void goNextButton(View v)
