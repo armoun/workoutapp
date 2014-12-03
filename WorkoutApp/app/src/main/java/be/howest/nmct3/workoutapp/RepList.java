@@ -42,6 +42,9 @@ public class RepList extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        //activity melden dat er een eigen menu moet worden geladen
+        setHasOptionsMenu(true);
+
         Log.d("RepList", "Ex_id" + MainActivity.EXERCICE_ID + " Wo_id" + MainActivity.WORKOUT_ID);
 
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.rep_list, null);

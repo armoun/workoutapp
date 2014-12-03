@@ -33,7 +33,7 @@
         <Button
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:text="NEXT" android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="CREATE WORKOUT" android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="#FFF"
             android:gravity="center"
             android:padding="15dp"

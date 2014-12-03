@@ -28,6 +28,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -75,6 +76,7 @@ public class MainActivity extends FragmentActivity {
             "be.howest.nmct3.workoutapp.AddNewWorkoutFragment",
             "be.howest.nmct3.workoutapp.Workout_Add_Exercise_List",
             "be.howest.nmct3.workoutapp.Workouts_SelectedWorkoutList_Fragment",
+            "be.howest.nmct3.workoutapp.RepList",
             "be.howest.nmct3.workoutapp.AddWorkoutToPlannerFragment"
     };
 
@@ -256,8 +258,12 @@ public class MainActivity extends FragmentActivity {
                     case 7:
                         getMenuInflater().inflate(R.menu.workouts_workoutselected_list, menu);
                         break;
-                    //Add Workout To Planner
+                    //Add Set To RepList
                     case 8:
+                        getMenuInflater().inflate(R.menu.replist, menu);
+                        break;
+                    //Add Workout To Planner
+                    case 9:
                         getMenuInflater().inflate(R.menu.my, menu);
                         break;
                     default:
@@ -290,6 +296,13 @@ public class MainActivity extends FragmentActivity {
             case R.id.action_add_exercise_to_exercises_selected_workout:
                 //Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
                 OpenNewWorkoutExercisesList();
+                break;
+            case R.id.action_search_exercises_selected_workout:
+                //Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
+                break;
+            //Geklikt op "+" bij geselecteerde exercise onder exercises
+            case R.id.action_add_sets:
+                Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
                 break;
             //Geklikt op "search" bij exercises
             case R.id.action_search:

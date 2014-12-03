@@ -63,6 +63,8 @@ public class ExercisesFragment extends Fragment {
                 // consider using Java coding conventions (upper first char class names!!!)
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
+                MainActivity.activeFragment = newFragment;
+
                 // Replace whatever is in the fragment_container view with this fragment,
                 // and add the transaction to the back stack
                 transaction.replace(R.id.main, newFragment);
