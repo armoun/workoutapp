@@ -114,6 +114,7 @@ public class LoginActivity extends Activity {
             Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
             //myIntent.putExtra("key", value); //Optional parameters
             LoginActivity.this.startActivity(myIntent);
+            finish();
         }
         else
         {
@@ -131,6 +132,7 @@ public class LoginActivity extends Activity {
         Intent myIntent = new Intent(LoginActivity.this, RegisterActivity.class);
         //myIntent.putExtra("key", value); //Optional parameters
         LoginActivity.this.startActivity(myIntent);
+        finish();
     }
 
     public void LoginGuestButton(View v)
@@ -139,6 +141,7 @@ public class LoginActivity extends Activity {
         Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
         //myIntent.putExtra("key", value); //Optional parameters
         LoginActivity.this.startActivity(myIntent);
+        finish();
     }
 
 }

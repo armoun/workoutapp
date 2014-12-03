@@ -6,13 +6,16 @@ import android.accounts.Account;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.SyncStatusObserver;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import be.howest.nmct3.workoutapp.Account.GenericAccountService;
 import be.howest.nmct3.workoutapp.data.Contract;
@@ -42,6 +45,14 @@ public class DashboardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.dashboard_fragment_layout, null);
+
+        //NAAM INVULLEN
+        TextView txtNavDrawerTitle = (TextView) root.findViewById(R.id.dashboardFirstnameLastnameId);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String firstname = preferences.getString("FIRSTNAME","");
+        String lastname = preferences.getString("LASTNAME","");
+        txtNavDrawerTitle.setText(firstname + " " + lastname);
+
         return root;
     }
 

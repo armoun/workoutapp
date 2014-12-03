@@ -96,6 +96,7 @@ public class RegisterActivity extends Activity {
             Intent myIntent = new Intent(RegisterActivity.this, MainActivity.class);
             //myIntent.putExtra("key", value); //Optional parameters
             RegisterActivity.this.startActivity(myIntent);
+            finish();
 
         } else {
             Toast.makeText(getApplicationContext(), "TRY AGAIN",
@@ -110,6 +111,7 @@ public class RegisterActivity extends Activity {
         Intent myIntent = new Intent(RegisterActivity.this, LoginActivity.class);
         //myIntent.putExtra("key", value); //Optional parameters
         RegisterActivity.this.startActivity(myIntent);
+        finish();
     }
 
 }
