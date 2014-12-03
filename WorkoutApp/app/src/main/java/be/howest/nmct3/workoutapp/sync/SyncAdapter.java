@@ -61,7 +61,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     @Override
     public void onPerformSync(Account account, Bundle bundle, String s, ContentProviderClient contentProviderClient, SyncResult syncResult) {
         //downloadExercises(contentProviderClient, syncResult);
-        //downloadWorkouts(contentProviderClient, syncResult);
+        downloadWorkouts(contentProviderClient, syncResult);
         //uploadWorkouts(contentProviderClient, syncResult);
     }
 
@@ -124,7 +124,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                             Log.d("","------------------------------------------------------------------------------");
                             Log.d(TAG,"Trying to SYNC for wo_id: " + wo_id + ": wo_id " + c2.getString(c2.getColumnIndex(Contract.WorkoutExercises.WORKOUT_ID)) + "; ex_id" + c2.getString(c2.getColumnIndex(Contract.WorkoutExercises.EXERCISE_ID)));
 
-                            URL url2 = new URL(UPLOAD_URL_WORKOUTEXERCISES + "workoutid=" + c2.getString(c2.getColumnIndex(Contract.WorkoutExercises.EXERCISE_ID)) + "&exerciseid=" + c2.getString(c2.getColumnIndex(Contract.WorkoutExercises.EXERCISE_ID)));
+                            URL url2 = new URL(UPLOAD_URL_WORKOUTEXERCISES + "workoutid=" + c2.getString(c2.getColumnIndex(Contract.WorkoutExercises.WORKOUT_ID)) + "&exerciseid=" + c2.getString(c2.getColumnIndex(Contract.WorkoutExercises.EXERCISE_ID)));
 
                             HttpURLConnection connection2 = (HttpURLConnection) url2.openConnection();
                             connection2.setReadTimeout(NET_READ_TIMEOUT_MILLIS);
