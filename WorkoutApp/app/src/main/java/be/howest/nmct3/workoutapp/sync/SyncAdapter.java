@@ -29,6 +29,7 @@ import java.net.URL;
 import java.net.HttpURLConnection;
 
 import be.howest.nmct3.workoutapp.data.Contract;
+import be.howest.nmct3.workoutapp.data.SettingsAdmin;
 
 /**
  * Created by nielslammens on 19/11/14.
@@ -51,7 +52,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     private static final String FEED_URL_EXERCISES = "https://viktordebock.be/mad_backend/api/exercises/index.php";
     private static final String FEED_URL_WORKOUTS = "http://www.viktordebock.be/mad_backend/api/workoutsbyuser/index.php?username=viktordebock";
     private static final String UPLOAD_URL_WORKOUTS = "http://www.viktordebock.be/mad_backend/add/addworkoutbyusername/index.php?";
-    //username=nielslammens&name=chest
+    public static final String UPLOAD_URL_WORKOUTEXERCISES = "http://www.viktordebock.be/mad_backend/add/addexercisetoworkout/?";
 
     private static final int NET_CONNECT_TIMEOUT_MILLIS = 15000;  // 15 seconds
 
@@ -59,8 +60,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
     @Override
     public void onPerformSync(Account account, Bundle bundle, String s, ContentProviderClient contentProviderClient, SyncResult syncResult) {
-        downloadExercises(contentProviderClient, syncResult);
-        downloadWorkouts(contentProviderClient, syncResult);
+        //downloadExercises(contentProviderClient, syncResult);
+        //downloadWorkouts(contentProviderClient, syncResult);
         //uploadWorkouts(contentProviderClient, syncResult);
     }
 
@@ -69,7 +70,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         Log.d(TAG, "Beginning network synchronization");
 
         try {
-            final URL location = new URL(UPLOAD_URL_WORKOUTS + "username=nielslammens&name=chest");
+            final URL location = new URL(UPLOAD_URL_WORKOUTS + "username=X&name=Y");
             InputStream stream = null;
 
             try {
@@ -77,27 +78,76 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
 
                 try {
-                    Log.d(TAG,"Trying to SYNC Exercises");
 
-                    URL url = new URL(UPLOAD_URL_WORKOUTS + "username=nielslammens&name=chest1");
 
-                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                    connection.setReadTimeout(NET_READ_TIMEOUT_MILLIS);
-                    connection.setConnectTimeout(NET_CONNECT_TIMEOUT_MILLIS);
-                    connection.setRequestMethod("GET");
-                    connection.setRequestProperty("Accept", "application/json");
-                    connection.setRequestProperty("charset", "utf-8");
-                    connection.setDoInput(true);
+                    String[] proj = new String[]{Contract.Workouts._ID, Contract.Workouts.NAME, Contract.Workouts.ISPAID};
+                    String username = SettingsAdmin.getInstance(getContext()).getUsername();
+                    Cursor c = contentProviderClient.query(Contract.Workouts.CONTENT_URI, proj, null, null, null);
 
-                    connection.connect();
+                    //c.moveToFirst();
 
-                    Log.d("","_____________________________response code : "+ connection.getResponseCode());
-                    Log.d("","______________CONNECTION: ");
-                    InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+                    Log.d("","Aantal workouts to sync: " + c.getCount());
 
-                    Log.d("","" + getStringFromInputStream(connection.getInputStream()));
+                    // voor elke workout moet dit gebeuren
+                    while(c.moveToNext()){
+                        Log.d("","____________________________________________________________________________________________________________________________________________________________");
+                        Log.d(TAG,"Trying to SYNC for " + username + ": " + c.getString(c.getColumnIndex(Contract.Workouts._ID)) + "; " + c.getString(c.getColumnIndex(Contract.Workouts.NAME)));
 
-                    connection.disconnect();
+                        URL url = new URL(UPLOAD_URL_WORKOUTS + "username=" + "nielslammens" + "&name=" + c.getString(c.getColumnIndex(Contract.Workouts.NAME)));
+
+                        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                        connection.setReadTimeout(NET_READ_TIMEOUT_MILLIS);
+                        connection.setConnectTimeout(NET_CONNECT_TIMEOUT_MILLIS);
+                        connection.setRequestMethod("GET");
+                        connection.setRequestProperty("Accept", "application/json");
+                        connection.setRequestProperty("charset", "utf-8");
+                        connection.setDoInput(true);
+
+                        connection.connect();
+
+                        Log.d("","_____________________________response code : "+ connection.getResponseCode());
+                        //Log.d("","______________CONNECTION: ");
+                        InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+
+                        Log.d("","Stream from workout: " + getStringFromInputStream(connection.getInputStream()));
+
+                        connection.disconnect();
+
+                        String wo_id = c.getString(c.getColumnIndex(Contract.Workouts._ID));
+
+                        String[] proj2 = new String[]{Contract.WorkoutExercises._ID, Contract.WorkoutExercises.EXERCISE_ID, Contract.WorkoutExercises.WORKOUT_ID, Contract.WorkoutExercises.REPS};
+                        Cursor c2 = contentProviderClient.query(Contract.WorkoutExercises.CONTENT_URI, proj2, Contract.WorkoutExercises.WORKOUT_ID +"=?", new String[]{wo_id}, null);
+
+                        Log.d("","Aantal workoutExercises to sync: " + c2.getCount());
+
+                        while (c2.moveToNext()){
+                            Log.d("","------------------------------------------------------------------------------");
+                            Log.d(TAG,"Trying to SYNC for wo_id: " + wo_id + ": wo_id " + c2.getString(c2.getColumnIndex(Contract.WorkoutExercises.WORKOUT_ID)) + "; ex_id" + c2.getString(c2.getColumnIndex(Contract.WorkoutExercises.EXERCISE_ID)));
+
+                            URL url2 = new URL(UPLOAD_URL_WORKOUTEXERCISES + "workoutid=" + c2.getString(c2.getColumnIndex(Contract.WorkoutExercises.EXERCISE_ID)) + "&exerciseid=" + c2.getString(c2.getColumnIndex(Contract.WorkoutExercises.EXERCISE_ID)));
+
+                            HttpURLConnection connection2 = (HttpURLConnection) url2.openConnection();
+                            connection2.setReadTimeout(NET_READ_TIMEOUT_MILLIS);
+                            connection2.setConnectTimeout(NET_CONNECT_TIMEOUT_MILLIS);
+                            connection2.setRequestMethod("GET");
+                            connection2.setRequestProperty("Accept", "application/json");
+                            connection2.setRequestProperty("charset", "utf-8");
+                            connection2.setDoInput(true);
+
+                            connection2.connect();
+
+                            Log.d("","_____________________________response code : "+ connection2.getResponseCode());
+                            //Log.d("","______________CONNECTION: ");
+                            InputStreamReader reader2 = new InputStreamReader(connection2.getInputStream());
+
+                            Log.d("","Stream from exercise: " + getStringFromInputStream(connection2.getInputStream()));
+
+                            connection2.disconnect();
+                        }
+                    }
+
+
+
                 } catch (Exception e){
                     e.printStackTrace();
                 }
