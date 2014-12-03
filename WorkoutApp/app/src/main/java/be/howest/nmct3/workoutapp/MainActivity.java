@@ -314,6 +314,7 @@ public class MainActivity extends FragmentActivity {
             //Geklikt op "+" bij planner
             case R.id.action_add_workout_to_planner:
                 //Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
+                OpenAddNewWorkoutInPlannerFragment();
                 break;
             default:
                 //Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
