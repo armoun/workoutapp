@@ -10,16 +10,12 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.Toast;
 
 import be.howest.nmct3.workoutapp.data.Contract;
 import be.howest.nmct3.workoutapp.data.ExercisesLoader;
@@ -27,19 +23,19 @@ import be.howest.nmct3.workoutapp.data.ExercisesLoader;
 /**
  * Created by nielslammens on 2/12/14.
  */
-public class NewWorkoutExercisesList extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
+public class Workout_Add_Exercise_List extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
 
     private CursorAdapter mAdapter;
     private ListView list;
 
     private Cursor mCursor;
 
-    public NewWorkoutExercisesList() {
+    public Workout_Add_Exercise_List() {
         // Required empty public constructor
     }
 
     public static Fragment newInstance(Context context) {
-        NewWorkoutExercisesList frag = new NewWorkoutExercisesList();
+        Workout_Add_Exercise_List frag = new Workout_Add_Exercise_List();
         return frag;
     }
 
