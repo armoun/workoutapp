@@ -302,23 +302,10 @@ public class MainActivity extends FragmentActivity {
             case R.id.action_search:
                 //Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
                 break;
-<<<<<<< HEAD
-            //Geklikt op "+" bij exercises
-            case R.id.action_add_exercise:
-                //Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
-                break;
             //Geklikt op "+" bij planner
             case R.id.action_add_workout_to_planner:
                 //Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
                 break;
-=======
-
-            //Geklikt op "+" bij planner
-            case R.id.action_add_workout_to_planner:
-                //Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
-                OpenAddNewWorkoutInPlannerFragment();
-
->>>>>>> FETCH_HEAD
             default:
                 //Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
                 break;
