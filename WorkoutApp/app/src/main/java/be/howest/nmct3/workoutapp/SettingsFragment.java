@@ -98,10 +98,7 @@ public class SettingsFragment extends Fragment {
 
     public void logOut(View v)
     {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("USERNAME", "");
-        editor.apply();
+        SettingsAdmin.getInstance(getActivity().getApplicationContext()).setUsername("");
 
         // DOORSTUREN NAAR LOGIN
         Intent myIntent = new Intent(getActivity(), LoginActivity.class);

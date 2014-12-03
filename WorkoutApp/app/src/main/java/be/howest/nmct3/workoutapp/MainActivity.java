@@ -35,6 +35,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import be.howest.nmct3.workoutapp.data.Exercise;
+import be.howest.nmct3.workoutapp.data.SettingsAdmin;
 import be.howest.nmct3.workoutapp.data.WorkoutsLoader;
 
 
@@ -143,8 +144,7 @@ public class MainActivity extends FragmentActivity {
 
         loadWorkouts();
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String name = preferences.getString("USERNAME","");
+        String name = SettingsAdmin.getInstance(getBaseContext()).getUsername();
 
         Toast.makeText(getApplicationContext(), "Logged in as: " + name,
                 Toast.LENGTH_LONG).show();

@@ -23,6 +23,7 @@ import org.w3c.dom.Text;
 
 import be.howest.nmct3.workoutapp.Account.GenericAccountService;
 import be.howest.nmct3.workoutapp.data.Contract;
+import be.howest.nmct3.workoutapp.data.SettingsAdmin;
 import be.howest.nmct3.workoutapp.sync.SyncUtils;
 
 
@@ -52,9 +53,8 @@ public class DashboardFragment extends Fragment {
 
         //NAAM INVULLEN
         TextView txtNavDrawerTitle = (TextView) root.findViewById(R.id.dashboardFirstnameLastnameId);
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String firstname = preferences.getString("FIRSTNAME","");
-        String lastname = preferences.getString("LASTNAME","");
+        String firstname = SettingsAdmin.getInstance(getActivity().getApplicationContext()).getFirstname();
+        String lastname = SettingsAdmin.getInstance(getActivity().getApplicationContext()).getLastname();
         txtNavDrawerTitle.setText(firstname + " " + lastname);
 
         TextView Weight = (TextView) root.findViewById(R.id.dashboardWEIGHT);

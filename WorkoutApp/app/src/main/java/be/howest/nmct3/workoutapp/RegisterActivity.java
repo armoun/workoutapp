@@ -21,6 +21,8 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.IOException;
 
+import be.howest.nmct3.workoutapp.data.SettingsAdmin;
+
 
 public class RegisterActivity extends Activity {
 
@@ -84,13 +86,9 @@ public class RegisterActivity extends Activity {
 
         if (ResponseCode == 201) {
             // USERNANE IN SHARED PREFRENCES ZETTEN
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putString("USERNAME", RegisterUsername);
-            editor.putString("FIRSTNAME", RegisterFirstName);
-            editor.putString("LASTNAME", RegisterLastName);
-            editor.apply();
-
+            SettingsAdmin.getInstance(getApplicationContext()).setUsername(RegisterUsername);
+            SettingsAdmin.getInstance(getApplicationContext()).setFirstname(RegisterFirstName);
+            SettingsAdmin.getInstance(getApplicationContext()).setLastname(RegisterLastName);
 
             // DOORSTUREN NAAR APP
             Intent myIntent = new Intent(RegisterActivity.this, MainActivity.class);

@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,6 +28,8 @@ import org.apache.http.params.HttpParams;
 
 import java.io.IOException;
 
+import be.howest.nmct3.workoutapp.data.SettingsAdmin;
+
 
 public class LoginActivity extends Activity {
 
@@ -37,8 +40,7 @@ public class LoginActivity extends Activity {
         setContentView(R.layout.login_layout);
 
         // CHECK IF THERE IS A SHARED PREFERENCE USERNAME
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String username = preferences.getString("USERNAME","");
+        String username = SettingsAdmin.getInstance(getApplicationContext()).getUsername();
         if(!(username.equals("")))
         {
             //AL REEDS INGELOGD
@@ -104,10 +106,8 @@ public class LoginActivity extends Activity {
         if(ResponseCode == 201)
         {
             // USERNANE IN SHARED PREFRENCES ZETTEN
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putString("USERNAME", LoginPassword);
-            editor.apply();
+            Log.d("USERNAMEEEEEE: ", LoginUsername);
+            SettingsAdmin.getInstance(getApplicationContext()).setUsername(LoginUsername);
 
 
             // DOORSTUREN NAAR APP
@@ -138,12 +138,9 @@ public class LoginActivity extends Activity {
     public void LoginGuestButton(View v)
     {
         // LEGE USERNANE IN SHARED PREFRENCES ZETTEN
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("USERNAME", "");
-        editor.putString("FIRSTNAME", "GUEST");
-        editor.putString("LASTNAME", "");
-        editor.apply();
+        SettingsAdmin.getInstance(getApplicationContext()).setUsername("");
+        SettingsAdmin.getInstance(getApplicationContext()).setFirstname("GUEST");
+        SettingsAdmin.getInstance(getApplicationContext()).setLastname("");
 
         // DOORSTUREN NAAR APP
         Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
