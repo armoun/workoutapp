@@ -48,6 +48,10 @@ public class WorkoutsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        //activity melden dat er een eigen menu moet worden geladen
+        setHasOptionsMenu(true);
+
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.workouts_fragment_layout, null);
 
         String[] columns = new String[]{"name"};
@@ -75,6 +79,8 @@ public class WorkoutsFragment extends Fragment {
                 Fragment newFragment = Fragment.instantiate(getActivity().getApplicationContext(), "be.howest.nmct3.workoutapp.Workouts_SelectedWorkoutList_Fragment");
                 // consider using Java coding conventions (upper first char class names!!!)
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+                MainActivity.activeFragment = newFragment;
 
                 // Replace whatever is in the fragment_container view with this fragment,
                 // and add the transaction to the back stack

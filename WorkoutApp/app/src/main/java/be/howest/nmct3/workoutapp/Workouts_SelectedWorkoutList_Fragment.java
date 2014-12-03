@@ -48,6 +48,10 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        //activity melden dat er een eigen menu moet worden geladen
+        setHasOptionsMenu(true);
+
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.workouts_workoutselected_list_fragment_layout, null);
 
         list = (ListView) root.findViewById(R.id.workoutselected_list);
@@ -78,6 +82,8 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
                 Fragment newFragment = Fragment.instantiate(getActivity().getApplicationContext(), "be.howest.nmct3.workoutapp.RepList");
                 // consider using Java coding conventions (upper first char class names!!!)
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+                MainActivity.activeFragment = newFragment;
 
                 // Replace whatever is in the fragment_container view with this fragment,
                 // and add the transaction to the back stack
