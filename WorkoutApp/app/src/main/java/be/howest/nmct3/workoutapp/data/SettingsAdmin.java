@@ -43,7 +43,8 @@ public class SettingsAdmin {
 
     private Context mContext;
 
-    private String KEY_NAME = "settings.name";
+    private String KEY_LASTNAME = "settings.lastname";
+    private String KEY_FIRSTNAME = "settings.firstname";
     private String KEY_GENDER = "settings.gender";
     private String KEY_DATE_OF_BIRTH = "settings.dob";
     private String KEY_EMAIL = "settings.email";
@@ -52,19 +53,11 @@ public class SettingsAdmin {
 
     private String KEY_SHAREDPREFS = "be.howest.nmct3.workoutapp.prefs";
 
-    Map<Integer, String> map = new HashMap<Integer, String>();
-
     private SharedPreferences prefs;
 
     public SettingsAdmin(Context context){
         mContext = context;
         prefs = mContext.getSharedPreferences(KEY_SHAREDPREFS, Context.MODE_PRIVATE);
-        map.put(0, KEY_NAME);
-        map.put(1, KEY_GENDER);
-        map.put(2, KEY_DATE_OF_BIRTH);
-        map.put(3, KEY_EMAIL);
-        map.put(4, KEY_PICTURE);
-        map.put(5, KEY_UNITS);
     }
 
     public static SettingsAdmin getInstance(Context context) {
@@ -84,7 +77,7 @@ public class SettingsAdmin {
 
         switch (index){
             case 0:
-                settingValue = getName();
+                settingValue = getLastname();
                 break;
             case 1:
                 settingValue = getGender();
@@ -107,12 +100,21 @@ public class SettingsAdmin {
         return settingValue;
     }
 
-    public void setName(String value){
-        prefs.edit().putString(KEY_NAME, value).apply();
+    public void setLastname(String value){
+        prefs.edit().putString(KEY_LASTNAME, value).apply();
     }
 
-    public String getName(){
-        String name = prefs.getString(KEY_NAME,"Firstname Name");
+    public String getLastname(){
+        String name = prefs.getString(KEY_LASTNAME,"Firstname Name");
+        return name;
+    }
+
+    public void setFirstname(String value){
+        prefs.edit().putString(KEY_FIRSTNAME, value).apply();
+    }
+
+    public String getFirstname(){
+        String name = prefs.getString(KEY_FIRSTNAME,"Firstname Name");
         return name;
     }
 
