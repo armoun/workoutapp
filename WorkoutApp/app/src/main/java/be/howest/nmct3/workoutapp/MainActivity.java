@@ -302,6 +302,7 @@ public class MainActivity extends FragmentActivity {
             case R.id.action_search:
                 //Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
                 break;
+<<<<<<< HEAD
             //Geklikt op "+" bij exercises
             case R.id.action_add_exercise:
                 //Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
@@ -310,6 +311,14 @@ public class MainActivity extends FragmentActivity {
             case R.id.action_add_workout_to_planner:
                 //Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
                 break;
+=======
+
+            //Geklikt op "+" bij planner
+            case R.id.action_add_workout_to_planner:
+                //Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
+                OpenAddNewWorkoutInPlannerFragment();
+
+>>>>>>> FETCH_HEAD
             default:
                 //Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
                 break;
@@ -341,6 +350,18 @@ public class MainActivity extends FragmentActivity {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
         activeFragment = frag;
+
+        transaction.replace(R.id.main, frag);
+        transaction.addToBackStack(null);
+
+        // Commit the transaction
+        transaction.commit();
+    }
+
+    private void OpenAddNewWorkoutInPlannerFragment()
+    {
+        Fragment frag = Fragment.instantiate(MainActivity.this, "be.howest.nmct3.workoutapp.AddWorkoutToPlannerFragment");
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
         transaction.replace(R.id.main, frag);
         transaction.addToBackStack(null);

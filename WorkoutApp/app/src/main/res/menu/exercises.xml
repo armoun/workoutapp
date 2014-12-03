@@ -6,8 +6,4 @@
         android:title="Search"
         android:icon="@drawable/ic_action_search"
         android:showAsAction="ifRoom|collapseActionView" />
-    <item android:id="@+id/action_add_exercise"
-        android:icon="@drawable/ic_action_add"
-        android:title="Add new exercise"
-        android:showAsAction="ifRoom" />
 </menu>

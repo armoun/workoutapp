@@ -44,6 +44,7 @@
 
 
             <TextView
+                android:id="@+id/dashboardFirstnameLastnameId"
                 android:layout_weight="3"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"

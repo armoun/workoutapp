@@ -114,6 +114,7 @@ public class LoginActivity extends Activity {
             Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
             //myIntent.putExtra("key", value); //Optional parameters
             LoginActivity.this.startActivity(myIntent);
+            finish();
         }
         else
         {
@@ -131,14 +132,24 @@ public class LoginActivity extends Activity {
         Intent myIntent = new Intent(LoginActivity.this, RegisterActivity.class);
         //myIntent.putExtra("key", value); //Optional parameters
         LoginActivity.this.startActivity(myIntent);
+        finish();
     }
 
     public void LoginGuestButton(View v)
     {
+        // LEGE USERNANE IN SHARED PREFRENCES ZETTEN
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("USERNAME", "");
+        editor.putString("FIRSTNAME", "GUEST");
+        editor.putString("LASTNAME", "");
+        editor.apply();
+
         // DOORSTUREN NAAR APP
         Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
         //myIntent.putExtra("key", value); //Optional parameters
         LoginActivity.this.startActivity(myIntent);
+        finish();
     }
 
 }

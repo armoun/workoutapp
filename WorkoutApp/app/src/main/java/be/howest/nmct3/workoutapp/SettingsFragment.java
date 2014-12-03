@@ -107,6 +107,8 @@ public class SettingsFragment extends Fragment {
         Intent myIntent = new Intent(getActivity(), LoginActivity.class);
         //myIntent.putExtra("key", value); //Optional parameters
         getActivity().startActivity(myIntent);
+        getActivity().finish();
+
     }
 
 }
