@@ -62,8 +62,6 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
             Toast.makeText(getActivity().getBaseContext(), "Selected exercise: " + selectedExercise, Toast.LENGTH_SHORT).show();
         }
 
-
-
         list = (ListView) root.findViewById(R.id.workoutselected_list);
 
         mWorkoutId = MainActivity.WORKOUT_ID;

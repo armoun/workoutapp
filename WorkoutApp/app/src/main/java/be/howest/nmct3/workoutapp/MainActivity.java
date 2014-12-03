@@ -288,7 +288,7 @@ public class MainActivity extends FragmentActivity {
                 break;
             //Geklikt op een workout onder workouts
             case R.id.action_add_exercise_to_exercises_selected_workout:
-                Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
                 OpenNewWorkoutExercisesList();
                 break;
             //Geklikt op "search" bij exercises
