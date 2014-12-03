@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.Toast;
 
 import be.howest.nmct3.workoutapp.data.Contract;
 import be.howest.nmct3.workoutapp.data.ExercisesLoader;
@@ -71,13 +72,13 @@ public class Workout_Add_Exercise_List extends Fragment implements LoaderManager
 
                 MainActivity.EXERCICE_ID = mCursor.getInt(mCursor.getColumnIndex(Contract.Exercises._ID));
 
-                Fragment newFragment = Fragment.instantiate(getActivity().getApplicationContext(), "be.howest.nmct3.workoutapp.AddNewWorkoutSelectedExercisesList");
+                Fragment newFragment = Fragment.instantiate(getActivity().getApplicationContext(), "be.howest.nmct3.workoutapp.Workouts_SelectedWorkoutList_Fragment");
                 // consider using Java coding conventions (upper first char class names!!!)
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
                 MainActivity.activeFragment = newFragment;
 
-                //geef de geselecteerde exercise door aan AddNewWorkoutSelectedExercisesList
+                //geef de geselecteerde exercise door aan Workouts_SelectedWorkoutList_Fragment
                 final Bundle bundle = new Bundle();
                 bundle.putString("selected_exercise", exerciseName);
                 newFragment.setArguments(bundle);

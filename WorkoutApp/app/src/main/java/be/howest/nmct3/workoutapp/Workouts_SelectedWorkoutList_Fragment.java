@@ -54,6 +54,16 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
 
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.workouts_workoutselected_list_fragment_layout, null);
 
+
+
+        Bundle args = getArguments();
+        if (args  != null && args.containsKey("selected_exercise")) {
+            String selectedExercise = args.getString("selected_exercise");
+            Toast.makeText(getActivity().getBaseContext(), "Selected exercise: " + selectedExercise, Toast.LENGTH_SHORT).show();
+        }
+
+
+
         list = (ListView) root.findViewById(R.id.workoutselected_list);
 
         mWorkoutId = MainActivity.WORKOUT_ID;

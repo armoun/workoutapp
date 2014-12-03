@@ -65,9 +65,6 @@ public class MainActivity extends FragmentActivity {
     // Instance fields
     Account mAccount;
 
-    //add new workout (lijst opvullen met exercises)
-    public static ArrayList<String> selectedExercises = new ArrayList<String>();
-
     final String[] listTitles ={"Dashboard","Exercises","Workouts","Planner","Settings"};
     static final String[] fragments = {
             "be.howest.nmct3.workoutapp.DashboardFragment",
@@ -76,7 +73,6 @@ public class MainActivity extends FragmentActivity {
             "be.howest.nmct3.workoutapp.PlannerFragment",
             "be.howest.nmct3.workoutapp.SettingsFragment",
             "be.howest.nmct3.workoutapp.AddNewWorkoutFragment",
-            "be.howest.nmct3.workoutapp.AddNewWorkoutSelectedExercisesList",
             "be.howest.nmct3.workoutapp.Workout_Add_Exercise_List",
             "be.howest.nmct3.workoutapp.Workouts_SelectedWorkoutList_Fragment",
             "be.howest.nmct3.workoutapp.AddWorkoutToPlannerFragment"
@@ -252,20 +248,16 @@ public class MainActivity extends FragmentActivity {
                     case 5:
                         getMenuInflater().inflate(R.menu.my, menu);
                         break;
-                    //New Workout Selected Exercises List
-                    case 6:
-                        getMenuInflater().inflate(R.menu.new_workout_selected_exercises, menu);
-                        break;
                     //New Workout Exercises List
-                    case 7:
+                    case 6:
                         getMenuInflater().inflate(R.menu.new_workout_all_exercises, menu);
                         break;
                     //Add Exercise To Selected Workout
-                    case 8:
+                    case 7:
                         getMenuInflater().inflate(R.menu.workouts_workoutselected_list, menu);
                         break;
                     //Add Workout To Planner
-                    case 9:
+                    case 8:
                         getMenuInflater().inflate(R.menu.my, menu);
                         break;
                     default:
@@ -297,15 +289,7 @@ public class MainActivity extends FragmentActivity {
             //Geklikt op een workout onder workouts
             case R.id.action_add_exercise_to_exercises_selected_workout:
                 Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
-                break;
-            //Geklikt op "+" bij new workout selected exercises list
-            case R.id.action_add_exercise_new_workout_selected_exercises:
-                //Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
                 OpenNewWorkoutExercisesList();
-                break;
-            //Geklikt op "search" bij new workout selected exercises list
-            case R.id.action_search_new_workout_selected_exercises:
-                //Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
                 break;
             //Geklikt op "search" bij exercises
             case R.id.action_search:
@@ -332,7 +316,6 @@ public class MainActivity extends FragmentActivity {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
         activeFragment = frag;
-        selectedExercises = new ArrayList<String>();
 
         transaction.replace(R.id.main, frag);
         transaction.addToBackStack(null);
