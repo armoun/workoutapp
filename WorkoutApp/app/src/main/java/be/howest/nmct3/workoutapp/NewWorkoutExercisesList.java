@@ -10,6 +10,9 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -43,6 +46,9 @@ public class NewWorkoutExercisesList extends Fragment implements LoaderManager.L
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        //activity melden dat er een eigen menu moet worden geladen
+        setHasOptionsMenu(true);
+
         Log.d("","NEW WORKOUT EXERCISES LIST");
 
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.new_workout_exercises_list, null);
@@ -50,7 +56,7 @@ public class NewWorkoutExercisesList extends Fragment implements LoaderManager.L
         list = (ListView) root.findViewById(R.id.new_workout_exercises_liste);
 
         String[] columns = new String[] { Contract.Exercises.EXERCISE_NAME };
-        int[] viewIds = new int[] { R.id.new_workout_exercise_textview};
+        int[] viewIds = new int[] { R.id.new_workout_list_exercises_item_text};
 
         mAdapter = new SimpleCursorAdapter(getActivity(),
                 R.layout.new_workout_exercise_item_layout, null,
@@ -64,13 +70,20 @@ public class NewWorkoutExercisesList extends Fragment implements LoaderManager.L
                                     long id) {
                 mCursor.moveToPosition(position);
                 String exerciseId = ""+ mCursor.getInt(mCursor.getColumnIndex(Contract.Exercises._ID));
-                Toast.makeText(getActivity().getBaseContext(), "" + exerciseId, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity().getBaseContext(), "" + exerciseId, Toast.LENGTH_SHORT).show();
 
                 MainActivity.EXERCICE_ID = mCursor.getInt(mCursor.getColumnIndex(Contract.Exercises._ID));
 
-                Fragment newFragment = Fragment.instantiate(getActivity().getApplicationContext(), "be.howest.nmct3.workoutapp.FRAGMENTNAAM");
+                Fragment newFragment = Fragment.instantiate(getActivity().getApplicationContext(), "be.howest.nmct3.workoutapp.AddNewWorkoutSelectedExercisesList");
                 // consider using Java coding conventions (upper first char class names!!!)
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+                MainActivity.activeFragment = newFragment;
+
+                //geef de geselecteerde exercise door aan AddNewWorkoutSelectedExercisesList
+                final Bundle bundle = new Bundle();
+                bundle.putString("selected_exercise", exerciseId);
+                newFragment.setArguments(bundle);
 
                 // Replace whatever is in the fragment_container view with this fragment,
                 // and add the transaction to the back stack

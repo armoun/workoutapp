@@ -1,0 +1,17 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="be.howest.nmct3.workoutapp.AddNewWorkoutSelectedExercisesList">
+
+    <ListView
+        android:id="@+id/new_workout_selected_exercises_list"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="start"
+        android:choiceMode="singleChoice"
+        android:layout_weight="1">
+
+    </ListView>
+
+</FrameLayout>

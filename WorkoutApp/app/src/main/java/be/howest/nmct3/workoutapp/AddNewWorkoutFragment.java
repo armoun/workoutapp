@@ -9,6 +9,8 @@ import android.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -34,7 +36,6 @@ public class AddNewWorkoutFragment extends android.support.v4.app.Fragment {
         return frag;
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -55,13 +56,15 @@ public class AddNewWorkoutFragment extends android.support.v4.app.Fragment {
 
     public void goNextButton(View v)
     {
-
         //OPEN NEXT FRAGMENT
-        android.support.v4.app.Fragment newFragment = android.support.v4.app.Fragment.instantiate(getActivity().getApplicationContext(), "be.howest.nmct3.workoutapp.NewWorkoutExercisesList");
+        android.support.v4.app.Fragment newFragment = android.support.v4.app.Fragment.instantiate(getActivity().getApplicationContext(), "be.howest.nmct3.workoutapp.AddNewWorkoutSelectedExercisesList");
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.main, newFragment);
         transaction.addToBackStack(null);
+
+        MainActivity.activeFragment = newFragment;
+        //Toast.makeText(getActivity().getBaseContext(), newFragment.getClass().getSimpleName(),Toast.LENGTH_SHORT).show();
 
         // Commit the transaction
         transaction.commit();
