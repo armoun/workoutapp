@@ -11,11 +11,15 @@ import android.content.SyncStatusObserver;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import be.howest.nmct3.workoutapp.Account.GenericAccountService;
 import be.howest.nmct3.workoutapp.data.Contract;
@@ -52,6 +56,11 @@ public class DashboardFragment extends Fragment {
         String firstname = preferences.getString("FIRSTNAME","");
         String lastname = preferences.getString("LASTNAME","");
         txtNavDrawerTitle.setText(firstname + " " + lastname);
+
+        TextView Weight = (TextView) root.findViewById(R.id.dashboardWEIGHT);
+        TextView Height = (TextView) root.findViewById(R.id.dashboardHEIGHT);
+        TextView BMI = (TextView) root.findViewById(R.id.dashboardBMI);
+        calculateBMI(Weight, Height, BMI);
 
         return root;
     }
@@ -136,4 +145,23 @@ public class DashboardFragment extends Fragment {
             });
         }
     };
+
+    public void calculateBMI(TextView pWeight, TextView pHeight, TextView pBMI)
+    {
+        double iWeight = Double.parseDouble(pWeight.getText().toString());
+        double iHeight = Double.parseDouble(pHeight.getText().toString());
+        iHeight = iHeight/100;
+
+        Log.d("WEIGHT", Double.toString(iWeight));
+        Log.d("HEIGHT", Double.toString(iHeight));
+
+        double myBMI = (iWeight / (iHeight * iHeight));
+        myBMI *= 100;
+        myBMI = Math.round(myBMI);
+        myBMI /= 100;
+
+        Log.d("BMI", Double.toString(myBMI));
+
+        pBMI.setText(Double.toString(myBMI));
+    }
 }

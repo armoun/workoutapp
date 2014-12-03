@@ -94,28 +94,31 @@
         android:layout_marginRight="15dp">
 
         <TextView
+            android:id="@+id/dashboardWEIGHT"
             android:layout_weight="1"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:text="65 kg"
+            android:text="65"
             android:gravity="center"
             android:background="#FFF"
             android:layout_marginRight="1dp"/>
 
         <TextView
+            android:id="@+id/dashboardHEIGHT"
             android:layout_weight="1"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:text="178 cm"
+            android:text="178"
             android:gravity="center"
             android:background="#FFF"
             android:layout_marginRight="1dp"/>
 
         <TextView
+            android:id="@+id/dashboardBMI"
             android:layout_weight="1"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:text="20 BMI"
+            android:text="20"
             android:gravity="center"
             android:background="#FFF"/>
 
