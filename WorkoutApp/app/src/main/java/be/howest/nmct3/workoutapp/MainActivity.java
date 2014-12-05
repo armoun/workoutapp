@@ -33,6 +33,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import be.howest.nmct3.workoutapp.data.Exercise;
 import be.howest.nmct3.workoutapp.data.SettingsAdmin;
@@ -54,6 +55,8 @@ public class MainActivity extends FragmentActivity {
     public static Fragment activeFragment;
 
     public static Cursor plannerWorkoutCursor;
+    public static String plannerSelectedDate = "";
+    public static Calendar phoneCalendar = Calendar.getInstance();
     public static int plannerSelectedWorkoutId = -1;
 
     ActionBarDrawerToggle icon;
