@@ -68,5 +68,21 @@ public class Contract {
         public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + CONTENT_PATH);
     }
 
+    public interface PlannersColumns extends BaseColumns {
+        public static final String WORKOUT_ID = "workout_id";
+        public static final String WO_DATE = "wo_date";
+    }
+
+    public static final class Planners implements PlannersColumns {
+        public static final String CONTENT_DIRECTORY = "planners";
+        public static final String DEFAULT_SORT_ORDER = WO_DATE + " ASC";
+        public static final int PLANNER_ID_PATH_POSITION = 1;
+        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.howest.planner";
+        public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.howest.planners";
+        public static final String ITEM_CONTENT_PATH = "/" + CONTENT_DIRECTORY +"/";
+        public static final Uri ITEM_CONTENT_URI = Uri.parse("content://" + AUTHORITY + ITEM_CONTENT_PATH);
+        public static final String CONTENT_PATH = "/" + CONTENT_DIRECTORY;
+        public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + CONTENT_PATH);
+    }
 
 }

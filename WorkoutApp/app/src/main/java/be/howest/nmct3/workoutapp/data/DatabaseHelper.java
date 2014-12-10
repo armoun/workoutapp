@@ -37,10 +37,12 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         db.execSQL("DROP TABLE IF EXISTS " + Contract.Workouts.CONTENT_DIRECTORY);
         db.execSQL("DROP TABLE IF EXISTS " + Contract.WorkoutExercises.CONTENT_DIRECTORY);
         db.execSQL("DROP TABLE IF EXISTS " + Contract.Exercises.CONTENT_DIRECTORY);
+        db.execSQL("DROP TABLE IF EXISTS " + Contract.Planners.CONTENT_DIRECTORY);
 
         createWorkoutsTableV1(db);
         createWorkoutExercisesTableV1(db);
         createExercisesTableV1(db);
+        createPlannerTableV1(db);
 
         //createDefaultRecords(db);
     }
@@ -50,10 +52,12 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         db.execSQL("DROP TABLE IF EXISTS " + Contract.Workouts.CONTENT_DIRECTORY);
         db.execSQL("DROP TABLE IF EXISTS " + Contract.WorkoutExercises.CONTENT_DIRECTORY);
         db.execSQL("DROP TABLE IF EXISTS " + Contract.Exercises.CONTENT_DIRECTORY);
+        db.execSQL("DROP TABLE IF EXISTS " + Contract.Planners.CONTENT_DIRECTORY);
 
         createWorkoutsTableV1(db);
         createWorkoutExercisesTableV1(db);
         createExercisesTableV1(db);
+        createPlannerTableV1(db);
 
         //createDefaultRecords(db);
     }
@@ -65,7 +69,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
                 + Contract.WorkoutColumns.ISPAID    + " INTEGER"
                 + ");";
 
-        Log.d(getClass().getCanonicalName(), "CREATE TABLE VOOR WORKOUTS__________________________________________________");
+        Log.d("DatabaseHelper","Workouts: " + SQL);
 
         db.execSQL(SQL);
 
@@ -79,7 +83,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
                 + Contract.WorkoutExerciseColumns.REPS          + " TEXT"
                 + ");";
         db.execSQL(SQL);
-
+        Log.d("DatabaseHelper","WorkoutExercises: " + SQL);
     }
 
     private void createExercisesTableV1(SQLiteDatabase db){
@@ -92,7 +96,17 @@ public class DatabaseHelper extends SQLiteOpenHelper{
                 + Contract.ExerciseColumns.IMAGE_NAME           + " TEXT "
                 + ");";
         db.execSQL(SQL);
+        Log.d("DatabaseHelper","Exercises: " + SQL);
+    }
 
+    private void createPlannerTableV1(SQLiteDatabase db) {
+        String SQL = "CREATE TABLE " + Contract.Planners.CONTENT_DIRECTORY + " ("
+                + Contract.PlannersColumns._ID                   + " INTEGER PRIMARY KEY, "
+                + Contract.PlannersColumns.WORKOUT_ID            + " INTEGER, "
+                + Contract.PlannersColumns.WO_DATE               + " TEXT"
+                + ");";
+        db.execSQL(SQL);
+        Log.d("DatabaseHelper","Planner: " + SQL);
     }
 
     private void createDefaultRecords(SQLiteDatabase db){

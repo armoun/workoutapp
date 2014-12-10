@@ -22,6 +22,7 @@ public class Provider extends ContentProvider{
     private static HashMap<String, String> sWorkoutsProjectionMap;
     private static HashMap<String, String> sExercisesProjectionMap;
     private static HashMap<String, String> sWorkoutExercisesProjectionMap;
+    private static HashMap<String, String> sPlannerProjectionMap;
 
     private static final int WORKOUTS = 1;
     private static final int WORKOUT_ID = 2;
@@ -29,6 +30,8 @@ public class Provider extends ContentProvider{
     private static final int EXERCISE_ID = 4;
     private static final int WORKOUTEXERCISES = 5;
     private static final int WORKOUTEXERCISE_ID = 6;
+    private static final int PLANNER = 7;
+    private static final int PLANNER_ID = 8;
 
     private DatabaseHelper mOpenHelper;
 
@@ -41,6 +44,8 @@ public class Provider extends ContentProvider{
         sUriMatcher.addURI(Contract.AUTHORITY, "exercises/#",           EXERCISE_ID);
         sUriMatcher.addURI(Contract.AUTHORITY, "workoutexercises",      WORKOUTEXERCISES);
         sUriMatcher.addURI(Contract.AUTHORITY, "workoutexercises/#",    WORKOUTEXERCISE_ID);
+        sUriMatcher.addURI(Contract.AUTHORITY, "planners",              PLANNER);
+        sUriMatcher.addURI(Contract.AUTHORITY, "planners/#",            PLANNER_ID);
 
         sWorkoutsProjectionMap = new HashMap<String, String>();
         sWorkoutsProjectionMap.put(Contract.Workouts._ID,                           Contract.Workouts._ID);
@@ -60,6 +65,11 @@ public class Provider extends ContentProvider{
         sWorkoutExercisesProjectionMap.put(Contract.WorkoutExercises.WORKOUT_ID,    Contract.WorkoutExercises.WORKOUT_ID);
         sWorkoutExercisesProjectionMap.put(Contract.WorkoutExercises.EXERCISE_ID,   Contract.WorkoutExercises.EXERCISE_ID);
         sWorkoutExercisesProjectionMap.put(Contract.WorkoutExercises.REPS,          Contract.WorkoutExercises.REPS);
+
+        sPlannerProjectionMap = new HashMap<String, String>();
+        sPlannerProjectionMap.put(Contract.Planners._ID,                             Contract.Planners._ID);
+        sPlannerProjectionMap.put(Contract.Planners.WORKOUT_ID,                      Contract.Planners.WORKOUT_ID);
+        sPlannerProjectionMap.put(Contract.Planners.WO_DATE,                         Contract.Planners.WO_DATE);
     }
 
     public Provider(){
@@ -132,6 +142,23 @@ public class Provider extends ContentProvider{
                     orderBy = Contract.WorkoutExercises.DEFAULT_SORT_ORDER;
                 }
                 break;
+            case PLANNER:
+                qb.setTables(Contract.Planners.CONTENT_DIRECTORY);
+                qb.setProjectionMap(sPlannerProjectionMap);
+                if (TextUtils.isEmpty(sortOrder)){
+                    orderBy = Contract.Planners.DEFAULT_SORT_ORDER;
+                }
+                break;
+            case PLANNER_ID:
+                qb.setTables(Contract.Planners.CONTENT_DIRECTORY);
+                qb.setProjectionMap(sPlannerProjectionMap);
+                qb.appendWhere(
+                        "(" + Contract.Planners._ID + "=" + uri.getPathSegments().get(Contract.Planners.PLANNER_ID_PATH_POSITION) + ")"
+                );
+                if (TextUtils.isEmpty(sortOrder)){
+                    orderBy = Contract.Planners.DEFAULT_SORT_ORDER;
+                }
+                break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
@@ -168,6 +195,10 @@ public class Provider extends ContentProvider{
                 return Contract.WorkoutExercises.CONTENT_TYPE;
             case WORKOUTEXERCISE_ID:
                 return Contract.WorkoutExercises.CONTENT_ITEM_TYPE;
+            case PLANNER:
+                return Contract.Planners.CONTENT_TYPE;
+            case PLANNER_ID:
+                return Contract.Planners.CONTENT_ITEM_TYPE;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
@@ -214,13 +245,13 @@ public class Provider extends ContentProvider{
                 }
                 break;
             case WORKOUTEXERCISES:
-                values.get(Contract.WorkoutExercises.WORKOUT_ID);
+                values.get(Contract.WorkoutExercises._ID);
                 if (!values.containsKey(Contract.WorkoutExercises.WORKOUT_ID))
                     throw  new IllegalArgumentException(Contract.WorkoutExercises.WORKOUT_ID + " is required for " + Contract.WorkoutExercises.CONTENT_DIRECTORY);
 
                 rowId = db.insert(
                         Contract.WorkoutExercises.CONTENT_DIRECTORY,
-                        Contract.WorkoutExercises.WORKOUT_ID,
+                        Contract.WorkoutExercises._ID,
                         values
                 );
 
@@ -228,6 +259,23 @@ public class Provider extends ContentProvider{
                     Uri workoutExerciseUri = ContentUris.withAppendedId(Contract.WorkoutExercises.ITEM_CONTENT_URI, rowId);
                     getContext().getContentResolver().notifyChange(workoutExerciseUri, null);
                     return workoutExerciseUri;
+                }
+                break;
+            case PLANNER:
+                values.get(Contract.Planners.WORKOUT_ID);
+                if (!values.containsKey(Contract.Planners.WORKOUT_ID))
+                    throw  new IllegalArgumentException(Contract.Planners.WORKOUT_ID + " is required for " + Contract.Planners.CONTENT_DIRECTORY);
+
+                rowId = db.insert(
+                        Contract.Planners.CONTENT_DIRECTORY,
+                        Contract.Planners.WORKOUT_ID,
+                        values
+                );
+
+                if (rowId > 0){
+                    Uri PlannerUri = ContentUris.withAppendedId(Contract.Planners.ITEM_CONTENT_URI, rowId);
+                    getContext().getContentResolver().notifyChange(PlannerUri, null);
+                    return PlannerUri;
                 }
                 break;
             default:
@@ -311,6 +359,28 @@ public class Provider extends ContentProvider{
                         whereArgs
                 );
                 break;
+            case PLANNER:
+                count = db.delete(
+                        Contract.Planners.CONTENT_DIRECTORY,
+                        where,
+                        whereArgs
+                );
+                break;
+
+            case PLANNER_ID:
+                String plannerId = uri.getPathSegments().get(Contract.Planners.PLANNER_ID_PATH_POSITION);
+                finalWhere = Contract.Planners._ID + "=" + plannerId;
+
+                if (where != null) {
+                    finalWhere = DatabaseUtils.concatenateWhere(finalWhere, where);
+                }
+
+                count = db.delete(
+                        Contract.Planners.CONTENT_DIRECTORY,
+                        finalWhere,
+                        whereArgs
+                );
+                break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
@@ -338,7 +408,7 @@ public class Provider extends ContentProvider{
 
             case WORKOUT_ID:
                 String workoutId = uri.getPathSegments().get(Contract.Workouts.WORKOUT_ID_PATH_POSITION);
-                finalWhere = Contract.WorkoutExercises._ID + "=" + workoutId;
+                finalWhere = Contract.Workouts._ID + "=" + workoutId;
                 if (where != null) {
                     finalWhere = DatabaseUtils.concatenateWhere(finalWhere, where);
                 }
@@ -391,6 +461,29 @@ public class Provider extends ContentProvider{
 
                 count = db.update(
                         Contract.WorkoutExercises.CONTENT_DIRECTORY,
+                        values,
+                        finalWhere,
+                        whereArgs
+                );
+                break;
+            case PLANNER:
+                count = db.update(
+                        Contract.Planners.CONTENT_DIRECTORY,
+                        values,
+                        where,
+                        whereArgs
+                );
+                break;
+
+            case PLANNER_ID:
+                String plannerId = uri.getPathSegments().get(Contract.Planners.PLANNER_ID_PATH_POSITION);
+                finalWhere = Contract.Planners._ID + "=" + plannerId;
+                if (where != null) {
+                    finalWhere = DatabaseUtils.concatenateWhere(finalWhere, where);
+                }
+
+                count = db.update(
+                        Contract.Planners.CONTENT_DIRECTORY,
                         values,
                         finalWhere,
                         whereArgs
