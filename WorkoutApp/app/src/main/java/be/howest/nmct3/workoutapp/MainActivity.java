@@ -1,7 +1,6 @@
 package be.howest.nmct3.workoutapp;
 
 
-
 import android.app.ActionBar;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,6 +15,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
@@ -42,7 +42,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import be.howest.nmct3.workoutapp.data.Exercise;
-import be.howest.nmct3.workoutapp.data.MyProfilePictureProvider;
 import be.howest.nmct3.workoutapp.data.SettingsAdmin;
 import be.howest.nmct3.workoutapp.data.WorkoutsLoader;
 
@@ -93,9 +92,8 @@ public class MainActivity extends FragmentActivity {
 
     private CustomDrawerlayoutAdapter customDrawerLayoutAdapter;
 
-    //profile picture load -> settings
-    private final int CAMERA_RESULT = 1;
-    private final String Tag = getClass().getName();
+    //Profile Picture Picker
+    private static int RESULT_LOAD_IMAGE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -425,48 +423,31 @@ public class MainActivity extends FragmentActivity {
         }
     }
 
-    public void startProfilePictureLoadIntent(View v) {
-        PackageManager pm = getPackageManager();
+    public void startProfilePicturePicker() {
+        Intent i = new Intent(
+                Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
-        if (pm.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
-
-            Intent i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-
-            i.putExtra(MediaStore.EXTRA_OUTPUT, MyProfilePictureProvider.CONTENT_URI);
-
-            startActivityForResult(i, CAMERA_RESULT);
-
-        } else {
-
-            Toast.makeText(getBaseContext(), "Camera is not available", Toast.LENGTH_LONG).show();
-
-        }
+        startActivityForResult(i, RESULT_LOAD_IMAGE);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-            super.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
 
-            Log.i(Tag, "Receive the camera result");
+        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
-            if (resultCode == RESULT_OK && requestCode == CAMERA_RESULT) {
+            Cursor cursor = getContentResolver().query(selectedImage,
+                    filePathColumn, null, null, null);
+            cursor.moveToFirst();
 
-                File out = new File(getFilesDir(), "newImage.jpg");
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String picturePath = cursor.getString(columnIndex);
+            cursor.close();
 
-                if(!out.exists()) {
-
-                    Toast.makeText(getBaseContext(),
-
-                            "Error while capturing image", Toast.LENGTH_LONG)
-
-                            .show();
-
-                    return;
-
-                }
-
-                Bitmap mBitmap = BitmapFactory.decodeFile(out.getAbsolutePath());
-                SettingsFragment.profilePicture = mBitmap;
-            }
+            // String picturePath contains the path of selected Image
+            Toast.makeText(getBaseContext(), "Selected Profile Picture Path: " + BitmapFactory.decodeFile(picturePath), Toast.LENGTH_SHORT);
+        }
     }
 }

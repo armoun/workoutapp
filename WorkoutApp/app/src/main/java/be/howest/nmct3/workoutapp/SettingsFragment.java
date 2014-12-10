@@ -1,13 +1,14 @@
 package be.howest.nmct3.workoutapp;
 
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
@@ -30,7 +31,6 @@ import android.widget.Toast;
 import java.util.List;
 import java.util.Set;
 
-import be.howest.nmct3.workoutapp.data.MyProfilePictureProvider;
 import be.howest.nmct3.workoutapp.data.SettingsAdmin;
 
 
@@ -41,7 +41,7 @@ import be.howest.nmct3.workoutapp.data.SettingsAdmin;
 public class SettingsFragment extends Fragment {
 
     private ListAdapter myListAdapter;
-    public static Bitmap profilePicture;
+    public static ImageView imageViewProfilePicture;
 
     public static final String[] Settings = {"Name", "Gender", "Date of Birth", "E-mail", "Picture", "Units"};
 
@@ -93,20 +93,12 @@ public class SettingsFragment extends Fragment {
             String value = SettingsAdmin.getInstance(getContext()).getValueForSetting(position);
             textSettingsPreview.setText(value);
 
-            //profile picture upload
+            //profile picture uploade
             if(position == 4) {
                 row.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        ((MainActivity)getActivity()).startProfilePictureLoadIntent(view);
-                        ImageView imageView = (ImageView) row.findViewById(R.id.imageViewProfilePicture);
-
-                        if (profilePicture != null) {
-                            Log.d("profile picture::::::::::::: ", ""+profilePicture);
-                            imageView.setImageBitmap(profilePicture);
-                        } else {
-                            Log.d("profile picture is ::::::::::::: ", "NULL");
-                        }
+                        ((MainActivity)getActivity()).startProfilePicturePicker();
                     }
                 });
             }
@@ -119,7 +111,6 @@ public class SettingsFragment extends Fragment {
             return Settings.length;
         }
     }
-
 
     public void logOut(View v)
     {
