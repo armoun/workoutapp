@@ -1,7 +1,9 @@
 package be.howest.nmct3.workoutapp;
 
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -20,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CursorAdapter;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
@@ -82,6 +85,11 @@ public class SettingsFragment extends Fragment {
             this.addAll(Settings);
         }
 
+        public void update()
+        {
+            this.notifyDataSetChanged();
+        }
+
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             final View row = super.getView(position, convertView, parent);
@@ -94,6 +102,16 @@ public class SettingsFragment extends Fragment {
             textSettingsPreview.setText(value);
 
             //profile picture uploade
+            if(position == 0)
+            {
+                row.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(final View v) {
+                        changeFirstnameLastname(v);
+                    }
+                });
+            }
+
             if(position == 4) {
                 row.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -124,4 +142,40 @@ public class SettingsFragment extends Fragment {
 
     }
 
+    public void changeFirstnameLastname(View v)
+    {
+        // get prompts.xml view
+        LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+        View promptView = layoutInflater.inflate(R.layout.settings_dialog_firstname_lastname, null);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                getActivity());
+        alertDialogBuilder.setView(promptView);
+
+        final EditText input_firstname = (EditText) promptView.findViewById(R.id.settings_input_firstname);
+        final EditText input_lastname = (EditText) promptView.findViewById(R.id.settings_input_lastname);
+        // setup a dialog window
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //resultText.setText("Hello, " + editText.getText());
+
+                        SettingsAdmin.getInstance(getActivity().getApplicationContext()).setFirstname(input_firstname.getText().toString());
+                        SettingsAdmin.getInstance(getActivity().getApplicationContext()).setLastname(input_lastname.getText().toString());
+
+
+                    }
+                })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        // create an alert dialog
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
+    }
 }
+

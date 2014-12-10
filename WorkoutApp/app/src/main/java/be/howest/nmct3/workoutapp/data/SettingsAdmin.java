@@ -77,7 +77,7 @@ public class SettingsAdmin {
 
         switch (index){
             case 0:
-                settingValue = getLastname();
+                settingValue = getFirstname() + " " + getLastname();
                 break;
             case 1:
                 settingValue = getGender();
@@ -101,69 +101,69 @@ public class SettingsAdmin {
     }
 
     public void setLastname(String value){
-        prefs.edit().putString(KEY_LASTNAME, value).apply();
+        prefs.edit().putString(getUsername() + "-" + KEY_LASTNAME, value).apply();
     }
 
     public String getLastname(){
-        String name = prefs.getString(KEY_LASTNAME,"Firstname Name");
+        String name = prefs.getString(getUsername() + "-" + KEY_LASTNAME,"Name");
         return name;
     }
 
     public void setFirstname(String value){
-        prefs.edit().putString(KEY_FIRSTNAME, value).apply();
+        prefs.edit().putString(getUsername() + "-" + KEY_FIRSTNAME, value).apply();
     }
 
     public String getFirstname(){
-        String name = prefs.getString(KEY_FIRSTNAME,"Firstname Name");
+        String name = prefs.getString(getUsername() + "-" + KEY_FIRSTNAME,"Firstname");
         return name;
     }
 
     public void setGender(String value){
         // 0 = male
         // 1 = female
-        prefs.edit().putString(KEY_GENDER, value).apply();
+        prefs.edit().putString(getUsername() + "-" + KEY_GENDER, value).apply();
     }
 
     public String getGender(){
-        String gender = prefs.getString(KEY_GENDER, "Male");
+        String gender = prefs.getString(getUsername() + "-" + KEY_GENDER, "Male");
         return gender;
     }
 
     public void setDateOfBirth(Date value){
-        prefs.edit().putString(KEY_DATE_OF_BIRTH, value.toString()).apply();
+        prefs.edit().putString(getUsername() + "-" + KEY_DATE_OF_BIRTH, value.toString()).apply();
     }
 
     public String getDateOfBirth(){
-        String dob = prefs.getString(KEY_DATE_OF_BIRTH, "1-1-1990");
+        String dob = prefs.getString(getUsername() + "-" + KEY_DATE_OF_BIRTH, "1-1-1990");
         return dob;
     }
 
     public void setEmail(String value){
-        prefs.edit().putString(KEY_EMAIL, value).apply();
+        prefs.edit().putString(getUsername() + "-" + KEY_EMAIL, value).apply();
     }
 
     public String getEmail(){
-        String email = prefs.getString(KEY_EMAIL,"email@example.com");
+        String email = prefs.getString(getUsername() + "-" + KEY_EMAIL,"email@example.com");
         return email;
     }
 
     public void setPicture(String path){
-        prefs.edit().putString(KEY_PICTURE, path).apply();
+        prefs.edit().putString(getUsername() + "-" + KEY_PICTURE, path).apply();
     }
 
     public String getPicture(){
-        String path = prefs.getString(KEY_PICTURE,"Picture.jpg");
+        String path = prefs.getString(getUsername() + "-" + KEY_PICTURE,"Picture.jpg");
         return path;
     }
 
     public void setUnits(String value){
         // 0 = kg, cm
         // 1 = lbs, ft & in
-        prefs.edit().putString(KEY_UNITS, value).apply();
+        prefs.edit().putString(getUsername() + "-" + KEY_UNITS, value).apply();
     }
 
     public String getUnits(){
-        String units = prefs.getString(KEY_UNITS, "Metric");
+        String units = prefs.getString(getUsername() + "-" + KEY_UNITS, "Metric");
         return units;
     }
 
