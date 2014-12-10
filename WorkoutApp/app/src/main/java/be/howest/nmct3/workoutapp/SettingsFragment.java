@@ -5,10 +5,14 @@ package be.howest.nmct3.workoutapp;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,10 +25,12 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 import java.util.Set;
 
+import be.howest.nmct3.workoutapp.data.MyProfilePictureProvider;
 import be.howest.nmct3.workoutapp.data.SettingsAdmin;
 
 
@@ -35,6 +41,7 @@ import be.howest.nmct3.workoutapp.data.SettingsAdmin;
 public class SettingsFragment extends Fragment {
 
     private ListAdapter myListAdapter;
+    public static Bitmap profilePicture;
 
     public static final String[] Settings = {"Name", "Gender", "Date of Birth", "E-mail", "Picture", "Units"};
 
@@ -77,7 +84,7 @@ public class SettingsFragment extends Fragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            View row = super.getView(position, convertView, parent);
+            final View row = super.getView(position, convertView, parent);
 
             TextView textSettingsTitle = (TextView) row.findViewById(R.id.list_settings_item_text);
             textSettingsTitle.setText(Settings[position]);
@@ -85,6 +92,24 @@ public class SettingsFragment extends Fragment {
             TextView textSettingsPreview = (TextView) row.findViewById(R.id.list_settings_item_text_preview);
             String value = SettingsAdmin.getInstance(getContext()).getValueForSetting(position);
             textSettingsPreview.setText(value);
+
+            //profile picture upload
+            if(position == 4) {
+                row.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ((MainActivity)getActivity()).startProfilePictureLoadIntent(view);
+                        ImageView imageView = (ImageView) row.findViewById(R.id.imageViewProfilePicture);
+
+                        if (profilePicture != null) {
+                            Log.d("profile picture::::::::::::: ", ""+profilePicture);
+                            imageView.setImageBitmap(profilePicture);
+                        } else {
+                            Log.d("profile picture is ::::::::::::: ", "NULL");
+                        }
+                    }
+                });
+            }
 
             return row;
         }

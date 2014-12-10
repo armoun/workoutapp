@@ -5,10 +5,17 @@
 
     <ListView
         android:id="@+id/settings_list"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
     </ListView>
+    <ImageView
+        android:id="@+id/imageViewProfilePicture"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="5"
+        android:src="@drawable/dashboard"
+        android:layout_centerHorizontal="true" />
     <Button
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"

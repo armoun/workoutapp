@@ -9,12 +9,16 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -33,10 +37,12 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 
 import be.howest.nmct3.workoutapp.data.Exercise;
+import be.howest.nmct3.workoutapp.data.MyProfilePictureProvider;
 import be.howest.nmct3.workoutapp.data.SettingsAdmin;
 import be.howest.nmct3.workoutapp.data.WorkoutsLoader;
 
@@ -86,6 +92,10 @@ public class MainActivity extends FragmentActivity {
     };
 
     private CustomDrawerlayoutAdapter customDrawerLayoutAdapter;
+
+    //profile picture load -> settings
+    private final int CAMERA_RESULT = 1;
+    private final String Tag = getClass().getName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -415,5 +425,48 @@ public class MainActivity extends FragmentActivity {
         }
     }
 
+    public void startProfilePictureLoadIntent(View v) {
+        PackageManager pm = getPackageManager();
 
+        if (pm.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+
+            Intent i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+
+            i.putExtra(MediaStore.EXTRA_OUTPUT, MyProfilePictureProvider.CONTENT_URI);
+
+            startActivityForResult(i, CAMERA_RESULT);
+
+        } else {
+
+            Toast.makeText(getBaseContext(), "Camera is not available", Toast.LENGTH_LONG).show();
+
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+            super.onActivityResult(requestCode, resultCode, data);
+
+            Log.i(Tag, "Receive the camera result");
+
+            if (resultCode == RESULT_OK && requestCode == CAMERA_RESULT) {
+
+                File out = new File(getFilesDir(), "newImage.jpg");
+
+                if(!out.exists()) {
+
+                    Toast.makeText(getBaseContext(),
+
+                            "Error while capturing image", Toast.LENGTH_LONG)
+
+                            .show();
+
+                    return;
+
+                }
+
+                Bitmap mBitmap = BitmapFactory.decodeFile(out.getAbsolutePath());
+                SettingsFragment.profilePicture = mBitmap;
+            }
+    }
 }
