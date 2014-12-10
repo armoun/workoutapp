@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SyncStatusObserver;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -61,6 +62,9 @@ public class DashboardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.dashboard_fragment_layout, null);
+
+        de.hdodenhof.circleimageview.CircleImageView profilePicture = (de.hdodenhof.circleimageview.CircleImageView) root.findViewById(R.id.profile_image);
+        profilePicture.setImageBitmap(BitmapFactory.decodeFile(MainActivity.myProfilePicturePath));
 
         //NAAM INVULLEN
         TextView txtNavDrawerTitle = (TextView) root.findViewById(R.id.dashboardFirstnameLastnameId);

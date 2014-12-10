@@ -94,6 +94,7 @@ public class MainActivity extends FragmentActivity {
 
     //Profile Picture Picker
     private static int RESULT_LOAD_IMAGE = 1;
+    public static String myProfilePicturePath = "Picture.jpg";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -443,11 +444,12 @@ public class MainActivity extends FragmentActivity {
             cursor.moveToFirst();
 
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String picturePath = cursor.getString(columnIndex);
+            myProfilePicturePath = cursor.getString(columnIndex);
             cursor.close();
 
             // String picturePath contains the path of selected Image
-            Toast.makeText(getBaseContext(), "Selected Profile Picture Path: " + BitmapFactory.decodeFile(picturePath), Toast.LENGTH_SHORT);
+            Toast.makeText(getBaseContext(), "Selected Profile Picture Path: " + BitmapFactory.decodeFile(myProfilePicturePath), Toast.LENGTH_SHORT).show();
+            SettingsAdmin.getInstance(getApplicationContext()).setPicture(myProfilePicturePath);
         }
     }
 }
