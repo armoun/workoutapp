@@ -48,6 +48,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     private static final String UPLOAD_URL_WORKOUTS = "http://www.viktordebock.be/mad_backend/add/addworkoutbyusername/index.php?";
     public static final String UPLOAD_URL_WORKOUTEXERCISES = "http://www.viktordebock.be/mad_backend/add/addexercisetoworkout/?";
     public static final String FEED_URL_PLANNER = "http://viktordebock.be/mad_backend/api/plannerworkoutsbyusernameanddate/index.php?username=viktordebock";
+    public static final String UPLOAD_URL_PLANNER = "http://www.viktordebock.be/mad_backend/add/addplannerworkoutbyusernameandworkoutidanddate/?";
 
     private static final int NET_CONNECT_TIMEOUT_MILLIS = 15000;  // 15 seconds
 
@@ -56,9 +57,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     @Override
     public void onPerformSync(Account account, Bundle bundle, String s, ContentProviderClient contentProviderClient, SyncResult syncResult) {
         //downloadExercises(contentProviderClient, syncResult);
-        downloadWorkouts(contentProviderClient, syncResult);
+        //downloadWorkouts(contentProviderClient, syncResult);
         //uploadWorkouts(contentProviderClient, syncResult);
-        downloadPlanner(contentProviderClient, syncResult);
+        //downloadPlanner(contentProviderClient, syncResult);
+        //uploadPlanner(contentProviderClient, syncResult);
     }
 
     private void uploadWorkouts(ContentProviderClient contentProviderClient, SyncResult syncResult){
@@ -143,6 +145,77 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     }
 
 
+
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+
+
+            } finally {
+                if (stream != null) {
+                    stream.close();
+                }
+            }
+        } catch (MalformedURLException e) {
+            Log.d(TAG, "Feed URL is malformed", e);
+            syncResult.stats.numParseExceptions++;
+            return;
+        } catch (IOException e) {
+            Log.d(TAG, "Error reading from network: " + e.toString());
+            syncResult.stats.numIoExceptions++;
+            return;
+        }
+        Log.d(TAG, "Network synchronization complete");
+    }
+
+    private void uploadPlanner(ContentProviderClient contentProviderClient, SyncResult syncResult){
+        Log.d(TAG, "On perform sync is called");
+        Log.d(TAG, "Beginning network synchronization");
+
+        try {
+            final URL location = new URL(UPLOAD_URL_WORKOUTS + "//username=X&workoutid=Y&date=Z");
+            InputStream stream = null;
+
+            try {
+                Log.d(TAG, "Streaming data from network: " + location);
+
+
+                try {
+
+
+                    String[] proj = new String[]{Contract.Planners._ID, Contract.Planners.WO_DATE, Contract.Planners.WORKOUT_ID};
+                    String username = SettingsAdmin.getInstance(getContext()).getUsername();
+                    Cursor c = contentProviderClient.query(Contract.Planners.CONTENT_URI, proj, null, null, null);
+
+                    //c.moveToFirst();
+
+                    Log.d("","Aantal planners to sync: " + c.getCount());
+
+                    // voor elke workout moet dit gebeuren
+                    while(c.moveToNext()){
+                        Log.d("","____________________________________________________________________________________________________________________________________________________________");
+                        Log.d(TAG,"Trying to SYNC for " + username + ": " + c.getString(c.getColumnIndex(Contract.Planners._ID)) + "; " + c.getString(c.getColumnIndex(Contract.Planners.WO_DATE)));
+
+                        URL url = new URL(UPLOAD_URL_PLANNER + "username=" + "viktordebock" + "&workoutid=" + c.getString(c.getColumnIndex(Contract.Planners.WORKOUT_ID)) + "&date=" + c.getString(c.getColumnIndex(Contract.Planners.WO_DATE)));
+
+                        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                        connection.setReadTimeout(NET_READ_TIMEOUT_MILLIS);
+                        connection.setConnectTimeout(NET_CONNECT_TIMEOUT_MILLIS);
+                        connection.setRequestMethod("GET");
+                        connection.setRequestProperty("Accept", "application/json");
+                        connection.setRequestProperty("charset", "utf-8");
+                        connection.setDoInput(true);
+
+                        connection.connect();
+
+                        Log.d("","_____________________________response code : "+ connection.getResponseCode());
+                        //Log.d("","______________CONNECTION: ");
+                        InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+
+                        Log.d("","Stream from planner: " + getStringFromInputStream(connection.getInputStream()));
+
+                        connection.disconnect();
+                    }
 
                 } catch (Exception e){
                     e.printStackTrace();
