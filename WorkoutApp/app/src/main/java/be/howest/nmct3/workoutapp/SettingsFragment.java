@@ -45,6 +45,7 @@ public class SettingsFragment extends Fragment {
 
     private ListAdapter myListAdapter;
     public static ImageView imageViewProfilePicture;
+    ListView listview;
 
     public static final String[] Settings = {"Name", "Gender", "Date of Birth", "E-mail", "Picture", "Units"};
 
@@ -64,7 +65,7 @@ public class SettingsFragment extends Fragment {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.settings_fragment_layout, null);
 
         myListAdapter = new CustomSettingsAdapter();
-        ListView listview = (ListView) root.findViewById(R.id.settings_list);
+        listview = (ListView) root.findViewById(R.id.settings_list);
         listview.setAdapter(myListAdapter);
 
         final Button logoutButton = (Button) root.findViewById(R.id.LogOutID);
@@ -163,6 +164,9 @@ public class SettingsFragment extends Fragment {
                         SettingsAdmin.getInstance(getActivity().getApplicationContext()).setFirstname(input_firstname.getText().toString());
                         SettingsAdmin.getInstance(getActivity().getApplicationContext()).setLastname(input_lastname.getText().toString());
 
+                        CustomSettingsAdapter adapter = (CustomSettingsAdapter) listview.getAdapter();
+                        adapter.notifyDataSetChanged();
+                        listview.setAdapter(adapter);
 
                     }
                 })
