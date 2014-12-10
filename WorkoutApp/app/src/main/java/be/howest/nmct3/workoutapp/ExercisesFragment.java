@@ -76,6 +76,7 @@ public class ExercisesFragment extends Fragment {
         });
 
 
+        getActivity().getActionBar().setTitle("Choose a muscle group");
 
         return root;
     }

@@ -89,6 +89,8 @@ public class Exercises_Musclegroup_Fragment extends Fragment implements LoaderMa
             }
         });
 
+        getActivity().getActionBar().setTitle("Choose an exercise");
+
         return root;
     }
 

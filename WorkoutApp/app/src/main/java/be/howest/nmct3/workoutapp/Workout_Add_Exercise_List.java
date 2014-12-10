@@ -104,6 +104,8 @@ public class Workout_Add_Exercise_List extends Fragment implements LoaderManager
             }
         });
 
+        getActivity().getActionBar().setTitle("Add exercise to workout");
+
         return root;
     }
 

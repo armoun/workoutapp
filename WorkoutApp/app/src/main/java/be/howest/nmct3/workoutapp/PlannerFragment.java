@@ -73,6 +73,8 @@ public class PlannerFragment extends Fragment {
             }
         });
 
+        getActivity().getActionBar().setTitle("Planner Workouts");
+
         return root;
     }
 

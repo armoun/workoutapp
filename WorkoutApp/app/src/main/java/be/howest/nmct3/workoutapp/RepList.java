@@ -61,7 +61,7 @@ public class RepList extends Fragment {
             }
         });
 
-
+        getActivity().getActionBar().setTitle("Reps for exercise");
 
         return root;
     }

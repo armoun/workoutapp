@@ -2,6 +2,7 @@ package be.howest.nmct3.workoutapp;
 
 
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.accounts.Account;
@@ -413,5 +414,6 @@ public class MainActivity extends FragmentActivity {
             return newAccount;
         }
     }
+
 
 }

@@ -62,6 +62,8 @@ public class AddWorkoutToPlannerFragment extends android.support.v4.app.Fragment
             }
         });
 
+        getActivity().getActionBar().setTitle("Add workout to planner");
+
         return root;
     }
 

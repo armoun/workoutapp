@@ -104,6 +104,8 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
             }
         });
 
+        getActivity().getActionBar().setTitle("Choose an exercise");
+
         return root;
     }
 

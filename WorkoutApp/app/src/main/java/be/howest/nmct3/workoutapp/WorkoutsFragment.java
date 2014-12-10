@@ -93,6 +93,8 @@ public class WorkoutsFragment extends Fragment {
             }
         });
 
+        getActivity().getActionBar().setTitle("Choose a workout");
+
         return root;
     }
 

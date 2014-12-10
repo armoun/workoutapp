@@ -56,6 +56,7 @@ public class AddNewWorkoutFragment extends android.support.v4.app.Fragment {
             }
         });
 
+        getActivity().getActionBar().setTitle("Add workout");
 
         return root;
     }

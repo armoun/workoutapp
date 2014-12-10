@@ -1,6 +1,6 @@
 package be.howest.nmct3.workoutapp;
 
-
+//wordt niet gebruikt
 
 import android.content.Context;
 import android.os.Bundle;
@@ -32,6 +32,7 @@ public class Planner_AddWorkout_Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.planner_addworkout_list_layout, null);
+
 
 
         return root;

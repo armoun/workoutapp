@@ -63,6 +63,8 @@ public class Exercises_Detail_Fragment extends Fragment {
         exercise_description = (TextView) root.findViewById(R.id.exercise_description);
         exercise_description.setText(c.getString(c.getColumnIndex(Contract.Exercises.DESCRIPTION)));
 
+        getActivity().getActionBar().setTitle("Exercise description");
+
         return root;
     }
 
