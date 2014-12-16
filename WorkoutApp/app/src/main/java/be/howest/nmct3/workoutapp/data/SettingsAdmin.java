@@ -129,7 +129,7 @@ public class SettingsAdmin {
         return gender;
     }
 
-    public void setDateOfBirth(String value){
+    public void setDateOfBirth(Date value){
         prefs.edit().putString(getUsername() + "-" + KEY_DATE_OF_BIRTH, value.toString()).apply();
     }
 
