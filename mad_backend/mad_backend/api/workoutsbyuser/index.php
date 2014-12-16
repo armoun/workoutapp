@@ -6,16 +6,17 @@
 	$conn = connect_db();
 
 	$usernameFromURL = $_GET['username'];
+	$ALL = "ALL";
 
 	if (!empty($_GET)) 
 	{
 		//workouts ophalen
 		//$result = mysqli_query($conn, "SELECT id, name, owner_username FROM mad_workouts WHERE owner_username = '$usernameFromURL'"); 
-		if(!($stmt = $conn->prepare("SELECT id, name, owner_username FROM mad_workouts WHERE owner_username = ?"))) {
+		if(!($stmt = $conn->prepare("SELECT id, name, owner_username, isPaid FROM mad_workouts WHERE owner_username = ? OR owner_username = ?"))) {
              echo "Prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
         }
         
-        if (!$stmt->bind_param("s", $usernameFromURL)) {
+        if (!$stmt->bind_param("ss", $usernameFromURL, $ALL)) {
             echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
         }
 
@@ -36,7 +37,8 @@
 			{ 
 				$id=$row['id']; 
 				$name=$row['name']; 
-				$owner_username=$row['owner_username']; 
+				$owner_username=$row['owner_username'];
+				$isPaid=$row['isPaid']; 
 
                 if(!($stmt1 = $conn->prepare("SELECT id, workout_id, exercise_id, reps FROM mad_workouts_exercises WHERE workout_id = ?"))) {
                      echo "Prepare failed: (" . $conn->errno . ") " . $conn->error;
@@ -84,10 +86,14 @@
 
                             $exercises[] = array('id_row'=> $id_row, 'workout_id'=> $workout_id, 'exercise_id'=> $exercise_id, 'exercise_name'=> $exercise_name, 'reps'=> $reps);
                         }
+
+
 					}
+
 				}
 
-				$posts[] = array('id'=> $id, 'name'=> $name, 'owner_username'=> $owner_username, 'exercises' => $exercises);
+				$posts[] = array('id'=> $id, 'name'=> $name, 'owner_username'=> $owner_username, 'isPaid'=> $isPaid, 'exercises' => $exercises);
+				$exercises = array();
 
 			} 
 
