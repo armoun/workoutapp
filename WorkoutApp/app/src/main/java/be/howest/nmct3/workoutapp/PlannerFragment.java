@@ -5,8 +5,12 @@ package be.howest.nmct3.workoutapp;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
@@ -37,6 +41,46 @@ public class PlannerFragment extends Fragment {
         return frag;
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.planner, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            //Geklikt op "+" bij planner
+            case R.id.action_add_workout_to_planner:
+                //Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
+                OpenAddNewWorkoutInPlannerFragment();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void OpenAddNewWorkoutInPlannerFragment()
+    {
+        Fragment frag = Fragment.instantiate(getActivity(), "be.howest.nmct3.workoutapp.AddWorkoutToPlannerFragment");
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+
+        MainActivity.activeFragment = frag;
+
+        transaction.replace(R.id.main, frag);
+        transaction.addToBackStack(null);
+
+        // Commit the transaction
+        transaction.commit();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,7 +99,7 @@ public class PlannerFragment extends Fragment {
         if(MainActivity.plannerSelectedWorkoutId!=-1)
         {
             MainActivity.plannerWorkoutCursor.moveToPosition(MainActivity.plannerSelectedWorkoutId);
-            Toast.makeText(getActivity(),"Plan this workout: " + MainActivity.plannerWorkoutCursor.getString(1) + " for date: " + MainActivity.plannerSelectedDate, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(),"Plan this workouts: " + MainActivity.plannerWorkoutCursor.getString(1) + " for date: " + MainActivity.plannerSelectedDate, Toast.LENGTH_SHORT).show();
         }
         final TextView plannerCurrentDate = (TextView) root.findViewById(R.id.plannerCurrentDate);
 

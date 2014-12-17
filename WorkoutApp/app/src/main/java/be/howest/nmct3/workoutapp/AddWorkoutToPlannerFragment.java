@@ -14,7 +14,7 @@ import android.widget.SimpleCursorAdapter;
 public class AddWorkoutToPlannerFragment extends android.support.v4.app.Fragment {
 
     private SimpleCursorAdapter myWorkoutsAdapter;
-    public static String actionBarTitle = "Add workout to planner";
+    public static String actionBarTitle = "Add workouts to planner";
 
     public AddWorkoutToPlannerFragment() {
         // Required empty public constructor
@@ -62,7 +62,7 @@ public class AddWorkoutToPlannerFragment extends android.support.v4.app.Fragment
             }
         });
 
-        getActivity().getActionBar().setTitle("Add workout to planner");
+        getActivity().getActionBar().setTitle("Add workouts to planner");
 
         return root;
     }

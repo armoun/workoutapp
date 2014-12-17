@@ -60,7 +60,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         downloadWorkouts(contentProviderClient, syncResult);
         //uploadWorkouts(contentProviderClient, syncResult);
 
-        //downloadPlanner(contentProviderClient, syncResult);
+        downloadPlanner(contentProviderClient, syncResult);
         //uploadPlanner(contentProviderClient, syncResult);
     }
 
@@ -87,7 +87,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
                     Log.d("","Aantal workouts to sync: " + c.getCount());
 
-                    // voor elke workout moet dit gebeuren
+                    // voor elke workouts moet dit gebeuren
                     while(c.moveToNext()){
                         Log.d("","____________________________________________________________________________________________________________________________________________________________");
                         Log.d(TAG,"Trying to SYNC for " + username + ": " + c.getString(c.getColumnIndex(Contract.Workouts._ID)) + "; " + c.getString(c.getColumnIndex(Contract.Workouts.NAME)));
@@ -108,7 +108,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                         //Log.d("","______________CONNECTION: ");
                         InputStreamReader reader = new InputStreamReader(connection.getInputStream());
 
-                        Log.d("","Stream from workout: " + getStringFromInputStream(connection.getInputStream()));
+                        Log.d("","Stream from workouts: " + getStringFromInputStream(connection.getInputStream()));
 
                         connection.disconnect();
 
@@ -192,7 +192,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
                     Log.d("","Aantal planners to sync: " + c.getCount());
 
-                    // voor elke workout moet dit gebeuren
+                    // voor elke workouts moet dit gebeuren
                     while(c.moveToNext()){
                         Log.d("","____________________________________________________________________________________________________________________________________________________________");
                         Log.d(TAG,"Trying to SYNC for " + username + ": " + c.getString(c.getColumnIndex(Contract.Planners._ID)) + "; " + c.getString(c.getColumnIndex(Contract.Planners.WO_DATE)));

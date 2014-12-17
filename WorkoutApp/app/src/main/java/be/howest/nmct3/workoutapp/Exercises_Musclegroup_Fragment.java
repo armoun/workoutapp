@@ -11,6 +11,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -94,6 +96,17 @@ public class Exercises_Musclegroup_Fragment extends Fragment implements LoaderMa
         return root;
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.exercises_musclegroup, menu);
+    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {

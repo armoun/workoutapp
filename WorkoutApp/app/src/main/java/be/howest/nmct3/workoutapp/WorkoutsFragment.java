@@ -2,22 +2,21 @@ package be.howest.nmct3.workoutapp;
 
 
 
-import android.app.ListFragment;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.CursorAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.lang.Override;
@@ -98,6 +97,51 @@ public class WorkoutsFragment extends Fragment {
         return root;
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.workouts, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            //Geklikt op "+" bij workouts
+            case R.id.action_add_workout:
+                //Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
+                OpenAddNewWorkoutFragment();
+                break;
+
+            //Geklikt op search bij workouts
+            case R.id.action_search_workouts:
+                Toast.makeText(getActivity(), item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void OpenAddNewWorkoutFragment() {
+        // Create and set the start fragment
+        Fragment frag = Fragment.instantiate(getActivity(), "be.howest.nmct3.workoutapp.AddNewWorkoutFragment");
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+
+        MainActivity.activeFragment = frag;
+
+        transaction.replace(R.id.main, frag);
+        transaction.addToBackStack(null);
+
+        // Commit the transaction
+        transaction.commit();
+    }
+}
 
 

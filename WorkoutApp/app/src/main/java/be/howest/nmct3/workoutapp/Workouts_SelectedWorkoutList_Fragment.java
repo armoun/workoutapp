@@ -11,6 +11,9 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -110,6 +113,33 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.workouts_selectedworkoutlist, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            //Geklikt op een workout onder workouts
+            case R.id.action_add_exercise_to_exercises_selected_workout:
+                //Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
+                OpenNewWorkoutExercisesList();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         getLoaderManager().initLoader(0, null, this);
@@ -134,5 +164,19 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
         mAdapter.swapCursor(null);
+    }
+
+    private void OpenNewWorkoutExercisesList() {
+        // Create and set the start fragment
+        Fragment frag = Fragment.instantiate(getActivity(), "be.howest.nmct3.workoutapp.Workout_Add_Exercise_List");
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+
+        MainActivity.activeFragment = frag;
+
+        transaction.replace(R.id.main, frag);
+        transaction.addToBackStack(null);
+
+        // Commit the transaction
+        transaction.commit();
     }
 }
