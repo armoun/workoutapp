@@ -139,7 +139,7 @@ public class PlannerFragment extends Fragment {
     }
 
     private void setPlannerSelectedDate(CalendarView planner) {
-        MainActivity.plannerSelectedDate = MainActivity.phoneCalendar.get(Calendar.DAY_OF_MONTH)+"/"+ (MainActivity.phoneCalendar.get(Calendar.MONTH)+1) +"/"+MainActivity.phoneCalendar.get(Calendar.YEAR);
+        MainActivity.plannerSelectedDate = MainActivity.phoneCalendar.get(Calendar.DAY_OF_MONTH)+"-"+ (MainActivity.phoneCalendar.get(Calendar.MONTH)+1) +"-"+MainActivity.phoneCalendar.get(Calendar.YEAR);
         planner.setDate(MainActivity.phoneCalendar.getTimeInMillis(),true,true);
     }
 }
