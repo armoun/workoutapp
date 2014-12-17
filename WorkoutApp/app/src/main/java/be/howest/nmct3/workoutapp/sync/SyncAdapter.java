@@ -87,11 +87,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             uploadPlanner(contentProviderClient, syncResult);
         }
 
-<<<<<<< HEAD
         downloadPlanner(contentProviderClient, syncResult);
         //uploadPlanner(contentProviderClient, syncResult);
-=======
->>>>>>> FETCH_HEAD
     }
 
     private void uploadWorkouts(ContentProviderClient contentProviderClient, SyncResult syncResult){
