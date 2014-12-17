@@ -56,7 +56,7 @@ public class AddNewWorkoutFragment extends android.support.v4.app.Fragment {
             }
         });
 
-        getActivity().getActionBar().setTitle("Add workout");
+        getActivity().getActionBar().setTitle("Add workouts");
 
         return root;
     }
@@ -86,6 +86,5 @@ public class AddNewWorkoutFragment extends android.support.v4.app.Fragment {
         // Commit the transaction
         transaction.commit();
     }
-
 
 }

@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -41,6 +43,11 @@ public class ExercisesFragment extends Fragment {
         return frag;
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,6 +71,7 @@ public class ExercisesFragment extends Fragment {
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
                 MainActivity.activeFragment = newFragment;
+                //Toast.makeText(getActivity().getBaseContext(), "Active fragment: " + MainActivity.activeFragment.getClass().getSimpleName(),Toast.LENGTH_SHORT).show();
 
                 // Replace whatever is in the fragment_container view with this fragment,
                 // and add the transaction to the back stack
@@ -81,7 +89,11 @@ public class ExercisesFragment extends Fragment {
         return root;
     }
 
-
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.exercises, menu);
+    }
 
     class MuscleGroupAdapter extends ArrayAdapter<String>
     {

@@ -10,11 +10,14 @@ import android.content.SyncResult;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.JsonReader;
 import android.util.Log;
 
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -84,6 +87,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             uploadPlanner(contentProviderClient, syncResult);
         }
 
+        downloadPlanner(contentProviderClient, syncResult);
+        //uploadPlanner(contentProviderClient, syncResult);
     }
 
     private void uploadWorkouts(ContentProviderClient contentProviderClient, SyncResult syncResult){
@@ -109,7 +114,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
                     Log.d("","Aantal workouts to sync: " + c.getCount());
 
-                    // voor elke workout moet dit gebeuren
+                    // voor elke workouts moet dit gebeuren
                     while(c.moveToNext()){
                         Log.d("","____________________________________________________________________________________________________________________________________________________________");
                         Log.d(TAG,"Trying to SYNC for " + username + ": " + c.getString(c.getColumnIndex(Contract.Workouts._ID)) + "; " + c.getString(c.getColumnIndex(Contract.Workouts.NAME)));
@@ -130,7 +135,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                         //Log.d("","______________CONNECTION: ");
                         InputStreamReader reader = new InputStreamReader(connection.getInputStream());
 
-                        Log.d("","Stream from workout: " + getStringFromInputStream(connection.getInputStream()));
+                        Log.d("","Stream from workouts: " + getStringFromInputStream(connection.getInputStream()));
 
                         connection.disconnect();
 
@@ -214,7 +219,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
                     Log.d("","Aantal planners to sync: " + c.getCount());
 
-                    // voor elke workout moet dit gebeuren
+                    // voor elke workouts moet dit gebeuren
                     while(c.moveToNext()){
                         Log.d("","____________________________________________________________________________________________________________________________________________________________");
                         Log.d(TAG,"Trying to SYNC for " + username + ": " + c.getString(c.getColumnIndex(Contract.Planners._ID)) + "; " + c.getString(c.getColumnIndex(Contract.Planners.WO_DATE)));
@@ -473,7 +478,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
             reader.nextName();
             image = reader.nextString();
-            values.put(Contract.Exercises.IMAGE_NAME, image);
+
+            String path = saveImageToSD(image, name);
+
+            values.put(Contract.Exercises.IMAGE_NAME, path);
 
             reader.endObject();
 
@@ -492,6 +500,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 contentProviderClient.insert(Contract.Exercises.CONTENT_URI, values);
                 Log.d("", "INSERTED " + id + ";" + name + ";" + musclegroup + ";" + target + ";" + description + ";" + image + "__________________________________________________");
             }
+
+
         }
 
         reader.endArray();
@@ -697,5 +707,50 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
         return sb.toString();
 
+    }
+
+    private String saveImageToSD(String filepath, String exName)
+    {
+        try
+        {
+            URL url = new URL(filepath);
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("GET");
+            urlConnection.setDoOutput(true);
+            urlConnection.connect();
+            File SDCardRoot = Environment.getExternalStorageDirectory().getAbsoluteFile();
+            String filename=exName;
+            Log.i("Local filename:",""+filename);
+            File file = new File(SDCardRoot,filename);
+            if(file.createNewFile())
+            {
+                file.createNewFile();
+            }
+            FileOutputStream fileOutput = new FileOutputStream(file);
+            InputStream inputStream = urlConnection.getInputStream();
+            int totalSize = urlConnection.getContentLength();
+            int downloadedSize = 0;
+            byte[] buffer = new byte[1024];
+            int bufferLength = 0;
+            while ( (bufferLength = inputStream.read(buffer)) > 0 )
+            {
+                fileOutput.write(buffer, 0, bufferLength);
+                downloadedSize += bufferLength;
+                Log.i("Progress:","downloadedSize:"+downloadedSize+"totalSize:"+ totalSize) ;
+            }
+            fileOutput.close();
+            if(downloadedSize==totalSize) filepath=file.getPath();
+        }
+        catch (MalformedURLException e)
+        {
+            e.printStackTrace();
+        }
+        catch (IOException e)
+        {
+            filepath=null;
+            e.printStackTrace();
+        }
+        Log.i("filepath:"," "+filepath) ;
+        return filepath;
     }
 }

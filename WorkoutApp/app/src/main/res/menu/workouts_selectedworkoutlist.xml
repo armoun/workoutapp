@@ -8,6 +8,6 @@
         android:actionViewClass="android.widget.SearchView"  />
     <item android:id="@+id/action_add_exercise_to_exercises_selected_workout"
         android:icon="@drawable/ic_action_add"
-        android:title="Add exercise to this selected workout"
+        android:title="Add exercise to this workout"
         android:showAsAction="ifRoom" />
 </menu>

@@ -9,8 +9,12 @@ import android.database.DatabaseUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
@@ -43,6 +47,46 @@ public class PlannerFragment extends Fragment {
         return frag;
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.planner, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            //Geklikt op "+" bij planner
+            case R.id.action_add_workout_to_planner:
+                //Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
+                OpenAddNewWorkoutInPlannerFragment();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void OpenAddNewWorkoutInPlannerFragment()
+    {
+        Fragment frag = Fragment.instantiate(getActivity(), "be.howest.nmct3.workoutapp.AddWorkoutToPlannerFragment");
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+
+        MainActivity.activeFragment = frag;
+
+        transaction.replace(R.id.main, frag);
+        transaction.addToBackStack(null);
+
+        // Commit the transaction
+        transaction.commit();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,6 +104,7 @@ public class PlannerFragment extends Fragment {
 
         if(MainActivity.plannerSelectedWorkoutId!=-1)
         {
+<<<<<<< HEAD
             String wo_id = ""+MainActivity.plannerSelectedWorkoutId;
             Cursor c = getActivity().getContentResolver().query(Contract.Workouts.CONTENT_URI, new String[]{Contract.Workouts._ID, Contract.Workouts.NAME, Contract.Workouts.ISPAID}, "(" + Contract.Workouts._ID + "=?)", new String[]{wo_id}, null);
             c.moveToFirst();
@@ -72,6 +117,10 @@ public class PlannerFragment extends Fragment {
             Uri uri = getActivity().getContentResolver().insert(Contract.Planners.CONTENT_URI, cv);
             Log.d("","Inserted " + uri.toString());
 
+=======
+            MainActivity.plannerWorkoutCursor.moveToPosition(MainActivity.plannerSelectedWorkoutId);
+            Toast.makeText(getActivity(),"Plan this workouts: " + MainActivity.plannerWorkoutCursor.getString(1) + " for date: " + MainActivity.plannerSelectedDate, Toast.LENGTH_SHORT).show();
+>>>>>>> FETCH_HEAD
         }
         final TextView plannerCurrentDate = (TextView) root.findViewById(R.id.plannerCurrentDate);
 

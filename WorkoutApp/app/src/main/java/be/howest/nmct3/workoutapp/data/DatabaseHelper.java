@@ -160,7 +160,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         Long bicepCurlId = db.insert(Contract.Exercises.CONTENT_DIRECTORY, "", cvBicepCurl);
 
 
-        // Sample workout 1: chest, bench press, free
+        // Sample workouts 1: chest, bench press, free
 
         ContentValues v1 = new ContentValues();
         v1.put(Contract.Workouts.NAME, "Chest day");
@@ -173,7 +173,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         v1e.put(Contract.WorkoutExercises.REPS, "12,10,8");
         Long id2 = db.insert(Contract.WorkoutExercises.CONTENT_DIRECTORY, "", v1e);
 
-        // Sample workout 2: legs, squat, free
+        // Sample workouts 2: legs, squat, free
 
         ContentValues v2 = new ContentValues();
         v2.put(Contract.Workouts.NAME, "Leg day");
@@ -186,7 +186,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         v2e.put(Contract.WorkoutExercises.REPS, "12,10,8");
         Long id4 = db.insert(Contract.WorkoutExercises.CONTENT_DIRECTORY, "", v2e);
 
-        // Sample workout 3: arms, bicep curl, paid
+        // Sample workouts 3: arms, bicep curl, paid
 
         ContentValues v3 = new ContentValues();
         v3.put(Contract.Workouts.NAME, "Arm day");

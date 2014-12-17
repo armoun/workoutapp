@@ -45,6 +45,9 @@ public class DashboardFragment extends Fragment {
     TextView Height;
     TextView BMI;
 
+    String weight;
+    String height;
+
     private Object mSyncObserverHandle;
 
 
@@ -80,24 +83,24 @@ public class DashboardFragment extends Fragment {
         BMI = (TextView) root.findViewById(R.id.dashboardBMI);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String weight = preferences.getString(SettingsAdmin.getInstance(getActivity().getApplicationContext()).getUsername()+"-WEIGHT","");
+        weight = preferences.getString(SettingsAdmin.getInstance(getActivity().getApplicationContext()).getUsername()+"-WEIGHT","");
         if(!weight.equalsIgnoreCase(""))
         {
-            Weight.setText(weight);
+            Weight.setText(weight + " kg");
         }
         else
         {
-            Weight.setText("0");
+            Weight.setText("0 kg");
         }
 
-        String height = preferences.getString(SettingsAdmin.getInstance(getActivity().getApplicationContext()).getUsername()+"-HEIGHT","");
+        height = preferences.getString(SettingsAdmin.getInstance(getActivity().getApplicationContext()).getUsername()+"-HEIGHT","");
         if(!height.equalsIgnoreCase(""))
         {
-            Height.setText(height);
+            Height.setText(height + " cm");
         }
         else
         {
-            Height.setText("0");
+            Height.setText("0 cm");
         }
 
         calculateBMI(Weight, Height, BMI);
@@ -201,8 +204,11 @@ public class DashboardFragment extends Fragment {
 
     public void calculateBMI(TextView pWeight, TextView pHeight, TextView pBMI)
     {
-        double iWeight = Double.parseDouble(pWeight.getText().toString());
-        double iHeight = Double.parseDouble(pHeight.getText().toString());
+        String[] splitWeight = pWeight.getText().toString().split("\\s+");
+        String[] splitHeight = pHeight.getText().toString().split("\\s+");
+
+        double iWeight = Double.parseDouble(splitWeight[0]);
+        double iHeight = Double.parseDouble(splitHeight[0]);
         iHeight = iHeight/100;
 
         Log.d("WEIGHT", Double.toString(iWeight));
@@ -215,7 +221,7 @@ public class DashboardFragment extends Fragment {
 
         Log.d("BMI", Double.toString(myBMI));
 
-        pBMI.setText(Double.toString(myBMI));
+        pBMI.setText(Double.toString(myBMI) + " BMI");
     }
 
 
@@ -241,7 +247,7 @@ public class DashboardFragment extends Fragment {
                         editor.putString(SettingsAdmin.getInstance(getActivity().getApplicationContext()).getUsername()+"-WEIGHT",input_weight.getText().toString());
                         editor.apply();
 
-                        Weight.setText(input_weight.getText().toString());
+                        Weight.setText(input_weight.getText().toString() + " kg");
                         calculateBMI(Weight, Height, BMI);
                     }
                 })
@@ -279,7 +285,7 @@ public class DashboardFragment extends Fragment {
                         editor.putString(SettingsAdmin.getInstance(getActivity().getApplicationContext()).getUsername()+"-HEIGHT",input_height.getText().toString());
                         editor.apply();
 
-                        Height.setText(input_height.getText().toString());
+                        Height.setText(input_height.getText().toString() + " cm");
                         calculateBMI(Weight, Height, BMI);
                     }
                 })
