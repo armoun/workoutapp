@@ -12,8 +12,13 @@ public class SyncAdmin {
 
     private Context mContext;
 
-    private String KEY_ARE_WORKOUTS_SYNCED = "sync.areworkoutssynced";
-    private String KEY_ARE_EXERCISES_SYNCED = "sync.areexercisesynced";
+    private String KEY_ALLOW_DOWNLOAD_EXERCISES = "sync.allowdownloadexercises";
+
+    private String KEY_ALLOW_UPLOAD_WORKOUTS = "sync.allowuploadworkouts";
+    private String KEY_ALLOW_DOWNLOAD_WORKOUTS = "sync.allowdownloadworkouts";
+
+    private String KEY_ALLOW_UPLOAD_PLANNERS = "sync.allowuploadplaners";
+    private String KEY_ALLOW_DOWNLOAD_PLANNERS = "sync.allowdownloadplanner";
 
     private String KEY_SHAREDPREFS = "be.howest.nmct3.workoutapp.syncprefs";
 
@@ -38,21 +43,21 @@ public class SyncAdmin {
     //workouts
     // download
     public void setAllowWorkoutsDownload(boolean value){
-        prefs.edit().putBoolean(KEY_ARE_WORKOUTS_SYNCED, value).apply();
+        prefs.edit().putBoolean(KEY_ALLOW_DOWNLOAD_WORKOUTS, value).apply();
     }
 
     public boolean getAllowWorkoutsDownload(){
-        boolean bool = prefs.getBoolean(KEY_ARE_WORKOUTS_SYNCED,false);
+        boolean bool = prefs.getBoolean(KEY_ALLOW_DOWNLOAD_WORKOUTS,false);
         return bool;
     }
 
     //  upload
     public void setAllowWorkoutsUpload(boolean value){
-        prefs.edit().putBoolean(KEY_ARE_WORKOUTS_SYNCED, value).apply();
+        prefs.edit().putBoolean(KEY_ALLOW_UPLOAD_WORKOUTS, value).apply();
     }
 
     public boolean getAllowWorkoutsUpload(){
-        boolean bool = prefs.getBoolean(KEY_ARE_WORKOUTS_SYNCED,false);
+        boolean bool = prefs.getBoolean(KEY_ALLOW_UPLOAD_WORKOUTS,false);
         return bool;
     }
 
@@ -60,21 +65,21 @@ public class SyncAdmin {
     //planners
     //  download
     public void setAllowPlannersDownload(boolean value){
-        prefs.edit().putBoolean(KEY_ARE_WORKOUTS_SYNCED, value).apply();
+        prefs.edit().putBoolean(KEY_ALLOW_DOWNLOAD_PLANNERS, value).apply();
     }
 
     public boolean getAllowPlannersDownload(){
-        boolean bool = prefs.getBoolean(KEY_ARE_WORKOUTS_SYNCED,false);
+        boolean bool = prefs.getBoolean(KEY_ALLOW_DOWNLOAD_PLANNERS,false);
         return bool;
     }
 
     //  upload
     public void setAllowPlannersUpload(boolean value){
-        prefs.edit().putBoolean(KEY_ARE_WORKOUTS_SYNCED, value).apply();
+        prefs.edit().putBoolean(KEY_ALLOW_UPLOAD_PLANNERS, value).apply();
     }
 
     public boolean getAllowPlannersUpload(){
-        boolean bool = prefs.getBoolean(KEY_ARE_WORKOUTS_SYNCED,false);
+        boolean bool = prefs.getBoolean(KEY_ALLOW_UPLOAD_PLANNERS,false);
         return bool;
     }
 
@@ -82,11 +87,11 @@ public class SyncAdmin {
     //exercises
     //  download
     public void setAllowExercisesDownload(boolean value){
-        prefs.edit().putBoolean(KEY_ARE_EXERCISES_SYNCED, value).apply();
+        prefs.edit().putBoolean(KEY_ALLOW_DOWNLOAD_EXERCISES, value).apply();
     }
 
     public boolean getAllowExercisesDownload(){
-        boolean bool = prefs.getBoolean(KEY_ARE_EXERCISES_SYNCED,false);
+        boolean bool = prefs.getBoolean(KEY_ALLOW_DOWNLOAD_EXERCISES,false);
         return bool;
     }
 }
