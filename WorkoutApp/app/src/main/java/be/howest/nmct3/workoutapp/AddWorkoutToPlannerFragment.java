@@ -23,13 +23,10 @@ import be.howest.nmct3.workoutapp.data.WorkoutsLoader;
 public class AddWorkoutToPlannerFragment extends android.support.v4.app.Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private SimpleCursorAdapter myWorkoutsAdapter;
-<<<<<<< HEAD
+
     private CursorAdapter mAdapter;
     private Cursor mCursor;
     public static String actionBarTitle = "Add workout to planner";
-=======
-    public static String actionBarTitle = "Add workouts to planner";
->>>>>>> FETCH_HEAD
 
     public AddWorkoutToPlannerFragment() {
         // Required empty public constructor

@@ -104,7 +104,6 @@ public class PlannerFragment extends Fragment {
 
         if(MainActivity.plannerSelectedWorkoutId!=-1)
         {
-<<<<<<< HEAD
             String wo_id = ""+MainActivity.plannerSelectedWorkoutId;
             Cursor c = getActivity().getContentResolver().query(Contract.Workouts.CONTENT_URI, new String[]{Contract.Workouts._ID, Contract.Workouts.NAME, Contract.Workouts.ISPAID}, "(" + Contract.Workouts._ID + "=?)", new String[]{wo_id}, null);
             c.moveToFirst();
@@ -117,10 +116,6 @@ public class PlannerFragment extends Fragment {
             Uri uri = getActivity().getContentResolver().insert(Contract.Planners.CONTENT_URI, cv);
             Log.d("","Inserted " + uri.toString());
 
-=======
-            MainActivity.plannerWorkoutCursor.moveToPosition(MainActivity.plannerSelectedWorkoutId);
-            Toast.makeText(getActivity(),"Plan this workouts: " + MainActivity.plannerWorkoutCursor.getString(1) + " for date: " + MainActivity.plannerSelectedDate, Toast.LENGTH_SHORT).show();
->>>>>>> FETCH_HEAD
         }
         final TextView plannerCurrentDate = (TextView) root.findViewById(R.id.plannerCurrentDate);
 
