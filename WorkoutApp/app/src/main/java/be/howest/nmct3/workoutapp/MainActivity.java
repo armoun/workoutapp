@@ -61,7 +61,6 @@ public class MainActivity extends FragmentActivity {
 
     public static Fragment activeFragment;
 
-    public static Cursor plannerWorkoutCursor;
     public static String plannerSelectedDate = "";
     public static Calendar phoneCalendar = Calendar.getInstance();
     public static int plannerSelectedWorkoutId = -1;
@@ -158,8 +157,6 @@ public class MainActivity extends FragmentActivity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
 
-        loadWorkouts();
-
         String name = SettingsAdmin.getInstance(getBaseContext()).getUsername();
 
         Toast.makeText(getApplicationContext(), "Logged in as: " + name,
@@ -187,11 +184,6 @@ public class MainActivity extends FragmentActivity {
 
 
 
-    }
-
-    private void loadWorkouts() {
-        WorkoutsLoader wl = new WorkoutsLoader(MainActivity.this);
-        MainActivity.plannerWorkoutCursor = wl.loadInBackground();
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {

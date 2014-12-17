@@ -2,7 +2,11 @@ package be.howest.nmct3.workoutapp;
 
 
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
+import android.database.DatabaseUtils;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -18,6 +22,8 @@ import android.widget.Toast;
 
 import java.util.Calendar;
 
+import be.howest.nmct3.workoutapp.data.Contract;
+
 
 /**
  * A simple {@link android.support.v4.app.Fragment} subclass.
@@ -26,7 +32,7 @@ import java.util.Calendar;
 public class PlannerFragment extends Fragment {
 
     private CursorAdapter myPlannerAdapter;
-
+    private ListView listView;
 
     public PlannerFragment() {
         // Required empty public constructor
@@ -46,16 +52,26 @@ public class PlannerFragment extends Fragment {
         String[] columns = new String[] { "name" };
         int[] viewIds = new int[] { R.id.dayWorkoutTitle };
 
-        final ListView listView = (ListView) root.findViewById(R.id.plannerList);
-        //myPlannerAdapter = new SimpleCursorAdapter(getActivity(),R.layout.planner_list_row_layout, MainActivity.plannerWorkoutCursor, columns, viewIds, 0);
+        listView = (ListView) root.findViewById(R.id.plannerList);
+        
         listView.setAdapter(myPlannerAdapter);
 
         final CalendarView planner = (CalendarView) root.findViewById(R.id.planner);
 
         if(MainActivity.plannerSelectedWorkoutId!=-1)
         {
-            MainActivity.plannerWorkoutCursor.moveToPosition(MainActivity.plannerSelectedWorkoutId);
-            Toast.makeText(getActivity(),"Plan this workout: " + MainActivity.plannerWorkoutCursor.getString(1) + " for date: " + MainActivity.plannerSelectedDate, Toast.LENGTH_SHORT).show();
+            String wo_id = ""+MainActivity.plannerSelectedWorkoutId;
+            Cursor c = getActivity().getContentResolver().query(Contract.Workouts.CONTENT_URI, new String[]{Contract.Workouts._ID, Contract.Workouts.NAME, Contract.Workouts.ISPAID}, "(" + Contract.Workouts._ID + "=?)", new String[]{wo_id}, null);
+            c.moveToFirst();
+            Toast.makeText(getActivity(),"Plan this workout: " + c.getString(c.getColumnIndex(Contract.Workouts.NAME)) + " for date: " + MainActivity.plannerSelectedDate, Toast.LENGTH_SHORT).show();
+
+            ContentValues cv = new ContentValues();
+            cv.put(Contract.Planners.WORKOUT_ID, wo_id);
+            cv.put(Contract.Planners.WORKOUT_ID, MainActivity.plannerSelectedDate);
+
+            Uri uri = getActivity().getContentResolver().insert(Contract.Planners.CONTENT_URI, cv);
+            Log.d("","Inserted " + uri.toString());
+
         }
         final TextView plannerCurrentDate = (TextView) root.findViewById(R.id.plannerCurrentDate);
 
