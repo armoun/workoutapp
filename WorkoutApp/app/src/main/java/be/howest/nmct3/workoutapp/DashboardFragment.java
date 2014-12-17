@@ -64,7 +64,10 @@ public class DashboardFragment extends Fragment {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.dashboard_fragment_layout, null);
 
         de.hdodenhof.circleimageview.CircleImageView profilePicture = (de.hdodenhof.circleimageview.CircleImageView) root.findViewById(R.id.profile_image);
-        profilePicture.setImageBitmap(BitmapFactory.decodeFile(MainActivity.myProfilePicturePath));
+
+        if(MainActivity.myProfilePicturePath != "Picture.jpg") {
+            profilePicture.setImageBitmap(BitmapFactory.decodeFile(MainActivity.myProfilePicturePath));
+        }
 
         //NAAM INVULLEN
         TextView txtNavDrawerTitle = (TextView) root.findViewById(R.id.dashboardFirstnameLastnameId);

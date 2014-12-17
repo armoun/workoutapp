@@ -22,12 +22,14 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CursorAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,7 +49,8 @@ public class SettingsFragment extends Fragment {
     public static ImageView imageViewProfilePicture;
     ListView listview;
 
-    public static final String[] Settings = {"Name", "Gender", "Date of Birth", "E-mail", "Picture", "Units"};
+    public static final String[] Settings = {"Name", "Gender", "Date of Birth", "E-mail", "Picture"};
+    //public static final String[] Settings = {"Name", "Gender", "Date of Birth", "E-mail", "Picture", "Units"};
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -113,6 +116,36 @@ public class SettingsFragment extends Fragment {
                 });
             }
 
+            if(position == 1)
+            {
+                row.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(final View v) {
+                        changeGender(v);
+                    }
+                });
+            }
+
+            if(position == 2)
+            {
+                row.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(final View v) {
+                        changeDateOfBirth(v);
+                    }
+                });
+            }
+
+            if(position == 3)
+            {
+                row.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(final View v) {
+                        changeEmail(v);
+                    }
+                });
+            }
+
             if(position == 4) {
                 row.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -163,6 +196,130 @@ public class SettingsFragment extends Fragment {
 
                         SettingsAdmin.getInstance(getActivity().getApplicationContext()).setFirstname(input_firstname.getText().toString());
                         SettingsAdmin.getInstance(getActivity().getApplicationContext()).setLastname(input_lastname.getText().toString());
+
+                        CustomSettingsAdapter adapter = (CustomSettingsAdapter) listview.getAdapter();
+                        adapter.notifyDataSetChanged();
+                        listview.setAdapter(adapter);
+
+                    }
+                })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        // create an alert dialog
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
+    }
+
+    public void changeGender(View v)
+    {
+        // get prompts.xml view
+        LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+        View promptView = layoutInflater.inflate(R.layout.settings_dialog_gender, null);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                getActivity());
+        alertDialogBuilder.setView(promptView);
+
+        final Spinner input_gender = (Spinner) promptView.findViewById(R.id.spinner_gender);
+        // setup a dialog window
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        final String gender_chosen = input_gender.getSelectedItem().toString();
+                        Log.d("gender", gender_chosen);
+                        SettingsAdmin.getInstance(getActivity().getApplicationContext()).setGender(gender_chosen);
+
+                        //update list
+                        CustomSettingsAdapter adapter = (CustomSettingsAdapter) listview.getAdapter();
+                        adapter.notifyDataSetChanged();
+                        listview.setAdapter(adapter);
+
+                    }
+                })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        // create an alert dialog
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
+    }
+
+    public void changeDateOfBirth(View v)
+    {
+        // get prompts.xml view
+        LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+        View promptView = layoutInflater.inflate(R.layout.settings_dialog_dateofbirth, null);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                getActivity());
+        alertDialogBuilder.setView(promptView);
+
+        final DatePicker input_picker = (DatePicker) promptView.findViewById(R.id.datePicker_dateofbirth);
+        // setup a dialog window
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        int day = input_picker.getDayOfMonth();
+                        int month = input_picker.getMonth() + 1;
+                        int year = input_picker.getYear();
+
+                        String dayStr = Integer.toString(day);
+                        String monthStr = Integer.toString(month);
+                        String yearStr = Integer.toString(year);
+
+                        final String dateofbirth_chosen = day + "-" + month + "-" + year;
+                        Log.d("gender", dateofbirth_chosen);
+                        SettingsAdmin.getInstance(getActivity().getApplicationContext()).setDateOfBirth(dateofbirth_chosen);
+
+                        //update list
+                        CustomSettingsAdapter adapter = (CustomSettingsAdapter) listview.getAdapter();
+                        adapter.notifyDataSetChanged();
+                        listview.setAdapter(adapter);
+
+                    }
+                })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        // create an alert dialog
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
+    }
+
+    public void changeEmail(View v)
+    {
+        // get prompts.xml view
+        LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+        View promptView = layoutInflater.inflate(R.layout.settings_dialog_email, null);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                getActivity());
+        alertDialogBuilder.setView(promptView);
+
+        final EditText input_email = (EditText) promptView.findViewById(R.id.settings_input_email);
+
+        // setup a dialog window
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //resultText.setText("Hello, " + editText.getText());
+
+                        SettingsAdmin.getInstance(getActivity().getApplicationContext()).setEmail(input_email.getText().toString());
 
                         CustomSettingsAdapter adapter = (CustomSettingsAdapter) listview.getAdapter();
                         adapter.notifyDataSetChanged();
