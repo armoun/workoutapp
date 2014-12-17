@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/activity_vertical_margin"
+    android:orientation="vertical" >
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Fill in your firstname and lastname"
+        android:gravity="center" />
+
+    <EditText
+        android:id="@+id/settings_input_firstname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="firstname"/>
+
+    <EditText
+        android:id="@+id/settings_input_lastname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="lastname"/>
+
+
+</LinearLayout>
