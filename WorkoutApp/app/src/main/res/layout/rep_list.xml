@@ -5,6 +5,7 @@
     android:layout_height="match_parent">
 
     <ListView
+        android:background="#FFFFFF"
         android:id="@+id/repslist"
         android:layout_weight="1"
         android:layout_width="fill_parent"

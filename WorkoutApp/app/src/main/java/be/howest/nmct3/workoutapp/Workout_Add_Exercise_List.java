@@ -96,7 +96,7 @@ public class Workout_Add_Exercise_List extends Fragment implements LoaderManager
                 // Replace whatever is in the fragment_container view with this fragment,
                 // and add the transaction to the back stack
                 transaction.replace(R.id.main, newFragment);
-                transaction.addToBackStack(null);
+                //transaction.addToBackStack(null);
 
                 // Commit the transaction
                 transaction.commit();

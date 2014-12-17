@@ -174,7 +174,7 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
         MainActivity.activeFragment = frag;
 
         transaction.replace(R.id.main, frag);
-        transaction.addToBackStack(null);
+        transaction.disallowAddToBackStack();
 
         // Commit the transaction
         transaction.commit();

@@ -78,7 +78,7 @@ public class AddNewWorkoutFragment extends android.support.v4.app.Fragment {
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.main, newFragment);
-        transaction.addToBackStack(null);
+        //transaction.addToBackStack(null);
 
         MainActivity.activeFragment = newFragment;
         //Toast.makeText(getActivity().getBaseContext(), newFragment.getClass().getSimpleName(),Toast.LENGTH_SHORT).show();
