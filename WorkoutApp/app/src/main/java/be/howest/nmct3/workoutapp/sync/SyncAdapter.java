@@ -31,14 +31,17 @@ import be.howest.nmct3.workoutapp.data.SettingsAdmin;
 public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
     private final ContentResolver mContentResolver;
+    private Context mContext;
 
     public SyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
+        mContext = context;
         mContentResolver = context.getContentResolver();
     }
 
     public SyncAdapter(Context context, boolean autoInitialize, boolean allowParallelSyncs){
         super(context, autoInitialize, allowParallelSyncs);
+        mContext = context;
         mContentResolver = context.getContentResolver();
     }
 
@@ -56,12 +59,31 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
     @Override
     public void onPerformSync(Account account, Bundle bundle, String s, ContentProviderClient contentProviderClient, SyncResult syncResult) {
-        downloadExercises(contentProviderClient, syncResult);
-        downloadWorkouts(contentProviderClient, syncResult);
-        //uploadWorkouts(contentProviderClient, syncResult);
+        //  exercises
+        if(SyncAdmin.getInstance(mContext).getAllowExercisesDownload()){
+            downloadExercises(contentProviderClient, syncResult);
+            SyncAdmin.getInstance(mContext).setAllowExercisesDownload(false);
+        }
 
-        //downloadPlanner(contentProviderClient, syncResult);
-        //uploadPlanner(contentProviderClient, syncResult);
+        //  workouts
+        if (SyncAdmin.getInstance(mContext).getAllowWorkoutsDownload()){
+            downloadWorkouts(contentProviderClient, syncResult);
+            SyncAdmin.getInstance(mContext).setAllowWorkoutsDownload(false);
+        }
+
+        if(SyncAdmin.getInstance(mContext).getAllowWorkoutsUpload()){
+            uploadWorkouts(contentProviderClient, syncResult);
+        }
+
+        //  planner
+        if(SyncAdmin.getInstance(mContext).getAllowPlannersDownload()){
+            downloadPlanner(contentProviderClient, syncResult);
+        }
+
+        if(SyncAdmin.getInstance(mContext).getAllowPlannersUpload()){
+            uploadPlanner(contentProviderClient, syncResult);
+        }
+
     }
 
     private void uploadWorkouts(ContentProviderClient contentProviderClient, SyncResult syncResult){

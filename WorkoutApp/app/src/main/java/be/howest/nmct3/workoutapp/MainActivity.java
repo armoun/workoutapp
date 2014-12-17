@@ -44,6 +44,7 @@ import java.util.Calendar;
 import be.howest.nmct3.workoutapp.data.Exercise;
 import be.howest.nmct3.workoutapp.data.SettingsAdmin;
 import be.howest.nmct3.workoutapp.data.WorkoutsLoader;
+import be.howest.nmct3.workoutapp.sync.SyncAdmin;
 
 
 public class MainActivity extends FragmentActivity {
@@ -70,9 +71,9 @@ public class MainActivity extends FragmentActivity {
     // The authority for the sync adapter's content provider
     public static final String AUTHORITY = "be.howest.nmct3.workoutapp";
     // An account type, in the form of a domain name
-    public static final String ACCOUNT_TYPE = "be.howest.nmct3.workoutapp.account";
+    public static final String ACCOUNT_TYPE = "be.howest.nmct3.workoutapp";
     // The account name
-    public static final String ACCOUNT = "dummyaccount";
+    public static final String ACCOUNT = "sync";
     // Instance fields
     Account mAccount;
 
@@ -100,7 +101,9 @@ public class MainActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //mAccount = CreateSyncAccount(this);
+        mAccount = CreateSyncAccount(this);
+
+        runSyncAdapter();
 
         setContentView(R.layout.activity_main);
 
@@ -166,7 +169,11 @@ public class MainActivity extends FragmentActivity {
 
     private void runSyncAdapter(){
 
-        Log.d("","_________________ runSyncAdapter()");
+        SyncAdmin.getInstance(getApplicationContext()).setAllowExercisesDownload(true);
+        SyncAdmin.getInstance(getApplicationContext()).setAllowWorkoutsDownload(true);
+
+        Log.d("MainActivity","runSyncAdapter() all set to true" );
+
         Bundle settingsBundle = new Bundle();
         settingsBundle.putBoolean(
                 ContentResolver.SYNC_EXTRAS_MANUAL, true);
@@ -177,6 +184,8 @@ public class MainActivity extends FragmentActivity {
          * manual sync settings
          */
         ContentResolver.requestSync(mAccount, AUTHORITY, settingsBundle);
+
+
 
     }
 
