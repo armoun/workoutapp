@@ -8,7 +8,7 @@
             android:layout_weight="0.80"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:background="#FFF"
+            android:background="@color/headcolor"
             android:orientation="vertical"
             android:layout_marginBottom="15dp">
 
@@ -45,11 +45,14 @@
 
             <TextView
                 android:id="@+id/dashboardFirstnameLastnameId"
-                android:layout_weight="3"
+                android:layout_weight="2"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:text="Voornaam Naam"
+                android:fontFamily="sans-serif-condensed"
+                android:textSize="20dp"
                 android:gravity="center"
+                android:textColor="#FFF"
                 android:layout_margin="5dp" />
 
         </LinearLayout>
@@ -70,16 +73,21 @@
                android:layout_height="fill_parent"
                android:text="TODAY"
                android:gravity="center"
-               android:background="@color/headcolor"
-               android:textColor="#FFF"/>
+               android:background="#ff5d5b5b"
+               android:textColor="#FFF"
+               android:fontFamily="sans-serif-condensed"
+               android:textSize="18dp"/>
 
            <TextView
+               android:id="@+id/todaysWorkout"
                android:layout_weight="1"
                android:layout_width="fill_parent"
                android:layout_height="fill_parent"
                android:text="Workout Name"
                android:gravity="center"
-               android:background="#FFF"/>
+               android:background="#FFF"
+               android:fontFamily="sans-serif-light"
+               android:textSize="18dp"/>
 
        </LinearLayout>
 
@@ -101,7 +109,9 @@
             android:text="65"
             android:gravity="center"
             android:background="#FFF"
-            android:layout_marginRight="1dp"/>
+            android:layout_marginRight="1dp"
+            android:fontFamily="sans-serif-light"
+            android:textSize="18dp"/>
 
         <TextView
             android:id="@+id/dashboardHEIGHT"
@@ -111,7 +121,9 @@
             android:text="178"
             android:gravity="center"
             android:background="#FFF"
-            android:layout_marginRight="1dp"/>
+            android:layout_marginRight="1dp"
+            android:fontFamily="sans-serif-light"
+            android:textSize="18dp"/>
 
         <TextView
             android:id="@+id/dashboardBMI"
@@ -120,7 +132,9 @@
             android:layout_height="fill_parent"
             android:text="20"
             android:gravity="center"
-            android:background="#FFF"/>
+            android:background="#FFF"
+            android:fontFamily="sans-serif-light"
+            android:textSize="18dp"/>
 
     </LinearLayout>
 
@@ -139,7 +153,9 @@
             android:layout_height="fill_parent"
             android:text="GRAFIEK"
             android:gravity="center"
-            android:background="#FFF"/>
+            android:background="#FFF"
+            android:fontFamily="sans-serif-light"
+            android:textSize="18dp"/>
 
     </LinearLayout>
 
