@@ -25,6 +25,7 @@
         android:layout_marginTop="30dp"
         android:id="@+id/RegisterFirstNameTextbox"
         android:hint="First Name"
+        android:singleLine="true"
         />
 
     <EditText
@@ -32,6 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="0.2"
         android:layout_marginTop="30dp"
+        android:singleLine="true"
         android:id="@+id/RegisterLastNameTextbox"
         android:hint="Last Name"
         />
@@ -41,6 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="0.2"
         android:layout_marginTop="30dp"
+        android:singleLine="true"
         android:id="@+id/RegisterUsernameTextbox"
         android:hint="Username"
         />
@@ -50,6 +53,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="0.2"
         android:layout_marginTop="30dp"
+        android:singleLine="true"
         android:id="@+id/RegisterPasswordTextbox"
         android:inputType="textPassword"
         android:hint="Password"

@@ -16,6 +16,7 @@
     <EditText
         android:id="@+id/settings_input_email"
         android:layout_width="match_parent"
+        android:singleLine="true"
         android:layout_height="wrap_content"
         android:hint="e-mail"/>
 

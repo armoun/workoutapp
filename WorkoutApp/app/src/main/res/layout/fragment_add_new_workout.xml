@@ -20,6 +20,7 @@
             android:textColor="#fff"/>
 
         <EditText
+            android:singleLine="true"
             android:id="@+id/name_new_workout_editText"
             android:layout_width="fill_parent"  android:layout_height="wrap_content"
             android:background="#FFF" android:padding="5dp" android:hint="Name" android:height="50dp" android:layout_marginTop="20dp"/>
