@@ -18,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.CalendarView;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
@@ -38,6 +39,7 @@ import be.howest.nmct3.workoutapp.data.DatabaseHelper;
 public class PlannerFragment extends Fragment {
 
     private CursorAdapter myPlannerAdapter;
+    private Cursor mCursor;
     private ListView listView;
 
     public PlannerFragment() {
@@ -100,6 +102,30 @@ public class PlannerFragment extends Fragment {
 
         listView = (ListView) root.findViewById(R.id.plannerList);
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                mCursor.moveToPosition(i);
+                int id = mCursor.getInt(mCursor.getColumnIndex(Contract.Workouts._ID));
+                Log.d("PlannerFragment","Workout ID: " + id);
+                MainActivity.WORKOUT_ID = id;
+
+                Fragment newFragment = Fragment.instantiate(getActivity().getApplicationContext(), "be.howest.nmct3.workoutapp.Workouts_SelectedWorkoutList_Fragment");
+                // consider using Java coding conventions (upper first char class names!!!)
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+                MainActivity.activeFragment = newFragment;
+
+                // Replace whatever is in the fragment_container view with this fragment,
+                // and add the transaction to the back stack
+                transaction.replace(R.id.main, newFragment);
+                transaction.addToBackStack(null);
+
+                // Commit the transaction
+                transaction.commit();
+            }
+        });
+
         myPlannerAdapter = new SimpleCursorAdapter(getActivity(), R.layout.planner_list_row_layout, null, columns, viewIds, 0);
 
         listView.setAdapter(myPlannerAdapter);
@@ -145,16 +171,16 @@ public class PlannerFragment extends Fragment {
     private void getworkouts(){
 
         SQLiteDatabase db = DatabaseHelper.getInstance(getActivity().getApplicationContext()).getReadableDatabase();
-        Cursor c = db.rawQuery( "SELECT "       + Contract.Workouts.CONTENT_DIRECTORY + "." + Contract.Workouts._ID + ", " + Contract.Workouts.CONTENT_DIRECTORY + "." + Contract.Workouts.NAME +
+        mCursor = db.rawQuery( "SELECT "       + Contract.Workouts.CONTENT_DIRECTORY + "." + Contract.Workouts._ID + ", " + Contract.Workouts.CONTENT_DIRECTORY + "." + Contract.Workouts.NAME +
                                 " FROM "         + Contract.Workouts.CONTENT_DIRECTORY +
                                 " INNER JOIN "   + Contract.Planners.CONTENT_DIRECTORY +
                                 " ON "           + Contract.Workouts.CONTENT_DIRECTORY + "." + Contract.Workouts._ID + " = " + Contract.Planners.CONTENT_DIRECTORY + "." + Contract.Planners.WORKOUT_ID +
                                 " WHERE "        + Contract.Planners.CONTENT_DIRECTORY + "." + Contract.Planners.WO_DATE + " = ?",
                 new String[]{MainActivity.plannerSelectedDate});
 
-        Log.d("",DatabaseUtils.dumpCursorToString(c));
+        Log.d("",DatabaseUtils.dumpCursorToString(mCursor));
 
-        myPlannerAdapter.changeCursor(c);
+        myPlannerAdapter.changeCursor(mCursor);
     }
 
     private void setPlannerSelectedDate(CalendarView planner) {
