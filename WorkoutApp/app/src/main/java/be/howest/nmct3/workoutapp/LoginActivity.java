@@ -39,6 +39,8 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_layout);
 
+        getActionBar().hide();
+
         // CHECK IF THERE IS A SHARED PREFERENCE USERNAME
         String username = SettingsAdmin.getInstance(getApplicationContext()).getUsername();
         if(!(username.equals("")))
