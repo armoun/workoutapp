@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -27,6 +28,7 @@ import android.widget.Toast;
 import java.util.Calendar;
 
 import be.howest.nmct3.workoutapp.data.Contract;
+import be.howest.nmct3.workoutapp.data.DatabaseHelper;
 
 
 /**
@@ -93,11 +95,13 @@ public class PlannerFragment extends Fragment {
                              Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.planner_fragment_layout, null);
 
-        String[] columns = new String[] { "name" };
+        String[] columns = new String[] { Contract.Workouts.NAME};
         int[] viewIds = new int[] { R.id.dayWorkoutTitle };
 
         listView = (ListView) root.findViewById(R.id.plannerList);
-        
+
+        myPlannerAdapter = new SimpleCursorAdapter(getActivity(), R.layout.planner_list_row_layout, null, columns, viewIds, 0);
+
         listView.setAdapter(myPlannerAdapter);
 
         final CalendarView planner = (CalendarView) root.findViewById(R.id.planner);
@@ -111,7 +115,7 @@ public class PlannerFragment extends Fragment {
 
             ContentValues cv = new ContentValues();
             cv.put(Contract.Planners.WORKOUT_ID, wo_id);
-            cv.put(Contract.Planners.WORKOUT_ID, MainActivity.plannerSelectedDate);
+            cv.put(Contract.Planners.WO_DATE, MainActivity.plannerSelectedDate);
 
             Uri uri = getActivity().getContentResolver().insert(Contract.Planners.CONTENT_URI, cv);
             Log.d("","Inserted " + uri.toString());
@@ -138,8 +142,24 @@ public class PlannerFragment extends Fragment {
         return root;
     }
 
+    private void getworkouts(){
+
+        SQLiteDatabase db = DatabaseHelper.getInstance(getActivity().getApplicationContext()).getReadableDatabase();
+        Cursor c = db.rawQuery( "SELECT "       + Contract.Workouts.CONTENT_DIRECTORY + "." + Contract.Workouts._ID + ", " + Contract.Workouts.CONTENT_DIRECTORY + "." + Contract.Workouts.NAME +
+                                " FROM "         + Contract.Workouts.CONTENT_DIRECTORY +
+                                " INNER JOIN "   + Contract.Planners.CONTENT_DIRECTORY +
+                                " ON "           + Contract.Workouts.CONTENT_DIRECTORY + "." + Contract.Workouts._ID + " = " + Contract.Planners.CONTENT_DIRECTORY + "." + Contract.Planners.WORKOUT_ID +
+                                " WHERE "        + Contract.Planners.CONTENT_DIRECTORY + "." + Contract.Planners.WO_DATE + " = ?",
+                new String[]{MainActivity.plannerSelectedDate});
+
+        Log.d("",DatabaseUtils.dumpCursorToString(c));
+
+        myPlannerAdapter.changeCursor(c);
+    }
+
     private void setPlannerSelectedDate(CalendarView planner) {
         MainActivity.plannerSelectedDate = MainActivity.phoneCalendar.get(Calendar.DAY_OF_MONTH)+"-"+ (MainActivity.phoneCalendar.get(Calendar.MONTH)+1) +"-"+MainActivity.phoneCalendar.get(Calendar.YEAR);
         planner.setDate(MainActivity.phoneCalendar.getTimeInMillis(),true,true);
+        getworkouts();
     }
 }
