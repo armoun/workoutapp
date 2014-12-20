@@ -10,7 +10,9 @@
         android:layout_height="fill_parent"
         android:padding="10dp"
         android:text="test"
-        android:layout_weight="1">
+        android:layout_weight="0.4"
+        android:fontFamily="sans-serif-condensed"
+        android:textSize="20dp">
     </TextView>
 
     <TextView
@@ -21,7 +23,9 @@
         android:text="test"
         android:layout_weight="1"
         android:gravity="right"
-        android:textColor="@color/headcolor">
+        android:textColor="@color/headcolor"
+        android:fontFamily="sans-serif-condensed"
+        android:textSize="20dp">
     </TextView>
 
 </LinearLayout>

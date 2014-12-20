@@ -2,15 +2,27 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:padding="0dp" >
+    android:padding="0dp"
+    android:orientation="horizontal"
+    android:background="#FFF">
+
+    <ImageView
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="10dp"
+        android:padding="10dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/workouts"/>
 
     <TextView
+        android:layout_marginTop="5dp"
         android:id="@+id/workout_item_title"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="70dp"
         android:padding="20dp"
         android:text="@string/workout_item_title"
-        android:background="#FFF">
+        android:fontFamily="sans-serif-condensed"
+        android:textSize="20dp">
     </TextView>
 
 </LinearLayout>
