@@ -145,7 +145,7 @@ public class PlannerFragment extends Fragment {
 
             Uri uri = getActivity().getContentResolver().insert(Contract.Planners.CONTENT_URI, cv);
             Log.d("","Inserted " + uri.toString());
-
+            MainActivity.plannerSelectedWorkoutId = -1;
         }
         final TextView plannerCurrentDate = (TextView) root.findViewById(R.id.plannerCurrentDate);
 
