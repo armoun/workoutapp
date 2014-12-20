@@ -11,10 +11,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SyncStatusObserver;
+import android.database.Cursor;
+import android.database.DatabaseUtils;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.InputType;
 import android.util.Log;
@@ -29,8 +33,11 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.util.Calendar;
+
 import be.howest.nmct3.workoutapp.Account.GenericAccountService;
 import be.howest.nmct3.workoutapp.data.Contract;
+import be.howest.nmct3.workoutapp.data.DatabaseHelper;
 import be.howest.nmct3.workoutapp.data.SettingsAdmin;
 import be.howest.nmct3.workoutapp.sync.SyncUtils;
 
@@ -44,6 +51,7 @@ public class DashboardFragment extends Fragment {
     TextView Weight;
     TextView Height;
     TextView BMI;
+    TextView TodaysWorkout;
 
     String weight;
     String height;
@@ -81,6 +89,7 @@ public class DashboardFragment extends Fragment {
         Weight  = (TextView) root.findViewById(R.id.dashboardWEIGHT);
         Height = (TextView) root.findViewById(R.id.dashboardHEIGHT);
         BMI = (TextView) root.findViewById(R.id.dashboardBMI);
+        TodaysWorkout = (TextView) root.findViewById(R.id.todaysWorkout);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         weight = preferences.getString(SettingsAdmin.getInstance(getActivity().getApplicationContext()).getUsername()+"-WEIGHT","");
@@ -103,6 +112,8 @@ public class DashboardFragment extends Fragment {
             Height.setText("0 cm");
         }
 
+        getWorkout();
+
         calculateBMI(Weight, Height, BMI);
 
         Weight.setOnClickListener(new View.OnClickListener() {
@@ -117,10 +128,47 @@ public class DashboardFragment extends Fragment {
                 changeHeight(v);
             }
         });
+        TodaysWorkout.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Fragment newFragment = Fragment.instantiate(getActivity().getApplicationContext(), "be.howest.nmct3.workoutapp.Workouts_SelectedWorkoutList_Fragment");
+                // consider using Java coding conventions (upper first char class names!!!)
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+                MainActivity.activeFragment = newFragment;
+
+                // Replace whatever is in the fragment_container view with this fragment,
+                // and add the transaction to the back1 stack
+                transaction.replace(R.id.main, newFragment);
+                transaction.addToBackStack(null);
+
+                // Commit the transaction
+                transaction.commit();
+            }
+        });
 
         return root;
     }
 
+    private void getWorkout(){
+        Calendar cal = Calendar.getInstance();
+        String date = cal.get(Calendar.DAY_OF_MONTH) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.YEAR);
+        Log.d("DashboardFragment","Date:" + date);
+        SQLiteDatabase db = DatabaseHelper.getInstance(getActivity().getApplicationContext()).getReadableDatabase();
+        Cursor c = db.rawQuery( "SELECT "       + Contract.Workouts.CONTENT_DIRECTORY + "." + Contract.Workouts._ID + ", " + Contract.Workouts.CONTENT_DIRECTORY + "." + Contract.Workouts.NAME +
+                                " FROM "         + Contract.Workouts.CONTENT_DIRECTORY +
+                                " INNER JOIN "   + Contract.Planners.CONTENT_DIRECTORY +
+                                " ON "           + Contract.Workouts.CONTENT_DIRECTORY + "." + Contract.Workouts._ID + " = " + Contract.Planners.CONTENT_DIRECTORY + "." + Contract.Planners.WORKOUT_ID +
+                                " WHERE "        + Contract.Planners.CONTENT_DIRECTORY + "." + Contract.Planners.WO_DATE + " = ?",
+                new String[]{date});
+
+        //Cursor c1 = db.rawQuery( "SELECT * FROM " + Contract.Planners.CONTENT_DIRECTORY, null);
+
+        Log.d("DashboardFragment", DatabaseUtils.dumpCursorToString(c));
+        c.moveToFirst();
+        TodaysWorkout.setText(c.getString(c.getColumnIndex(Contract.Workouts.NAME)));
+        MainActivity.WORKOUT_ID = c.getInt(c.getColumnIndex(Contract.Workouts._ID));
+    }
 
     @Override
     public void onAttach(Activity activity) {
