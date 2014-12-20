@@ -94,7 +94,7 @@ public class Workout_Add_Exercise_List extends Fragment implements LoaderManager
                 getActivity().getContentResolver().insert(Contract.WorkoutExercises.CONTENT_URI, values);
 
                 // Replace whatever is in the fragment_container view with this fragment,
-                // and add the transaction to the back stack
+                // and add the transaction to the back1 stack
                 transaction.replace(R.id.main, newFragment);
                 //transaction.addToBackStack(null);
 

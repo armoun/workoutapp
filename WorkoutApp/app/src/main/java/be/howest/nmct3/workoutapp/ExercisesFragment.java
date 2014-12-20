@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -74,7 +75,7 @@ public class ExercisesFragment extends Fragment {
                 //Toast.makeText(getActivity().getBaseContext(), "Active fragment: " + MainActivity.activeFragment.getClass().getSimpleName(),Toast.LENGTH_SHORT).show();
 
                 // Replace whatever is in the fragment_container view with this fragment,
-                // and add the transaction to the back stack
+                // and add the transaction to the back1 stack
                 transaction.replace(R.id.main, newFragment);
                 transaction.addToBackStack(null);
 
@@ -115,6 +116,43 @@ public class ExercisesFragment extends Fragment {
 
             TextView txtMuscleGroupTitle = (TextView) row.findViewById(R.id.grid_item_text);
             txtMuscleGroupTitle.setText(MuscleGroupTitle);
+
+                if(position == 0)
+                {
+                    ImageView imgMusclegroupIcon = (ImageView) row.findViewById(R.id.musclegroup_icon);
+                    imgMusclegroupIcon.setImageResource(R.drawable.arms_red);
+                }
+
+                if(position == 1)
+                {
+                    ImageView imgMusclegroupIcon = (ImageView) row.findViewById(R.id.musclegroup_icon);
+                    imgMusclegroupIcon.setImageResource(R.drawable.back1_red);
+                }
+
+                if(position == 2)
+                {
+                    ImageView imgMusclegroupIcon = (ImageView) row.findViewById(R.id.musclegroup_icon);
+                    imgMusclegroupIcon.setImageResource(R.drawable.chest_red);
+                }
+
+                if(position == 3)
+                {
+                    ImageView imgMusclegroupIcon = (ImageView) row.findViewById(R.id.musclegroup_icon);
+                    imgMusclegroupIcon.setImageResource(R.drawable.shoulders_red);
+                }
+
+                if(position == 4)
+                {
+                    ImageView imgMusclegroupIcon = (ImageView) row.findViewById(R.id.musclegroup_icon);
+                    imgMusclegroupIcon.setImageResource(R.drawable.abs_red);
+                }
+
+                if(position == 5)
+                {
+                    ImageView imgMusclegroupIcon = (ImageView) row.findViewById(R.id.musclegroup_icon);
+                    imgMusclegroupIcon.setImageResource(R.drawable.legs_red);
+                }
+
 
             return row;
         }

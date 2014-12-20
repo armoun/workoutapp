@@ -1,17 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp">
+    android:padding="20dp"
+    android:background="#FFF">
+
+    <ImageView
+        android:id="@+id/musclegroup_list_icon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/chest_red"/>
 
     <TextView
         android:id="@+id/list_musclegroup_item_text"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
-        android:text="exercise name">
+        android:text="exercise name"
+        android:fontFamily="sans-serif-condensed"
+        android:textSize="20dp"
+        android:layout_marginLeft="10dp">
     </TextView>
 
 

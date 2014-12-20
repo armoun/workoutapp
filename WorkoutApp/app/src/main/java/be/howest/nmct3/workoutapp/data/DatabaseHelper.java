@@ -113,8 +113,8 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
         ContentValues cvDeadlift = new ContentValues();
         cvDeadlift.put(Contract.Exercises.EXERCISE_NAME, "Deadlift");
-        cvDeadlift.put(Contract.Exercises.MUSCLE_GROUP , "back");
-        cvDeadlift.put(Contract.Exercises.TARGET , "lower back");
+        cvDeadlift.put(Contract.Exercises.MUSCLE_GROUP , "back1");
+        cvDeadlift.put(Contract.Exercises.TARGET , "lower back1");
         cvDeadlift.put(Contract.Exercises.DESCRIPTION , "Stand in front of a loaded barbell. ...");
         cvDeadlift.put(Contract.Exercises.IMAGE_NAME , "deadlift");
         Long deadLiftId = db.insert(Contract.Exercises.CONTENT_DIRECTORY, "", cvDeadlift);
@@ -131,7 +131,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         cvBenchPress.put(Contract.Exercises.EXERCISE_NAME, "Bench press");
         cvBenchPress.put(Contract.Exercises.MUSCLE_GROUP , "chest");
         cvBenchPress.put(Contract.Exercises.TARGET , "chest");
-        cvBenchPress.put(Contract.Exercises.DESCRIPTION , "Lie back on a flat bench. ...");
+        cvBenchPress.put(Contract.Exercises.DESCRIPTION , "Lie back1 on a flat bench. ...");
         cvBenchPress.put(Contract.Exercises.IMAGE_NAME , "benchpress");
         Long benchPressId = db.insert(Contract.Exercises.CONTENT_DIRECTORY, "", cvBenchPress);
 
@@ -147,7 +147,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         cvBicycleCrunch.put(Contract.Exercises.EXERCISE_NAME, "Bicycle crunch");
         cvBicycleCrunch.put(Contract.Exercises.MUSCLE_GROUP , "abs");
         cvBicycleCrunch.put(Contract.Exercises.TARGET , "abs");
-        cvBicycleCrunch.put(Contract.Exercises.DESCRIPTION , "Lie flat on the floor with your lower back pressed to the ground. ...");
+        cvBicycleCrunch.put(Contract.Exercises.DESCRIPTION , "Lie flat on the floor with your lower back1 pressed to the ground. ...");
         cvBicycleCrunch.put(Contract.Exercises.IMAGE_NAME , "bicyclecrunch");
         Long bicycleCrunchId = db.insert(Contract.Exercises.CONTENT_DIRECTORY, "", cvBicycleCrunch);
 

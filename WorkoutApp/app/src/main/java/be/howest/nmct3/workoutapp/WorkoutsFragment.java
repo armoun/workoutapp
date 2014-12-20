@@ -82,7 +82,7 @@ public class WorkoutsFragment extends Fragment {
                 MainActivity.activeFragment = newFragment;
 
                 // Replace whatever is in the fragment_container view with this fragment,
-                // and add the transaction to the back stack
+                // and add the transaction to the back1 stack
                 transaction.replace(R.id.main, newFragment);
                 transaction.addToBackStack(null);
 

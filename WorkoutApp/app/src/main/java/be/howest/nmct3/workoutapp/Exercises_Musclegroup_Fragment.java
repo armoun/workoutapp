@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,8 +18,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CursorAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import be.howest.nmct3.workoutapp.data.Contract;
@@ -60,9 +63,53 @@ public class Exercises_Musclegroup_Fragment extends Fragment implements LoaderMa
         String[] columns = new String[] { "name" };
         int[] viewIds = new int[] { R.id.list_musclegroup_item_text};
 
+
         mAdapter = new SimpleCursorAdapter(getActivity(),
                 R.layout.exercises_musclegroup_item_layout, null,
-                columns, viewIds, 0);
+                columns, viewIds, 0)
+        {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                final View row = super.getView(position, convertView, parent);
+
+                String musclegroup = MainActivity.EXTRA_SELECTED_MUSCLEGROUP;
+                ImageView imgMusclegroupIcon = (ImageView) row.findViewById(R.id.musclegroup_list_icon);
+
+                Log.d("MUSCLEGROUP", musclegroup);
+
+                if(musclegroup.equals("ARMS"))
+                {
+                    imgMusclegroupIcon.setImageResource(R.drawable.arms_red);
+                }
+
+                if(musclegroup.equals("BACK"))
+                {
+                    imgMusclegroupIcon.setImageResource(R.drawable.back1_red);
+                }
+
+                if(musclegroup.equals("CHEST"))
+                {
+                    imgMusclegroupIcon.setImageResource(R.drawable.chest_red);
+                }
+
+                if(musclegroup.equals("SHOULDERS"))
+                {
+                    imgMusclegroupIcon.setImageResource(R.drawable.shoulders_red);
+                }
+
+                if(musclegroup.equals("ABS"))
+                {
+                    imgMusclegroupIcon.setImageResource(R.drawable.abs_red);
+                }
+
+                if(musclegroup.equals("LEGS"))
+                {
+                    imgMusclegroupIcon.setImageResource(R.drawable.legs_red);
+                }
+
+                return row;
+            }
+        };
 
         list.setAdapter(mAdapter);
 
@@ -81,7 +128,7 @@ public class Exercises_Musclegroup_Fragment extends Fragment implements LoaderMa
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
                 // Replace whatever is in the fragment_container view with this fragment,
-                // and add the transaction to the back stack
+                // and add the transaction to the back1 stack
                 transaction.replace(R.id.main, newFragment);
                 transaction.addToBackStack(null);
 

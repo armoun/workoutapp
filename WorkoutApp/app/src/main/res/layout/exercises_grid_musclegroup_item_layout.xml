@@ -2,14 +2,38 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:padding="0dp" >
+    android:padding="0dp"
+    android:orientation="vertical"
+    android:background="#FFF">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp">
+
+        <ImageView
+            android:id="@+id/musclegroup_icon"
+            android:layout_weight="1"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/chest"/>
+
+
+    </LinearLayout>
+
 
     <TextView
+
+
         android:id="@+id/grid_item_text"
         android:layout_width="fill_parent"
-        android:layout_height="152dp"
+        android:layout_height="52dp"
         android:gravity="center"
-        android:background="#FFF">
+        android:text="test"
+        android:background="#FFF"
+        android:fontFamily="sans-serif-condensed"
+        android:textSize="20dp">
     </TextView>
 
 </LinearLayout>
