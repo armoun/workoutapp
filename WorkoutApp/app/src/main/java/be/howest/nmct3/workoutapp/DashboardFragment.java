@@ -166,8 +166,13 @@ public class DashboardFragment extends Fragment {
 
         Log.d("DashboardFragment", DatabaseUtils.dumpCursorToString(c));
         c.moveToFirst();
-        TodaysWorkout.setText(c.getString(c.getColumnIndex(Contract.Workouts.NAME)));
-        MainActivity.WORKOUT_ID = c.getInt(c.getColumnIndex(Contract.Workouts._ID));
+        if(c.getCount() > 0){
+            TodaysWorkout.setText(c.getString(c.getColumnIndex(Contract.Workouts.NAME)));
+            MainActivity.WORKOUT_ID = c.getInt(c.getColumnIndex(Contract.Workouts._ID));
+        }else{
+            TodaysWorkout.setText("No workout planned");
+        }
+
     }
 
     @Override
