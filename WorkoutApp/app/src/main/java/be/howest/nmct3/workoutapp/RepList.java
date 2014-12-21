@@ -1,9 +1,14 @@
 package be.howest.nmct3.workoutapp;
 
+import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -15,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -22,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import be.howest.nmct3.workoutapp.data.Contract;
+import be.howest.nmct3.workoutapp.data.SettingsAdmin;
 
 /**
  * Created by nielslammens on 2/12/14.
@@ -29,7 +36,7 @@ import be.howest.nmct3.workoutapp.data.Contract;
 public class RepList extends Fragment {
 
     private ListAdapter myListAdapter;
-
+    ListView list;
 
     public RepList() {
         // Required empty public constructor
@@ -59,11 +66,60 @@ public class RepList extends Fragment {
 
             //Geklikt op "+" bij sets en reps (replist)
             case R.id.action_add_sets:
-                Toast.makeText(getActivity(), item.getTitle() + " clicked!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), item.getTitle() + " clicked!", Toast.LENGTH_SHORT).show();
+                getNewSet();
                 break;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void getNewSet()
+    {
+        // get prompts.xml view
+        LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+        View promptView = layoutInflater.inflate(R.layout.input_dialog, null);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                getActivity());
+        alertDialogBuilder.setView(promptView);
+
+        final EditText input_reps = (EditText) promptView.findViewById(R.id.input_weight);
+        // setup a dialog window
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        String ex_id = ""+ MainActivity.EXERCICE_ID;
+                        String wo_id = ""+ MainActivity.WORKOUT_ID;
+                        Cursor c = getActivity().getContentResolver().query(Contract.WorkoutExercises.CONTENT_URI, new String[]{Contract.WorkoutExercises.REPS},
+                                "(" + Contract.WorkoutExercises.EXERCISE_ID + " =? AND " + Contract.WorkoutExercises.WORKOUT_ID + "=?)",
+                                new String[]{ex_id, wo_id},
+                                null);
+                        c.moveToFirst();
+                        String reps = c.getString(c.getColumnIndex(Contract.WorkoutExercises.REPS));
+                        reps += " " + input_reps.getText().toString();
+
+                        ContentValues cv = new ContentValues();
+                        cv.put(Contract.WorkoutExercises.REPS, reps);
+
+                        int a = getActivity().getContentResolver().update(Contract.WorkoutExercises.CONTENT_URI, cv,
+                                "(" + Contract.WorkoutExercises.EXERCISE_ID + " =? AND " + Contract.WorkoutExercises.WORKOUT_ID + "=?)",
+                                new String[]{ex_id, wo_id});
+
+                        myListAdapter = new repsAdapter();
+                        list.setAdapter(myListAdapter);
+                    }
+                })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        // create an alert dialog
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
     }
 
     @Override
@@ -78,7 +134,7 @@ public class RepList extends Fragment {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.rep_list, null);
 
         myListAdapter = new repsAdapter();
-        ListView list = (ListView) root.findViewById(R.id.repslist);
+        list = (ListView) root.findViewById(R.id.repslist);
         list.setAdapter(myListAdapter);
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener()
@@ -114,7 +170,6 @@ public class RepList extends Fragment {
                     "(" + Contract.WorkoutExercises.EXERCISE_ID + " =? AND " + Contract.WorkoutExercises.WORKOUT_ID + "=?)",
                     new String[]{ex_id, wo_id},
                     null);
-            //"(" + Contract.WorkoutExercises.EXERCISE_ID + "=? AND " + Contract.WorkoutExercises.WORKOUT_ID + "=?)", new String[]{ex_id, wo_id},
 
             c.moveToFirst();
 
