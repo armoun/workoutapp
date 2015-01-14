@@ -89,25 +89,29 @@ public class RepList extends Fragment {
                 .setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        String ex_id = ""+ MainActivity.EXERCICE_ID;
-                        String wo_id = ""+ MainActivity.WORKOUT_ID;
-                        Cursor c = getActivity().getContentResolver().query(Contract.WorkoutExercises.CONTENT_URI, new String[]{Contract.WorkoutExercises.REPS},
-                                "(" + Contract.WorkoutExercises.EXERCISE_ID + " =? AND " + Contract.WorkoutExercises.WORKOUT_ID + "=?)",
-                                new String[]{ex_id, wo_id},
-                                null);
-                        c.moveToFirst();
-                        String reps = c.getString(c.getColumnIndex(Contract.WorkoutExercises.REPS));
-                        reps += " " + input_reps.getText().toString();
+                        Log.d("Replist","_"+input_reps.getText().toString()+ "_");
+                        if(input_reps.getText().toString().length() > 0){
+                            Log.d("Replist","input reps not empty");
+                            String ex_id = ""+ MainActivity.EXERCICE_ID;
+                            String wo_id = ""+ MainActivity.WORKOUT_ID;
+                            Cursor c = getActivity().getContentResolver().query(Contract.WorkoutExercises.CONTENT_URI, new String[]{Contract.WorkoutExercises.REPS},
+                                    "(" + Contract.WorkoutExercises.EXERCISE_ID + " =? AND " + Contract.WorkoutExercises.WORKOUT_ID + "=?)",
+                                    new String[]{ex_id, wo_id},
+                                    null);
+                            c.moveToFirst();
+                            String reps = c.getString(c.getColumnIndex(Contract.WorkoutExercises.REPS));
+                            reps += " " + input_reps.getText().toString();
 
-                        ContentValues cv = new ContentValues();
-                        cv.put(Contract.WorkoutExercises.REPS, reps);
+                            ContentValues cv = new ContentValues();
+                            cv.put(Contract.WorkoutExercises.REPS, reps);
 
-                        int a = getActivity().getContentResolver().update(Contract.WorkoutExercises.CONTENT_URI, cv,
-                                "(" + Contract.WorkoutExercises.EXERCISE_ID + " =? AND " + Contract.WorkoutExercises.WORKOUT_ID + "=?)",
-                                new String[]{ex_id, wo_id});
+                            int a = getActivity().getContentResolver().update(Contract.WorkoutExercises.CONTENT_URI, cv,
+                                    "(" + Contract.WorkoutExercises.EXERCISE_ID + " =? AND " + Contract.WorkoutExercises.WORKOUT_ID + "=?)",
+                                    new String[]{ex_id, wo_id});
 
-                        myListAdapter = new repsAdapter();
-                        list.setAdapter(myListAdapter);
+                            myListAdapter = new repsAdapter();
+                            list.setAdapter(myListAdapter);
+                        }
                     }
                 })
                 .setNegativeButton("Cancel",
