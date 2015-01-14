@@ -148,8 +148,7 @@ public class WorkoutsFragment extends Fragment {
                                 myWorkoutCursorAdapter.setFilterQueryProvider(new FilterQueryProvider() {
                                     @Override
                                     public Cursor runQuery(CharSequence charSequence) {
-                                        Cursor filteredCursor = getWorkoutsByWorkoutName(charSequence.toString());
-                                        return filteredCursor;
+                                        return getWorkoutsByWorkoutName(charSequence.toString());
                                     }
                                 });
                                 return null;

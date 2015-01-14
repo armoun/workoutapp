@@ -53,14 +53,10 @@ public class WorkoutDatasoure {
 
         return reps;
     }
-<<<<<<< HEAD
-=======
 
     public void deleteWorkout(Context context, int id){
         String wo_id = "" + id;
         context.getContentResolver().delete(Contract.Workouts.CONTENT_URI, Contract.Workouts._ID + " =?", new String[]{wo_id});
     }
 
-
->>>>>>> FETCH_HEAD
 }
