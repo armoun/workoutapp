@@ -56,6 +56,10 @@ import be.howest.nmct3.workoutapp.sync.SyncUtils;
  */
 public class DashboardFragment extends Fragment {
 
+    Calendar calendar = MainActivity.phoneCalendar;
+    GraphView graph;
+    LineGraphSeries<DataPoint> series;
+
     TextView Weight;
     TextView Height;
     TextView BMI;
@@ -155,10 +159,10 @@ public class DashboardFragment extends Fragment {
             }
         });
 
-        GraphView graph = (GraphView) root.findViewById(R.id.graphView);
+        graph = (GraphView) root.findViewById(R.id.graphView);
 
         // generate Dates
-        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, 1);
         Date d1 = calendar.getTime();
         calendar.add(Calendar.DATE, 1);
         Date d2 = calendar.getTime();
@@ -166,17 +170,14 @@ public class DashboardFragment extends Fragment {
         Date d3 = calendar.getTime();
         calendar.add(Calendar.DATE, 1);
         Date d4 = calendar.getTime();
-        calendar.add(Calendar.DATE, 1);
-        Date d5 = calendar.getTime();
 
         // you can directly pass Date objects to DataPoint-Constructor
         // this will convert the Date to double via Date#getTime()
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[] {
-                new DataPoint(d1, 67),
+        series = new LineGraphSeries<DataPoint>(new DataPoint[] {
+                new DataPoint(d1, 74),
                 new DataPoint(d2, 73),
-                new DataPoint(d3, 75),
-                new DataPoint(d4, 75),
-                new DataPoint(d5, 74)
+                new DataPoint(d3, 72),
+                new DataPoint(d4, 75)
         });
         graph.addSeries(series);
 
@@ -193,12 +194,12 @@ public class DashboardFragment extends Fragment {
                 }
             }
         });
-        graph.getGridLabelRenderer().setNumHorizontalLabels(3); // only 3 because of the space
+        graph.getGridLabelRenderer().setNumHorizontalLabels(10); // only 3 because of the space
         graph.getGridLabelRenderer().setGridColor(Color.rgb(139,137,137));
 
         // set manual x bounds to have nice steps
         graph.getViewport().setMinX(d1.getTime());
-        graph.getViewport().setMaxX(d3.getTime());
+        graph.getViewport().setMaxX(d4.getTime());
         graph.getViewport().setXAxisBoundsManual(true);
 
         //adapt style to app layout
@@ -320,24 +321,26 @@ public class DashboardFragment extends Fragment {
 
     public void calculateBMI(TextView pWeight, TextView pHeight, TextView pBMI)
     {
-        String[] splitWeight = pWeight.getText().toString().split("\\s+");
-        String[] splitHeight = pHeight.getText().toString().split("\\s+");
+        if(pHeight.getText()!="0" && pWeight.getText()!="0") {
+            String[] splitWeight = pWeight.getText().toString().split("\\s+");
+            String[] splitHeight = pHeight.getText().toString().split("\\s+");
 
-        double iWeight = Double.parseDouble(splitWeight[0]);
-        double iHeight = Double.parseDouble(splitHeight[0]);
-        iHeight = iHeight/100;
+            double iWeight = Double.parseDouble(splitWeight[0]);
+            double iHeight = Double.parseDouble(splitHeight[0]);
+            iHeight = iHeight / 100;
 
-        Log.d("WEIGHT", Double.toString(iWeight));
-        Log.d("HEIGHT", Double.toString(iHeight));
+            Log.d("WEIGHT", Double.toString(iWeight));
+            Log.d("HEIGHT", Double.toString(iHeight));
 
-        double myBMI = (iWeight / (iHeight * iHeight));
-        myBMI *= 100;
-        myBMI = Math.round(myBMI);
-        myBMI /= 100;
+            double myBMI = (iWeight / (iHeight * iHeight));
+            myBMI *= 100;
+            myBMI = Math.round(myBMI);
+            myBMI /= 100;
 
-        Log.d("BMI", Double.toString(myBMI));
+            Log.d("BMI", Double.toString(myBMI));
 
-        pBMI.setText(Double.toString(myBMI) + " BMI");
+            pBMI.setText(Double.toString(myBMI) + " BMI");
+        }
     }
 
 
@@ -365,6 +368,12 @@ public class DashboardFragment extends Fragment {
 
                         Weight.setText(input_weight.getText().toString() + " kg");
                         calculateBMI(Weight, Height, BMI);
+
+                        //CHANGE GRAPHVIEW
+                        calendar.add(Calendar.DATE, 1);
+                        Date d = calendar.getTime();
+                        series.appendData(new DataPoint(d, Integer.parseInt(input_weight.getText().toString())),true,40);
+                        graph.onDataChanged(true, true);
                     }
                 })
                 .setNegativeButton("Cancel",
