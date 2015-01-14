@@ -2,15 +2,21 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="20dp" android:paddingRight="20dp">
+    android:layout_height="match_parent" android:paddingLeft="20dp" android:paddingRight="20dp" android:paddingTop="20dp" android:paddingBottom="20dp">
 
     <ImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:id="@+id/dayWorkoutIcon" />
+        android:id="@+id/dayWorkoutIcon"
+        android:src="@drawable/workouts"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/dayWorkoutTitle" />
+        android:id="@+id/dayWorkoutTitle"
+        android:fontFamily="sans-serif-condensed"
+        android:textSize="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="12dp"
+        android:text="workout"/>
 </LinearLayout>

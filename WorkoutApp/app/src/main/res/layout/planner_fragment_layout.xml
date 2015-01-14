@@ -22,12 +22,14 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="@color/headcolor"
+        android:fontFamily="sans-serif-condensed"
         android:textSize="20dp"/>
 
     <ListView
         android:layout_weight="1.4"
         android:id="@+id/plannerList"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"></ListView>
+        android:layout_height="fill_parent"
+        android:background="#fff5f5f5"></ListView>
 
 </LinearLayout>
