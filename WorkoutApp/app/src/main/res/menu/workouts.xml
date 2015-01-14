@@ -4,7 +4,7 @@
             android:title="Search through all the workouts"
             android:icon="@drawable/ic_action_search"
             android:showAsAction="ifRoom|collapseActionView"
-            android:actionViewClass="android.widget.SearchView"  />
+            android:actionViewClass="android.widget.SearchView" />
         <item android:id="@+id/action_add_workout"
             android:icon="@drawable/ic_action_add"
             android:title="Add new workout"
