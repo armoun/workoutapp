@@ -321,7 +321,6 @@ public class DashboardFragment extends Fragment {
 
     public void calculateBMI(TextView pWeight, TextView pHeight, TextView pBMI)
     {
-        if(pHeight.getText()!="0" && pWeight.getText()!="0") {
             String[] splitWeight = pWeight.getText().toString().split("\\s+");
             String[] splitHeight = pHeight.getText().toString().split("\\s+");
 
@@ -340,7 +339,6 @@ public class DashboardFragment extends Fragment {
             Log.d("BMI", Double.toString(myBMI));
 
             pBMI.setText(Double.toString(myBMI) + " BMI");
-        }
     }
 
 

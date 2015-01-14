@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:background="@color/headcolor">
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:background="@color/headcolor">
+
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="40dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/gorilla_logo_rond"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:background="@color/headcolor"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="40dp">
+
+            <Button
+                android:layout_weight="0.2"
+                android:fontFamily="sans-serif-condensed"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_gravity="right"
+                android:text="REGISTER"
+                android:onClick="goToRegister"
+                android:background="#ff5d5b5b"
+                android:textColor="#FFF"
+                android:layout_margin="5dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:textSize="22dp"
+                />
+
+            <Button
+                android:layout_weight="0.2"
+                android:fontFamily="sans-serif-condensed"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_gravity="right"
+                android:text="GUEST"
+                android:onClick="LoginGuestButton"
+                android:background="#ff5d5b5b"
+                android:textColor="#FFF"
+                android:layout_margin="5dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:textSize="22dp"
+                />
+
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_weight="3"
+        android:orientation="vertical"
+        android:layout_gravity="center_horizontal"
+        android:background="#FFF">
+
+        <EditText
+            android:layout_gravity="center_horizontal"
+            android:fontFamily="sans-serif-condensed"
+            android:textSize="22dp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:layout_weight="0"
+            android:layout_marginTop="70dp"
+            android:id="@+id/LoginUsernameTextbox"
+            android:hint="Username"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            />
+
+        <EditText
+            android:layout_gravity="center_horizontal"
+            android:inputType="textPassword"
+            android:layout_width="fill_parent"
+            android:singleLine="true"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:layout_marginTop="30dp"
+            android:id="@+id/LoginPasswordTextbox"
+            android:hint="Password"
+            android:fontFamily="sans-serif-condensed"
+            android:textSize="22dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            />
+
+        <Button
+            android:layout_gravity="center_horizontal"
+            android:fontFamily="sans-serif-condensed"
+            android:textSize="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:text="LOGIN"
+            android:layout_marginTop="30dp"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:background="#ff5d5b5b"
+            android:textColor="#FFF"
+            android:onClick="LoginButton"
+            />
+
+    </LinearLayout>
+
+
+</LinearLayout>
