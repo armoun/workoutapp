@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CursorAdapter;
+import android.widget.FilterQueryProvider;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
@@ -24,6 +25,8 @@ import android.widget.Toast;
 import java.lang.Override;
 
 import be.howest.nmct3.workoutapp.data.Contract;
+import be.howest.nmct3.workoutapp.data.DatabaseHelper;
+import be.howest.nmct3.workoutapp.data.SpecificWorkoutLoader;
 import be.howest.nmct3.workoutapp.data.WorkoutsLoader;
 
 
@@ -65,32 +68,35 @@ public class WorkoutsFragment extends Fragment {
         myWorkoutCursorAdapter = new SimpleCursorAdapter(getActivity(), R.layout.workouts_list_workout_item_rowlayout, cursor, columns, viewIds, 0);
         listView.setAdapter(myWorkoutCursorAdapter);
 
+        //ENABLE SEARCH FILTERING
+        listView.setTextFilterEnabled(true);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
-                cursor.moveToPosition(position);
-                String workoutId = cursor.getString(cursor.getColumnIndex(Contract.WorkoutColumns._ID));
+                    Cursor filteredCursor = ((SimpleCursorAdapter)listView.getAdapter()).getCursor();
+                    filteredCursor.moveToPosition(position);
 
-                Toast.makeText(getActivity().getBaseContext(), "" + workoutId, Toast.LENGTH_SHORT).show();
+                    String workoutId = filteredCursor.getString(filteredCursor.getColumnIndex(Contract.WorkoutColumns._ID));
 
-                MainActivity.WORKOUT_ID = Integer.parseInt(workoutId);
+                    Toast.makeText(getActivity().getBaseContext(), "" + workoutId, Toast.LENGTH_SHORT).show();
 
-                Fragment newFragment = Fragment.instantiate(getActivity().getApplicationContext(), "be.howest.nmct3.workoutapp.Workouts_SelectedWorkoutList_Fragment");
-                // consider using Java coding conventions (upper first char class names!!!)
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                    MainActivity.WORKOUT_ID = Integer.parseInt(workoutId);
 
-                MainActivity.activeFragment = newFragment;
+                    Fragment newFragment = Fragment.instantiate(getActivity().getApplicationContext(), "be.howest.nmct3.workoutapp.Workouts_SelectedWorkoutList_Fragment");
+                    // consider using Java coding conventions (upper first char class names!!!)
+                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
-                // Replace whatever is in the fragment_container view with this fragment,
-                // and add the transaction to the back1 stack
-                transaction.replace(R.id.main, newFragment);
-                transaction.addToBackStack(null);
+                    MainActivity.activeFragment = newFragment;
 
-                // Commit the transaction
-                transaction.commit();
+                    // Replace whatever is in the fragment_container view with this fragment,
+                    // and add the transaction to the back1 stack
+                    transaction.replace(R.id.main, newFragment);
+                    transaction.addToBackStack(null);
 
+                    // Commit the transaction
+                    transaction.commit();
             }
         });
 
@@ -135,6 +141,22 @@ public class WorkoutsFragment extends Fragment {
                     @Override
                     public boolean onQueryTextChange(String s) {
                         Log.d("", "--------- QUERY: " + s);
+                        myWorkoutCursorAdapter.setFilterQueryProvider(new FilterQueryProvider() {
+                            @Override
+                            public Cursor runQuery(CharSequence charSequence) {
+                                Log.d("",""+charSequence);
+                                myWorkoutCursorAdapter.setFilterQueryProvider(new FilterQueryProvider() {
+                                    @Override
+                                    public Cursor runQuery(CharSequence charSequence) {
+                                        Cursor filteredCursor = getWorkoutsByWorkoutName(charSequence.toString());
+                                        return filteredCursor;
+                                    }
+                                });
+                                return null;
+                            }
+                        });
+                        myWorkoutCursorAdapter.runQueryOnBackgroundThread(s);
+                        myWorkoutCursorAdapter.getFilter().filter(s);
                         return false;
                     }
                 });
@@ -156,6 +178,23 @@ public class WorkoutsFragment extends Fragment {
 
         // Commit the transaction
         transaction.commit();
+    }
+
+    private Cursor getWorkoutsByWorkoutName(String searchTerm) {
+        String[] projection = new String[]{
+                Contract.Workouts._ID,
+                Contract.Workouts.NAME,
+                Contract.Workouts.ISPAID
+        };
+
+        Cursor c = getActivity().getContentResolver().query(
+                Contract.Workouts.CONTENT_URI,
+                projection,
+                "(" + Contract.Workouts.NAME + " like ?)",
+                new String[]{"%" + searchTerm + "%"},
+                null);
+
+        return c;
     }
 }
 
