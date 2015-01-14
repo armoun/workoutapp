@@ -15,6 +15,7 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -31,9 +32,16 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
+import com.jjoe64.graphview.series.BarGraphSeries;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
+
 import org.w3c.dom.Text;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import be.howest.nmct3.workoutapp.Account.GenericAccountService;
 import be.howest.nmct3.workoutapp.data.Contract;
@@ -146,6 +154,61 @@ public class DashboardFragment extends Fragment {
                 transaction.commit();
             }
         });
+
+        GraphView graph = (GraphView) root.findViewById(R.id.graphView);
+
+        // generate Dates
+        Calendar calendar = Calendar.getInstance();
+        Date d1 = calendar.getTime();
+        calendar.add(Calendar.DATE, 1);
+        Date d2 = calendar.getTime();
+        calendar.add(Calendar.DATE, 1);
+        Date d3 = calendar.getTime();
+        calendar.add(Calendar.DATE, 1);
+        Date d4 = calendar.getTime();
+        calendar.add(Calendar.DATE, 1);
+        Date d5 = calendar.getTime();
+
+        // you can directly pass Date objects to DataPoint-Constructor
+        // this will convert the Date to double via Date#getTime()
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[] {
+                new DataPoint(d1, 67),
+                new DataPoint(d2, 73),
+                new DataPoint(d3, 75),
+                new DataPoint(d4, 75),
+                new DataPoint(d5, 74)
+        });
+        graph.addSeries(series);
+
+        // set date label formatter
+        graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getActivity()) {
+            @Override
+            public String formatLabel(double value, boolean isValueX) {
+                if (isValueX) {
+                    // show normal x values
+                    return super.formatLabel(value, isValueX);
+                } else {
+                    // show kg for y values
+                    return super.formatLabel(value, isValueX) + " kg";
+                }
+            }
+        });
+        graph.getGridLabelRenderer().setNumHorizontalLabels(3); // only 3 because of the space
+        graph.getGridLabelRenderer().setGridColor(Color.rgb(139,137,137));
+
+        // set manual x bounds to have nice steps
+        graph.getViewport().setMinX(d1.getTime());
+        graph.getViewport().setMaxX(d3.getTime());
+        graph.getViewport().setXAxisBoundsManual(true);
+
+        //adapt style to app layout
+        series.setColor(Color.rgb(246,93,81));
+        series.setThickness(8);
+        graph.addSeries(series);
+
+        //hide labels
+        graph.getGridLabelRenderer().setHorizontalLabelsVisible(false);
+        /*graph.getGridLabelRenderer().setVerticalLabelsVisible(false);*/
 
         return root;
     }
