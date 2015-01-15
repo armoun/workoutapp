@@ -323,6 +323,8 @@ public class MainActivity extends FragmentActivity {
             // String picturePath contains the path of selected Image
             Toast.makeText(getBaseContext(), "Selected Profile Picture Path: " + BitmapFactory.decodeFile(myProfilePicturePath), Toast.LENGTH_SHORT).show();
             SettingsAdmin.getInstance(getApplicationContext()).setPicture(myProfilePicturePath);
+
+            ((SettingsFragment.CustomSettingsAdapter)SettingsFragment.listview.getAdapter()).updateImage(selectedImage);
         }
     }
 }

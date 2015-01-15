@@ -11,6 +11,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
@@ -33,6 +34,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.net.URI;
 import java.util.List;
 import java.util.Set;
 
@@ -46,8 +49,8 @@ import be.howest.nmct3.workoutapp.data.SettingsAdmin;
 public class SettingsFragment extends Fragment {
 
     private ListAdapter myListAdapter;
-    public static ImageView imageViewProfilePicture;
-    ListView listview;
+    public ImageView imageViewProfilePicture;
+    public static ListView listview;
 
     public static final String[] Settings = {"Name", "Gender", "Date of Birth", "E-mail", "Picture"};
     //public static final String[] Settings = {"Name", "Gender", "Date of Birth", "E-mail", "Picture", "Units"};
@@ -66,6 +69,8 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.settings_fragment_layout, null);
+
+        imageViewProfilePicture = (ImageView) root.findViewById(R.id.imageViewProfile);
 
         myListAdapter = new CustomSettingsAdapter();
         listview = (ListView) root.findViewById(R.id.settings_list);
@@ -89,9 +94,11 @@ public class SettingsFragment extends Fragment {
             this.addAll(Settings);
         }
 
-        public void update()
+        public void updateImage(Uri myProfilePictureURI)
         {
             this.notifyDataSetChanged();
+
+            imageViewProfilePicture.setImageURI(myProfilePictureURI);
         }
 
         @Override
@@ -105,7 +112,7 @@ public class SettingsFragment extends Fragment {
             String value = SettingsAdmin.getInstance(getContext()).getValueForSetting(position);
             textSettingsPreview.setText(value);
 
-            //profile picture uploade
+            //Settings wijzigen
             if(position == 0)
             {
                 row.setOnClickListener(new View.OnClickListener() {

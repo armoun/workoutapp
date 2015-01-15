@@ -5,14 +5,20 @@
 
     <ListView
         android:id="@+id/settings_list"
-        android:layout_weight="1"
+        android:layout_weight="5"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_height="match_parent">
     </ListView>
+    <ImageView
+        android:id="@+id/imageViewProfile"
+        android:src="@drawable/default_profile"
+        android:layout_width="fill_parent"
+        android:layout_height="200dp"
+        android:layout_weight="1" />
     <Button
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_weight="6"
+        android:layout_weight="10"
         android:text="LOGOUT"
         android:background="#ff5d5b5b"
         android:textColor="#FFF"
