@@ -7,13 +7,20 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CursorAdapter;
+import android.widget.FilterQueryProvider;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.Toast;
 
 import be.howest.nmct3.workoutapp.data.Contract;
 import be.howest.nmct3.workoutapp.data.ExercisesLoader;
@@ -41,6 +48,10 @@ public class AddWorkoutToPlannerFragment extends android.support.v4.app.Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        //activity melden dat er een eigen menu moet worden geladen
+        setHasOptionsMenu(true);
+
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_add_workout_to_planner, null);
 
         String[] columns = new String[] { "name" };
@@ -61,13 +72,10 @@ public class AddWorkoutToPlannerFragment extends android.support.v4.app.Fragment
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                //Log.d("", "SELECTED WORKOUT ID: " + (position+1));
-                //MainActivity.plannerWorkoutCursor.moveToPosition(position);
-                //Log.d("", "SELECTED WORKOUT NAME: " + MainActivity.plannerWorkoutCursor.getString(1));
+                Cursor filteredCursor = ((SimpleCursorAdapter)listView.getAdapter()).getCursor();
+                filteredCursor.moveToPosition(position);
 
-                mCursor.moveToPosition(position);
-
-                MainActivity.plannerSelectedWorkoutId = mCursor.getInt(mCursor.getColumnIndex(Contract.Workouts._ID));
+                MainActivity.plannerSelectedWorkoutId = filteredCursor.getInt(filteredCursor.getColumnIndex(Contract.Workouts._ID));
 
                 android.support.v4.app.Fragment frag = android.support.v4.app.Fragment.instantiate(getActivity(), MainActivity.fragments[3]);
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
@@ -80,6 +88,54 @@ public class AddWorkoutToPlannerFragment extends android.support.v4.app.Fragment
         getActivity().getActionBar().setTitle("Add workouts to planner");
 
         return root;
+    }
+
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.workouts_planner, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            //Geklikt op search bij workouts
+            case R.id.action_search_workouts:
+                Toast.makeText(getActivity(), item.getTitle() + " clicked!", Toast.LENGTH_SHORT).show();
+                SearchView searchView = (SearchView)item.getActionView();
+                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String s) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String s) {
+                        Log.d("", "--------- QUERY: " + s);
+                        mAdapter.setFilterQueryProvider(new FilterQueryProvider() {
+                            @Override
+                            public Cursor runQuery(CharSequence charSequence) {
+                                Log.d("",""+charSequence);
+                                mAdapter.setFilterQueryProvider(new FilterQueryProvider() {
+                                    @Override
+                                    public Cursor runQuery(CharSequence charSequence) {
+                                        return getWorkoutsByWorkoutName(charSequence.toString());
+                                    }
+                                });
+                                return null;
+                            }
+                        });
+                        mAdapter.runQueryOnBackgroundThread(s);
+                        mAdapter.getFilter().filter(s);
+                        return false;
+                    }
+                });
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -108,5 +164,22 @@ public class AddWorkoutToPlannerFragment extends android.support.v4.app.Fragment
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
         mAdapter.swapCursor(null);
+    }
+
+    private Cursor getWorkoutsByWorkoutName(String searchTerm) {
+        String[] projection = new String[]{
+                Contract.Workouts._ID,
+                Contract.Workouts.NAME,
+                Contract.Workouts.ISPAID
+        };
+
+        Cursor c = getActivity().getContentResolver().query(
+                Contract.Workouts.CONTENT_URI,
+                projection,
+                "(" + Contract.Workouts.NAME + " like ?)",
+                new String[]{"%" + searchTerm + "%"},
+                Contract.WorkoutColumns.ISPAID + " ASC");
+
+        return c;
     }
 }

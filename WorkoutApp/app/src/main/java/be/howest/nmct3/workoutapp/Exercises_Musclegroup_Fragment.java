@@ -14,12 +14,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CursorAdapter;
+import android.widget.FilterQueryProvider;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -117,11 +120,12 @@ public class Exercises_Musclegroup_Fragment extends Fragment implements LoaderMa
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
-                mCursor.moveToPosition(position);
-                String exerciseId = ""+ mCursor.getInt(mCursor.getColumnIndex(Contract.Exercises._ID));
+                Cursor filteredCursor = ((SimpleCursorAdapter)list.getAdapter()).getCursor();
+                filteredCursor.moveToPosition(position);
+                String exerciseId = ""+ filteredCursor.getInt(filteredCursor.getColumnIndex(Contract.Exercises._ID));
                 Toast.makeText(getActivity().getBaseContext(), "" + exerciseId, Toast.LENGTH_SHORT).show();
 
-                MainActivity.EXERCICE_ID = mCursor.getInt(mCursor.getColumnIndex(Contract.Exercises._ID));
+                MainActivity.EXERCICE_ID = filteredCursor.getInt(filteredCursor.getColumnIndex(Contract.Exercises._ID));
 
                 Fragment newFragment = Fragment.instantiate(getActivity().getApplicationContext(), "be.howest.nmct3.workoutapp.Exercises_Detail_Fragment");
                 // consider using Java coding conventions (upper first char class names!!!)
@@ -156,6 +160,48 @@ public class Exercises_Musclegroup_Fragment extends Fragment implements LoaderMa
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+
+        switch (item.getItemId()) {
+            //Geklikt op search
+            case R.id.action_search_exercises_musclegroup:
+                Toast.makeText(getActivity(), item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
+                SearchView searchView = (SearchView)item.getActionView();
+                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String s) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String s) {
+                        Log.d("", "--------- QUERY: " + s);
+                        mAdapter.setFilterQueryProvider(new FilterQueryProvider() {
+                            @Override
+                            public Cursor runQuery(CharSequence charSequence) {
+                                Log.d("",""+charSequence);
+                                mAdapter.setFilterQueryProvider(new FilterQueryProvider() {
+                                    @Override
+                                    public Cursor runQuery(CharSequence charSequence) {
+                                        return getExercisesByExerciseName(charSequence.toString());
+                                    }
+                                });
+                                return null;
+                            }
+                        });
+                        mAdapter.runQueryOnBackgroundThread(s);
+                        mAdapter.getFilter().filter(s);
+                        return false;
+                    }
+                });
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         getLoaderManager().initLoader(0, null, this);
@@ -181,5 +227,23 @@ public class Exercises_Musclegroup_Fragment extends Fragment implements LoaderMa
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
         mAdapter.swapCursor(null);
+    }
+
+    private Cursor getExercisesByExerciseName(String searchTerm) {
+        String[] projection = new String[]{
+                Contract.Exercises._ID,
+                Contract.Exercises.EXERCISE_NAME,
+                Contract.Exercises.DESCRIPTION,
+                Contract.Exercises.MUSCLE_GROUP
+        };
+
+        Cursor c = getActivity().getContentResolver().query(
+                Contract.Exercises.CONTENT_URI,
+                projection,
+                "(" + Contract.Exercises.EXERCISE_NAME + " like ?) and " + Contract.Exercises.MUSCLE_GROUP + "='" + mMuscleGroup.toLowerCase() + "'",
+                new String[]{"%" + searchTerm + "%"},
+                Contract.ExerciseColumns._ID + " ASC");
+
+        return c;
     }
 }

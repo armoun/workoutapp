@@ -191,7 +191,7 @@ public class WorkoutsFragment extends Fragment {
                 projection,
                 "(" + Contract.Workouts.NAME + " like ?)",
                 new String[]{"%" + searchTerm + "%"},
-                null);
+                Contract.WorkoutColumns.ISPAID + " ASC");
 
         return c;
     }

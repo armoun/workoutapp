@@ -3,12 +3,20 @@ package be.howest.nmct3.workoutapp;
 //wordt niet gebruikt
 
 import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FilterQueryProvider;
+import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 /**
@@ -37,6 +45,5 @@ public class Planner_AddWorkout_Fragment extends Fragment {
 
         return root;
     }
-
 
 }
