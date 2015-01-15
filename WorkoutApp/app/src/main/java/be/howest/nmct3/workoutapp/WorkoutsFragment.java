@@ -123,7 +123,11 @@ public class WorkoutsFragment extends Fragment {
                 // TODO Auto-generated method stub
 
                 Toast.makeText(getActivity().getBaseContext(), "Long Clicked on" + pos , Toast.LENGTH_SHORT).show();
-                String selectedFromList = listView.getItemAtPosition(pos).toString();
+
+                Cursor filteredCursor = ((SimpleCursorAdapter)listView.getAdapter()).getCursor();
+                filteredCursor.moveToPosition(pos);
+                String selectedFromList = ""+ filteredCursor.getString(filteredCursor.getColumnIndex(Contract.Workouts.NAME));
+                //String selectedFromList = listView.getItemAtPosition(pos).toString();
                 openDialogEditDelete(v, selectedFromList);
 
                 return true;
