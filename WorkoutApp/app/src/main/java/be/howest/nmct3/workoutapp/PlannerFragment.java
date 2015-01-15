@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import be.howest.nmct3.workoutapp.data.Contract;
 import be.howest.nmct3.workoutapp.data.DatabaseHelper;
@@ -99,6 +100,13 @@ public class PlannerFragment extends Fragment {
 
         String[] columns = new String[] { Contract.Workouts.NAME};
         int[] viewIds = new int[] { R.id.dayWorkoutTitle };
+
+        //SET CURRENT DATE TO TODAY
+        Date now = new Date();
+        MainActivity.phoneCalendar.setTime(now);
+        Log.d("", " -------- JAAR => " + MainActivity.phoneCalendar.get(Calendar.YEAR));
+        Log.d("", " -------- MAAND => " + MainActivity.phoneCalendar.get(Calendar.MONTH));
+        Log.d("", " -------- DAG => " + MainActivity.phoneCalendar.get(Calendar.DAY_OF_MONTH));
 
         listView = (ListView) root.findViewById(R.id.plannerList);
 
