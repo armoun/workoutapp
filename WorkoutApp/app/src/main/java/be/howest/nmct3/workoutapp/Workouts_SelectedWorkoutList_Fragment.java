@@ -2,7 +2,9 @@ package be.howest.nmct3.workoutapp;
 
 
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,7 +19,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.CursorAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
@@ -107,10 +111,89 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
             }
         });
 
+        list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+            public boolean onItemLongClick(AdapterView<?> arg0, View v,
+                                           int pos, long id) {
+                // TODO Auto-generated method stub
+
+                Toast.makeText(getActivity().getBaseContext(), "Long Clicked on" + pos , Toast.LENGTH_SHORT).show();
+
+                Cursor filteredCursor = ((SimpleCursorAdapter)list.getAdapter()).getCursor();
+                filteredCursor.moveToPosition(pos);
+                String selectedFromList = "";
+
+                //NIELS, de lijn hieronder uit comment halen en de naam van de exercise ophalen
+
+                //selectedFromList = ""+ filteredCursor.getString(filteredCursor.getColumnIndex(Contract.WorkoutExercises.));
+
+
+                //String selectedFromList = listView.getItemAtPosition(pos).toString();
+                openDialogEditDelete(v, selectedFromList);
+
+                return true;
+            }
+        });
+
         getActivity().getActionBar().setTitle("Choose an exercise");
 
         return root;
     }
+
+
+    public void openDialogEditDelete(View v, String SelectedText)
+    {
+        // get prompts.xml view
+        LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+        final View promptView = layoutInflater.inflate(R.layout.input_dialog_edit_delete, null);
+        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                getActivity());
+        alertDialogBuilder.setView(promptView);
+
+        //EDIT TEXT
+        final EditText input_for_row = (EditText) promptView.findViewById(R.id.input_for_row);
+        input_for_row.setText(SelectedText);
+
+        // setup a dialog window
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("Edit", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+
+
+
+                    }
+                })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        // create an alert dialog
+        final AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
+
+        //DELETE BUTTON
+        Button deleteRow;
+        deleteRow = (Button) promptView.findViewById(R.id.delete_row_button_dialog_id);
+        deleteRow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                deleteRowMethod(v);
+                alert.cancel();
+            }
+        });
+    }
+
+    public void deleteRowMethod(View v)
+    {
+        Toast.makeText(getActivity().getBaseContext(), "Row deleted" , Toast.LENGTH_SHORT).show();
+        reOpenFragment();
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -175,6 +258,20 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
 
         transaction.replace(R.id.main, frag);
         transaction.disallowAddToBackStack();
+
+        // Commit the transaction
+        transaction.commit();
+    }
+
+    private void reOpenFragment() {
+        // Create and set the start fragment
+        Fragment frag = Fragment.instantiate(getActivity(), "be.howest.nmct3.workoutapp.Workouts_SelectedWorkoutList_Fragment");
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+
+        MainActivity.activeFragment = frag;
+
+        transaction.replace(R.id.main, frag);
+        transaction.addToBackStack(null);
 
         // Commit the transaction
         transaction.commit();
