@@ -151,16 +151,6 @@ public class WorkoutsFragment extends Fragment {
                 getActivity());
         alertDialogBuilder.setView(promptView);
 
-        //DELETE BUTTON
-        Button deleteRow;
-        deleteRow = (Button) promptView.findViewById(R.id.delete_row_button_dialog_id);
-        deleteRow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                deleteRowMethod(v);
-            }
-        });
-
         //EDIT TEXT
         final EditText input_for_row = (EditText) promptView.findViewById(R.id.input_for_row);
         input_for_row.setText(SelectedText);
@@ -184,8 +174,19 @@ public class WorkoutsFragment extends Fragment {
                         });
 
         // create an alert dialog
-        AlertDialog alert = alertDialogBuilder.create();
+        final AlertDialog alert = alertDialogBuilder.create();
         alert.show();
+
+        //DELETE BUTTON
+        Button deleteRow;
+        deleteRow = (Button) promptView.findViewById(R.id.delete_row_button_dialog_id);
+        deleteRow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                deleteRowMethod(v);
+                alert.cancel();
+            }
+        });
     }
 
     public void deleteRowMethod(View v)
