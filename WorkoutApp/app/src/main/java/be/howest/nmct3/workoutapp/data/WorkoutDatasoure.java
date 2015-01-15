@@ -59,4 +59,25 @@ public class WorkoutDatasoure {
         context.getContentResolver().delete(Contract.Workouts.CONTENT_URI, Contract.Workouts._ID + " =?", new String[]{wo_id});
     }
 
+    public void deleteExerciseForWorkout(Context context, int exerciseId, int workoutId){
+        String ex_id = ""+ exerciseId;
+        String wo_id = ""+ workoutId;
+        context.getContentResolver().delete(Contract.WorkoutExercises.CONTENT_URI, Contract.WorkoutExercises.WORKOUT_ID + " =? AND " + Contract.WorkoutExercises.EXERCISE_ID + " =?", new String[]{wo_id, ex_id});
+    }
+
+    public void updateWorkoutName(Context context, int id, String newName){
+        String wo_id = "" + id;
+        ContentValues c = new ContentValues();
+        c.put(Contract.Workouts.NAME, newName);
+        context.getContentResolver().update(Contract.Workouts.CONTENT_URI,c, Contract.Workouts._ID + " =?", new String[]{wo_id});
+    }
+
+    public Uri addExerciseToWorkout(Context context, int exerciseId, int workoutId, String reps){
+        ContentValues c = new ContentValues();
+        c.put(Contract.WorkoutExercises.WORKOUT_ID, workoutId);
+        c.put(Contract.WorkoutExercises.EXERCISE_ID, exerciseId);
+        c.put(Contract.WorkoutExercises.REPS, reps);
+        Uri uri = context.getContentResolver().insert(Contract.WorkoutExercises.CONTENT_URI, c);
+        return uri;
+    }
 }
