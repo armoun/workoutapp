@@ -2,12 +2,17 @@ package be.howest.nmct3.workoutapp;
 
 
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,17 +20,24 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.CursorAdapter;
+import android.widget.EditText;
 import android.widget.FilterQueryProvider;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
+import com.jjoe64.graphview.series.DataPoint;
+
 import java.lang.Override;
+import java.util.Calendar;
+import java.util.Date;
 
 import be.howest.nmct3.workoutapp.data.Contract;
 import be.howest.nmct3.workoutapp.data.DatabaseHelper;
+import be.howest.nmct3.workoutapp.data.SettingsAdmin;
 import be.howest.nmct3.workoutapp.data.SpecificWorkoutLoader;
 import be.howest.nmct3.workoutapp.data.WorkoutsLoader;
 
@@ -35,6 +47,8 @@ import be.howest.nmct3.workoutapp.data.WorkoutsLoader;
  *
  */
 public class WorkoutsFragment extends Fragment {
+
+
 
     //public final String[] Workouts = {"Workout 1", "Workout 2", "Workout 3"};
     private CursorAdapter myWorkoutCursorAdapter;
@@ -53,10 +67,12 @@ public class WorkoutsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+
         //activity melden dat er een eigen menu moet worden geladen
         setHasOptionsMenu(true);
 
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.workouts_fragment_layout, null);
+
 
         String[] columns = new String[]{"name"};
         int[] viewIds = new int[]{R.id.workout_item_title};
@@ -100,9 +116,78 @@ public class WorkoutsFragment extends Fragment {
             }
         });
 
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+            public boolean onItemLongClick(AdapterView<?> arg0, View v,
+                                           int pos, long id) {
+                // TODO Auto-generated method stub
+
+                Toast.makeText(getActivity().getBaseContext(), "Long Clicked on" + pos , Toast.LENGTH_SHORT).show();
+                String selectedFromList = listView.getItemAtPosition(pos).toString();
+                openDialogEditDelete(v, selectedFromList);
+
+                return true;
+            }
+        });
+
+
+
+
         getActivity().getActionBar().setTitle("Choose a workout");
 
         return root;
+    }
+
+    public void openDialogEditDelete(View v, String SelectedText)
+    {
+        // get prompts.xml view
+        LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+        final View promptView = layoutInflater.inflate(R.layout.input_dialog_edit_delete, null);
+        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                getActivity());
+        alertDialogBuilder.setView(promptView);
+
+        //DELETE BUTTON
+        Button deleteRow;
+        deleteRow = (Button) promptView.findViewById(R.id.delete_row_button_dialog_id);
+        deleteRow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                deleteRowMethod(v);
+            }
+        });
+
+        //EDIT TEXT
+        final EditText input_for_row = (EditText) promptView.findViewById(R.id.input_for_row);
+        input_for_row.setText(SelectedText);
+
+        // setup a dialog window
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("Edit", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+
+
+
+                    }
+                })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        // create an alert dialog
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
+    }
+
+    public void deleteRowMethod(View v)
+    {
+        Toast.makeText(getActivity().getBaseContext(), "Row deleted" , Toast.LENGTH_SHORT).show();
+        reOpenFragment();
     }
 
     @Override
@@ -168,6 +253,20 @@ public class WorkoutsFragment extends Fragment {
     private void OpenAddNewWorkoutFragment() {
         // Create and set the start fragment
         Fragment frag = Fragment.instantiate(getActivity(), "be.howest.nmct3.workoutapp.AddNewWorkoutFragment");
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+
+        MainActivity.activeFragment = frag;
+
+        transaction.replace(R.id.main, frag);
+        transaction.addToBackStack(null);
+
+        // Commit the transaction
+        transaction.commit();
+    }
+
+    private void reOpenFragment() {
+        // Create and set the start fragment
+        Fragment frag = Fragment.instantiate(getActivity(), "be.howest.nmct3.workoutapp.WorkoutsFragment");
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
 
         MainActivity.activeFragment = frag;
