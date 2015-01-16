@@ -276,7 +276,6 @@ public class DashboardFragment extends Fragment {
         graph.getGridLabelRenderer().setNumHorizontalLabels(10); // only 3 because of the space
         graph.getGridLabelRenderer().setGridColor(Color.rgb(139,137,137));
 
-        graph.
 
         // set manual x bounds to have nice steps
         //graph.getViewport().setMinX(Integer.parseInt(graphViewWeightArray.get(1).toString()));
