@@ -39,6 +39,7 @@ import be.howest.nmct3.workoutapp.data.Contract;
 import be.howest.nmct3.workoutapp.data.DatabaseHelper;
 import be.howest.nmct3.workoutapp.data.SettingsAdmin;
 import be.howest.nmct3.workoutapp.data.SpecificWorkoutLoader;
+import be.howest.nmct3.workoutapp.data.WorkoutDatasoure;
 import be.howest.nmct3.workoutapp.data.WorkoutsLoader;
 
 
@@ -48,7 +49,7 @@ import be.howest.nmct3.workoutapp.data.WorkoutsLoader;
  */
 public class WorkoutsFragment extends Fragment {
 
-
+    public WorkoutDatasoure workoutDatasource;
 
     //public final String[] Workouts = {"Workout 1", "Workout 2", "Workout 3"};
     private CursorAdapter myWorkoutCursorAdapter;
@@ -73,6 +74,7 @@ public class WorkoutsFragment extends Fragment {
 
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.workouts_fragment_layout, null);
 
+        workoutDatasource = new WorkoutDatasoure();
 
         String[] columns = new String[]{"name"};
         int[] viewIds = new int[]{R.id.workout_item_title};
@@ -127,8 +129,9 @@ public class WorkoutsFragment extends Fragment {
                 Cursor filteredCursor = ((SimpleCursorAdapter)listView.getAdapter()).getCursor();
                 filteredCursor.moveToPosition(pos);
                 String selectedFromList = ""+ filteredCursor.getString(filteredCursor.getColumnIndex(Contract.Workouts.NAME));
+                int selectedId = filteredCursor.getInt(filteredCursor.getColumnIndex(Contract.Workouts._ID));
                 //String selectedFromList = listView.getItemAtPosition(pos).toString();
-                openDialogEditDelete(v, selectedFromList);
+                openDialogEditDelete(v, selectedFromList,selectedId);
 
                 return true;
             }
@@ -142,7 +145,7 @@ public class WorkoutsFragment extends Fragment {
         return root;
     }
 
-    public void openDialogEditDelete(View v, String SelectedText)
+    public void openDialogEditDelete(View v, String SelectedText, final int selectedID)
     {
         // get prompts.xml view
         LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
@@ -161,8 +164,9 @@ public class WorkoutsFragment extends Fragment {
                 .setPositiveButton("Edit", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
 
-
-
+                        workoutDatasource.updateWorkoutName(getActivity(),selectedID, input_for_row.getText().toString());
+                        Toast.makeText(getActivity(), "Workout name changed to " + input_for_row.getText().toString() + " with ID: " + selectedID,Toast.LENGTH_LONG).show();
+                        reOpenFragment();
 
                     }
                 })
@@ -183,15 +187,16 @@ public class WorkoutsFragment extends Fragment {
         deleteRow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                deleteRowMethod(v);
+                deleteRowMethod(v, selectedID);
                 alert.cancel();
             }
         });
     }
 
-    public void deleteRowMethod(View v)
+    public void deleteRowMethod(View v, int selectedItemID)
     {
-        Toast.makeText(getActivity().getBaseContext(), "Row deleted" , Toast.LENGTH_SHORT).show();
+        workoutDatasource.deleteWorkout(getActivity(),selectedItemID);
+        Toast.makeText(getActivity().getBaseContext(), "Row deleted with id: " + selectedItemID , Toast.LENGTH_SHORT).show();
         reOpenFragment();
     }
 
