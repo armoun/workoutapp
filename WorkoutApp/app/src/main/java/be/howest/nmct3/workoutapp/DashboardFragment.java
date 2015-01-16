@@ -40,8 +40,14 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 import be.howest.nmct3.workoutapp.Account.GenericAccountService;
 import be.howest.nmct3.workoutapp.data.Contract;
@@ -68,6 +74,17 @@ public class DashboardFragment extends Fragment {
     String weight;
     String height;
 
+    //NIET MEER GEBRUIKT
+    Set<String> graphViewWeight = new LinkedHashSet<String>();
+
+
+    String WeightsStringSpaced;
+    ArrayList<String> graphViewWeightArray = new ArrayList<String>();
+
+    SharedPreferences preferences;
+    SharedPreferences.Editor editor;
+
+
     private Object mSyncObserverHandle;
 
 
@@ -88,6 +105,8 @@ public class DashboardFragment extends Fragment {
 
         de.hdodenhof.circleimageview.CircleImageView profilePicture = (de.hdodenhof.circleimageview.CircleImageView) root.findViewById(R.id.profile_image);
 
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
         if(MainActivity.myProfilePicturePath != "Picture.jpg") {
             profilePicture.setImageBitmap(BitmapFactory.decodeFile(MainActivity.myProfilePicturePath));
         }
@@ -103,7 +122,8 @@ public class DashboardFragment extends Fragment {
         BMI = (TextView) root.findViewById(R.id.dashboardBMI);
         TodaysWorkout = (TextView) root.findViewById(R.id.todaysWorkout);
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
         weight = preferences.getString(SettingsAdmin.getInstance(getActivity().getApplicationContext()).getUsername()+"-WEIGHT","");
         if(!weight.equalsIgnoreCase(""))
         {
@@ -159,10 +179,69 @@ public class DashboardFragment extends Fragment {
             }
         });
 
+
+        //GRAFIEK______________________________________________
+
         graph = (GraphView) root.findViewById(R.id.graphView);
 
+        graph.removeAllSeries();
+
+        boolean hasWeights = preferences.contains(SettingsAdmin.getInstance(getActivity().getApplicationContext()).getUsername() + "-WeightsForGraph");
+
+        if(hasWeights == true)
+        {
+            WeightsStringSpaced = preferences.getString(SettingsAdmin.getInstance(getActivity().getApplicationContext()).getUsername() + "-WeightsForGraph", null);
+
+            String[] parts = WeightsStringSpaced.split(" ");
+
+            graphViewWeightArray = new ArrayList<String>(Arrays.asList(parts));
+            graphViewWeightArray.remove(0);
+        }
+        else
+        {
+            Date d1 = calendar.getTime();
+
+            //graphViewWeight.add("test");
+
+            series = new LineGraphSeries<DataPoint>(new DataPoint[] {
+
+            });
+            calendar.add(Calendar.DATE, 1);
+            Date d = calendar.getTime();
+            calendar.add(Calendar.DATE, 1);
+            Date dd = calendar.getTime();
+            series.appendData(new DataPoint(d, 1),true,40);
+            graph.onDataChanged(true, true);
+            series.appendData(new DataPoint(dd, 5),true,40);
+            graph.onDataChanged(true, true);
+        }
+
+        //String[] graphViewWeightArray = graphViewWeight.toArray(new String[graphViewWeight.size()]);
+
+
+        if(graphViewWeightArray.size() > 1)
+        {
+            series = new LineGraphSeries<DataPoint>(new DataPoint[] {
+
+            });
+
+            //GENERATE DATAPOINTS
+            for(int i = 0; i < graphViewWeightArray.size(); i++ ){
+
+                //LENGTE VAN GRAPHVIEWWEIGHT EN GRAPHVIEWDATE ZIJN HETZELFDE
+
+                calendar.add(Calendar.DATE, 1);
+                Date date = calendar.getTime();
+
+                //new DataPoint(d1, Integer.parseInt(graphViewWeightArray[i].toString()));
+                series.appendData(new DataPoint(date, Integer.parseInt(graphViewWeightArray.get(i).toString())),true,40);
+                graph.onDataChanged(true, true);
+
+            }
+        }
+
         // generate Dates
-        calendar.add(Calendar.DATE, 1);
+        /*calendar.add(Calendar.DATE, 1);
         Date d1 = calendar.getTime();
         calendar.add(Calendar.DATE, 1);
         Date d2 = calendar.getTime();
@@ -178,8 +257,8 @@ public class DashboardFragment extends Fragment {
                 new DataPoint(d2, 73),
                 new DataPoint(d3, 72),
                 new DataPoint(d4, 75)
-        });
-        graph.addSeries(series);
+        });*/
+        //graph.addSeries(series);
 
         // set date label formatter
         graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getActivity()) {
@@ -190,17 +269,19 @@ public class DashboardFragment extends Fragment {
                     return super.formatLabel(value, isValueX);
                 } else {
                     // show kg for y values
-                    return super.formatLabel(value, isValueX) + " kg";
+                    return super.formatLabel(value, isValueX) + " kg ";
                 }
             }
         });
         graph.getGridLabelRenderer().setNumHorizontalLabels(10); // only 3 because of the space
         graph.getGridLabelRenderer().setGridColor(Color.rgb(139,137,137));
 
+        graph.
+
         // set manual x bounds to have nice steps
-        graph.getViewport().setMinX(d1.getTime());
-        graph.getViewport().setMaxX(d4.getTime());
-        graph.getViewport().setXAxisBoundsManual(true);
+        //graph.getViewport().setMinX(Integer.parseInt(graphViewWeightArray.get(1).toString()));
+        //graph.getViewport().setMaxX(graphViewWeightArray.size());
+        graph.getViewport().setXAxisBoundsManual(false);
 
         //adapt style to app layout
         series.setColor(Color.rgb(246,93,81));
@@ -210,6 +291,8 @@ public class DashboardFragment extends Fragment {
         //hide labels
         graph.getGridLabelRenderer().setHorizontalLabelsVisible(false);
         /*graph.getGridLabelRenderer().setVerticalLabelsVisible(false);*/
+
+
 
         return root;
     }
@@ -360,7 +443,10 @@ public class DashboardFragment extends Fragment {
                         //resultText.setText("Hello, " + editText.getText());
 
                         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                        SharedPreferences.Editor editor = preferences.edit();
+                        editor = preferences.edit();
+
+                        editor = preferences.edit();
+
                         editor.putString(SettingsAdmin.getInstance(getActivity().getApplicationContext()).getUsername()+"-WEIGHT",input_weight.getText().toString());
                         editor.apply();
 
@@ -371,7 +457,14 @@ public class DashboardFragment extends Fragment {
                         calendar.add(Calendar.DATE, 1);
                         Date d = calendar.getTime();
                         series.appendData(new DataPoint(d, Integer.parseInt(input_weight.getText().toString())),true,40);
-                        graph.onDataChanged(true, true);
+                        graph.onDataChanged(true, false);
+
+
+                        WeightsStringSpaced = WeightsStringSpaced + " " + input_weight.getText().toString();
+                        editor.putString(SettingsAdmin.getInstance(getActivity().getApplicationContext()).getUsername()+"-WeightsForGraph",WeightsStringSpaced);
+
+                        editor.commit();
+                        editor.apply();
                     }
                 })
                 .setNegativeButton("Cancel",
