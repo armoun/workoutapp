@@ -66,7 +66,8 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         String SQL = "CREATE TABLE " + Contract.Workouts.CONTENT_DIRECTORY + " ("
                 + Contract.WorkoutColumns._ID       + " INTEGER PRIMARY KEY, "
                 + Contract.WorkoutColumns.NAME      + " TEXT,"
-                + Contract.WorkoutColumns.ISPAID    + " INTEGER"
+                + Contract.WorkoutColumns.ISPAID    + " INTEGER,"
+                + Contract.WorkoutColumns.USERNAME  + " TEXT"
                 + ");";
 
         Log.d("DatabaseHelper","Workouts: " + SQL);

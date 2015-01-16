@@ -77,7 +77,7 @@ public class MainActivity extends FragmentActivity {
     // The account name
     public static final String ACCOUNT = "sync";
     // Instance fields
-    Account mAccount;
+    public static Account mAccount;
 
     final String[] listTitles ={"Dashboard","Exercises","Workouts","Planner","Settings"};
     static final String[] fragments = {
@@ -182,14 +182,7 @@ public class MainActivity extends FragmentActivity {
                 ContentResolver.SYNC_EXTRAS_MANUAL, true);
         settingsBundle.putBoolean(
                 ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
-        /*
-         * Request the sync for the default account, authority, and
-         * manual sync settings
-         */
         ContentResolver.requestSync(mAccount, AUTHORITY, settingsBundle);
-
-
-
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {

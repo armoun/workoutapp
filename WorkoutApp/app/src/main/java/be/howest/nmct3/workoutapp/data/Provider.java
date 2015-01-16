@@ -51,6 +51,7 @@ public class Provider extends ContentProvider{
         sWorkoutsProjectionMap.put(Contract.Workouts._ID,                           Contract.Workouts._ID);
         sWorkoutsProjectionMap.put(Contract.Workouts.NAME,                          Contract.Workouts.NAME);
         sWorkoutsProjectionMap.put(Contract.Workouts.ISPAID,                        Contract.Workouts.ISPAID);
+        sWorkoutsProjectionMap.put(Contract.Workouts.USERNAME,                      Contract.Workouts.USERNAME);
 
         sExercisesProjectionMap = new HashMap<String, String>();
         sExercisesProjectionMap.put(Contract.Exercises._ID,                         Contract.Exercises._ID);
@@ -70,6 +71,7 @@ public class Provider extends ContentProvider{
         sPlannerProjectionMap.put(Contract.Planners._ID,                             Contract.Planners._ID);
         sPlannerProjectionMap.put(Contract.Planners.WORKOUT_ID,                      Contract.Planners.WORKOUT_ID);
         sPlannerProjectionMap.put(Contract.Planners.WO_DATE,                         Contract.Planners.WO_DATE);
+        sPlannerProjectionMap.put(Contract.Planners.USERNAME,                        Contract.Planners.USERNAME);
     }
 
     public Provider(){

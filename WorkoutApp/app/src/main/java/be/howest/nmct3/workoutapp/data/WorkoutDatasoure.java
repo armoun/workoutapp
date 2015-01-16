@@ -18,6 +18,7 @@ public class WorkoutDatasoure {
         ContentValues values1 = new ContentValues();
         values1.put(Contract.Workouts.NAME, name);
         values1.put(Contract.Workouts.ISPAID, isPaid);
+        values1.put(Contract.Workouts.USERNAME, SettingsAdmin.getInstance(context).getUsername());
 
         Uri uri = context.getContentResolver().insert(Contract.Workouts.CONTENT_URI, values1);
 

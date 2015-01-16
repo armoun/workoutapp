@@ -23,6 +23,7 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
 import be.howest.nmct3.workoutapp.data.Contract;
+import be.howest.nmct3.workoutapp.data.SettingsAdmin;
 import be.howest.nmct3.workoutapp.data.WorkoutsLoader;
 
 
@@ -68,6 +69,7 @@ public class AddNewWorkoutFragment extends android.support.v4.app.Fragment {
         ContentValues values = new ContentValues();
         values.put(Contract.Workouts.NAME, name);
         values.put(Contract.Workouts.ISPAID, 0);
+        values.put(Contract.Workouts.USERNAME, SettingsAdmin.getInstance(getActivity().getApplicationContext()).getUsername());
         getActivity().getContentResolver().insert(Contract.Workouts.CONTENT_URI, values);
     }
 

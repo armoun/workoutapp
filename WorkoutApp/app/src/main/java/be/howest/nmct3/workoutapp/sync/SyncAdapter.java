@@ -50,10 +50,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
     public static final String TAG = "";
     private static final String FEED_URL_EXERCISES = "https://viktordebock.be/mad_backend/api/exercises/index.php";
-    private static final String FEED_URL_WORKOUTS = "http://www.viktordebock.be/mad_backend/api/workoutsbyuser/index.php?username=viktordebock";
+    private static final String FEED_URL_WORKOUTS = "http://www.viktordebock.be/mad_backend/api/workoutsbyuser/index.php?username=";
     private static final String UPLOAD_URL_WORKOUTS = "http://www.viktordebock.be/mad_backend/add/addworkoutbyusername/index.php?";
     public static final String UPLOAD_URL_WORKOUTEXERCISES = "http://www.viktordebock.be/mad_backend/add/addexercisetoworkout/?";
-    public static final String FEED_URL_PLANNER = "http://viktordebock.be/mad_backend/api/plannerworkoutsbyusernameanddate/index.php?username=viktordebock";
+    public static final String FEED_URL_PLANNER = "http://viktordebock.be/mad_backend/api/plannerworkoutsbyusernameanddate/index.php?username=";
     public static final String UPLOAD_URL_PLANNER = "http://www.viktordebock.be/mad_backend/add/addplannerworkoutbyusernameandworkoutidanddate/?";
 
     private static final int NET_CONNECT_TIMEOUT_MILLIS = 15000;  // 15 seconds
@@ -64,30 +64,44 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     public void onPerformSync(Account account, Bundle bundle, String s, ContentProviderClient contentProviderClient, SyncResult syncResult) {
         //  exercises
         if(SyncAdmin.getInstance(mContext).getAllowExercisesDownload()){
-            downloadExercises(contentProviderClient, syncResult);
-            SyncAdmin.getInstance(mContext).setAllowExercisesDownload(false);
+            if(SettingsAdmin.getInstance(getContext()).isInternetAvailable()){
+                downloadExercises(contentProviderClient, syncResult);
+                SyncAdmin.getInstance(mContext).setAllowExercisesDownload(false);
+            }
         }
 
         //  workouts
         if (SyncAdmin.getInstance(mContext).getAllowWorkoutsDownload()){
-            downloadWorkouts(contentProviderClient, syncResult);
-            SyncAdmin.getInstance(mContext).setAllowWorkoutsDownload(false);
+            if(SettingsAdmin.getInstance(getContext()).isInternetAvailable()){
+                downloadWorkouts(contentProviderClient, syncResult);
+                SyncAdmin.getInstance(mContext).setAllowWorkoutsDownload(false);
+            }
+
         }
 
         if(SyncAdmin.getInstance(mContext).getAllowWorkoutsUpload()){
-            uploadWorkouts(contentProviderClient, syncResult);
+            if(SettingsAdmin.getInstance(getContext()).isInternetAvailable()){
+                uploadWorkouts(contentProviderClient, syncResult);
+            }
+
         }
 
         //  planner
         if(SyncAdmin.getInstance(mContext).getAllowPlannersDownload()){
-            downloadPlanner(contentProviderClient, syncResult);
+            if(SettingsAdmin.getInstance(getContext()).isInternetAvailable()){
+                downloadPlanner(contentProviderClient, syncResult);
+            }
+
         }
 
         if(SyncAdmin.getInstance(mContext).getAllowPlannersUpload()){
-            uploadPlanner(contentProviderClient, syncResult);
+            if(SettingsAdmin.getInstance(getContext()).isInternetAvailable()){
+                uploadPlanner(contentProviderClient, syncResult);
+            }
+
         }
 
-        downloadPlanner(contentProviderClient, syncResult);
+        //downloadPlanner(contentProviderClient, syncResult);
         //uploadPlanner(contentProviderClient, syncResult);
     }
 
@@ -106,9 +120,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 try {
 
 
-                    String[] proj = new String[]{Contract.Workouts._ID, Contract.Workouts.NAME, Contract.Workouts.ISPAID};
+                    String[] proj = new String[]{Contract.Workouts._ID, Contract.Workouts.NAME, Contract.Workouts.ISPAID, Contract.Workouts.USERNAME};
                     String username = SettingsAdmin.getInstance(getContext()).getUsername();
-                    Cursor c = contentProviderClient.query(Contract.Workouts.CONTENT_URI, proj, null, null, null);
+                    Cursor c = contentProviderClient.query(Contract.Workouts.CONTENT_URI, proj, Contract.Workouts.USERNAME + "=?", new String[]{username}, null);
 
                     //c.moveToFirst();
 
@@ -119,7 +133,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                         Log.d("","____________________________________________________________________________________________________________________________________________________________");
                         Log.d(TAG,"Trying to SYNC for " + username + ": " + c.getString(c.getColumnIndex(Contract.Workouts._ID)) + "; " + c.getString(c.getColumnIndex(Contract.Workouts.NAME)));
 
-                        URL url = new URL(UPLOAD_URL_WORKOUTS + "username=" + "nielslammens" + "&name=" + c.getString(c.getColumnIndex(Contract.Workouts.NAME)));
+                        URL url = new URL(UPLOAD_URL_WORKOUTS + "username=" + username + "&name=" + c.getString(c.getColumnIndex(Contract.Workouts.NAME)));
 
                         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                         connection.setReadTimeout(NET_READ_TIMEOUT_MILLIS);
@@ -201,7 +215,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         Log.d(TAG, "Beginning network synchronization");
 
         try {
-            final URL location = new URL(UPLOAD_URL_WORKOUTS + "//username=X&workoutid=Y&date=Z");
+            final URL location = new URL(UPLOAD_URL_WORKOUTS + "//username=" + SettingsAdmin.getInstance(getContext()).getUsername() + "&workoutid=Y&date=Z");
             InputStream stream = null;
 
             try {
@@ -211,9 +225,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 try {
 
 
-                    String[] proj = new String[]{Contract.Planners._ID, Contract.Planners.WO_DATE, Contract.Planners.WORKOUT_ID};
+                    String[] proj = new String[]{Contract.Planners._ID, Contract.Planners.WO_DATE, Contract.Planners.WORKOUT_ID, Contract.Planners.USERNAME};
                     String username = SettingsAdmin.getInstance(getContext()).getUsername();
-                    Cursor c = contentProviderClient.query(Contract.Planners.CONTENT_URI, proj, null, null, null);
+                    Cursor c = contentProviderClient.query(Contract.Planners.CONTENT_URI, proj, Contract.Planners.USERNAME + "=?", new String[]{username}, null);
 
                     //c.moveToFirst();
 
@@ -224,7 +238,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                         Log.d("","____________________________________________________________________________________________________________________________________________________________");
                         Log.d(TAG,"Trying to SYNC for " + username + ": " + c.getString(c.getColumnIndex(Contract.Planners._ID)) + "; " + c.getString(c.getColumnIndex(Contract.Planners.WO_DATE)));
 
-                        URL url = new URL(UPLOAD_URL_PLANNER + "username=" + "viktordebock" + "&workoutid=" + c.getString(c.getColumnIndex(Contract.Planners.WORKOUT_ID)) + "&date=" + c.getString(c.getColumnIndex(Contract.Planners.WO_DATE)));
+                        URL url = new URL(UPLOAD_URL_PLANNER
+                                + "username=" + username
+                                + "&workoutid=" + c.getString(c.getColumnIndex(Contract.Planners.WORKOUT_ID))
+                                + "&date=" + c.getString(c.getColumnIndex(Contract.Planners.WO_DATE)));
 
                         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                         connection.setReadTimeout(NET_READ_TIMEOUT_MILLIS);
@@ -327,7 +344,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         Log.d(TAG, "On perform sync is called");
         Log.d(TAG, "Beginning network synchronization");
         try {
-            final URL location = new URL(FEED_URL_WORKOUTS);
+            String username = SettingsAdmin.getInstance(getContext()).getUsername();
+            final URL location = new URL(FEED_URL_WORKOUTS + username);
             InputStream stream = null;
 
             try {
@@ -337,7 +355,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 try {
                     Log.d(TAG,"Trying to SYNC WORKOUTS");
 
-                    URL url = new URL(FEED_URL_WORKOUTS);
+                    URL url = new URL(FEED_URL_WORKOUTS + username);
 
                     HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                     connection.setReadTimeout(NET_READ_TIMEOUT_MILLIS);
@@ -382,7 +400,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         Log.d(TAG, "On perform sync is called");
         Log.d(TAG, "Beginning network synchronization");
         try {
-            final URL location = new URL(FEED_URL_PLANNER);
+            String username = SettingsAdmin.getInstance(getContext()).getUsername();
+            final URL location = new URL(FEED_URL_PLANNER + username);
             InputStream stream = null;
 
             try {
@@ -392,7 +411,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 try {
                     Log.d(TAG,"Trying to SYNC PLANNER");
 
-                    URL url = new URL(FEED_URL_PLANNER);
+                    URL url = new URL(FEED_URL_PLANNER + username);
 
                     HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                     connection.setReadTimeout(NET_READ_TIMEOUT_MILLIS);
@@ -485,7 +504,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
             reader.endObject();
 
-            Log.d("", "CONTENTVALUES FORMED " + id + ";" + name + ";" + musclegroup + ";" + target + ";" + description + ";" + image + "__________________________________________________");
+            //Log.d("", "CONTENTVALUES FORMED " + id + ";" + name + ";" + musclegroup + ";" + target + ";" + description + ";" + image + "__________________________________________________");
 
             Uri uri = Contract.Exercises.ITEM_CONTENT_URI.buildUpon().appendEncodedPath(values.getAsString(Contract.Exercises._ID)).build();
             Cursor cursor = contentProviderClient.query(
@@ -539,6 +558,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
             reader.nextName();
             owner = reader.nextString();
+            values.put(Contract.Workouts.USERNAME, owner);
 
             reader.nextName();
             isPaid = reader.nextInt();
@@ -579,7 +599,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
                 reader.endObject();
 
-                Log.d("", "CONTENTVALUES FORMED " + e_id + ";" + workout_id + ";" + exercsise_id + ";" + reps);
+                //Log.d("", "CONTENTVALUES FORMED " + e_id + ";" + workout_id + ";" + exercsise_id + ";" + reps);
 
                 Uri uriEx = Contract.WorkoutExercises.ITEM_CONTENT_URI.buildUpon().appendEncodedPath(valuesExercise.getAsString(Contract.WorkoutExercises._ID)).build();
                 Cursor cursor = contentProviderClient.query(
@@ -601,7 +621,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
             reader.endObject();
 
-            Log.d("", "CONTENTVALUES FORMED " + id + ";" + name + ";" + isPaid);
+            Log.d("", "CONTENTVALUES FORMED wks " + id + ";" + name + ";" + isPaid);
 
             Uri uriWorkout = Contract.Workouts.ITEM_CONTENT_URI.buildUpon().appendEncodedPath(values.getAsString(Contract.Workouts._ID)).build();
             Cursor cursor = contentProviderClient.query(
@@ -653,6 +673,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
             reader.nextName();
             username = reader.nextString();
+            values.put(Contract.Workouts.USERNAME, username);
 
             reader.nextName();
             workout_id = reader.nextInt();
@@ -709,8 +730,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
     }
 
-    private String saveImageToSD(String filepath, String exName)
-    {
+    private String saveImageToSD(String filepath, String exName){
         try
         {
             URL url = new URL(filepath);

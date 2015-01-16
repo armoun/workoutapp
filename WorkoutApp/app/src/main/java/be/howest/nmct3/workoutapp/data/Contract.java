@@ -14,6 +14,7 @@ public class Contract {
     public interface WorkoutColumns extends BaseColumns{
         public static final String NAME = "name";
         public static final String ISPAID = "ispaid";
+        public static final String USERNAME = "username";
     }
 
     public static final class Workouts implements WorkoutColumns{
@@ -71,6 +72,7 @@ public class Contract {
     public interface PlannersColumns extends BaseColumns {
         public static final String WORKOUT_ID = "workout_id";
         public static final String WO_DATE = "wo_date";
+        public static final String USERNAME = "username";
     }
 
     public static final class Planners implements PlannersColumns {

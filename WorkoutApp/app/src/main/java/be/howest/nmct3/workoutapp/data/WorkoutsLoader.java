@@ -27,8 +27,8 @@ public class WorkoutsLoader extends AsyncTaskLoader<Cursor> {
                         Contract.WorkoutColumns._ID,
                         Contract.WorkoutColumns.NAME,
                         Contract.WorkoutColumns.ISPAID},
-                null,
-                null,
+                Contract.Workouts.USERNAME + "=? OR " + Contract.Workouts.USERNAME + "= \"ALL\"",
+                new String[]{SettingsAdmin.getInstance(getContext()).getUsername()},
                 null,
                 null,
                 Contract.WorkoutColumns.ISPAID + " ASC"
