@@ -3,6 +3,7 @@ package be.howest.nmct3.workoutapp.data;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.net.InetAddress;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -176,5 +177,20 @@ public class SettingsAdmin {
         return name;
     }
 
+    public boolean isInternetAvailable() {
+        try {
+            InetAddress ipAddr = InetAddress.getByName("google.com"); //You can replace it with your name
+
+            if (ipAddr.equals("")) {
+                return false;
+            } else {
+                return true;
+            }
+
+        } catch (Exception e) {
+            return false;
+        }
+
+    }
 
 }
