@@ -145,26 +145,14 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
     {
         // get prompts.xml view
         LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-        final View promptView = layoutInflater.inflate(R.layout.input_dialog_edit_delete, null);
+        final View promptView = layoutInflater.inflate(R.layout.input_dialog_delete, null);
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                 getActivity());
         alertDialogBuilder.setView(promptView);
 
-        //EDIT TEXT
-        final EditText input_for_row = (EditText) promptView.findViewById(R.id.input_for_row);
-        input_for_row.setText(SelectedText);
-
         // setup a dialog window
         alertDialogBuilder
                 .setCancelable(false)
-                .setPositiveButton("Edit", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-
-
-
-
-                    }
-                })
                 .setNegativeButton("Cancel",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
