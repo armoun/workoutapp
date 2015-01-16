@@ -43,6 +43,7 @@ import java.util.Calendar;
 
 import be.howest.nmct3.workoutapp.data.Exercise;
 import be.howest.nmct3.workoutapp.data.SettingsAdmin;
+import be.howest.nmct3.workoutapp.data.WorkoutDatasoure;
 import be.howest.nmct3.workoutapp.data.WorkoutsLoader;
 import be.howest.nmct3.workoutapp.sync.SyncAdmin;
 
@@ -64,6 +65,8 @@ public class MainActivity extends FragmentActivity {
     public static String plannerSelectedDate = "";
     public static Calendar phoneCalendar = Calendar.getInstance();
     public static int plannerSelectedWorkoutId = -1;
+
+    public static WorkoutDatasoure workoutDatasource;
 
     ActionBarDrawerToggle icon;
 
@@ -103,6 +106,7 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
 
         mAccount = CreateSyncAccount(this);
+        workoutDatasource = new WorkoutDatasoure();
 
         runSyncAdapter();
 

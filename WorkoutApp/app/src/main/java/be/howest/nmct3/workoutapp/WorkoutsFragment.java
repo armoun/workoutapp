@@ -49,8 +49,6 @@ import be.howest.nmct3.workoutapp.data.WorkoutsLoader;
  */
 public class WorkoutsFragment extends Fragment {
 
-    public WorkoutDatasoure workoutDatasource;
-
     //public final String[] Workouts = {"Workout 1", "Workout 2", "Workout 3"};
     private CursorAdapter myWorkoutCursorAdapter;
 
@@ -74,7 +72,7 @@ public class WorkoutsFragment extends Fragment {
 
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.workouts_fragment_layout, null);
 
-        workoutDatasource = new WorkoutDatasoure();
+        MainActivity.workoutDatasource = new WorkoutDatasoure();
 
         String[] columns = new String[]{"name"};
         int[] viewIds = new int[]{R.id.workout_item_title};
@@ -164,7 +162,7 @@ public class WorkoutsFragment extends Fragment {
                 .setPositiveButton("Edit", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
 
-                        workoutDatasource.updateWorkoutName(getActivity(),selectedID, input_for_row.getText().toString());
+                        MainActivity.workoutDatasource.updateWorkoutName(getActivity(),selectedID, input_for_row.getText().toString());
                         Toast.makeText(getActivity(), "Workout name changed to " + input_for_row.getText().toString() + " with ID: " + selectedID,Toast.LENGTH_LONG).show();
                         reOpenFragment();
 
@@ -195,7 +193,7 @@ public class WorkoutsFragment extends Fragment {
 
     public void deleteRowMethod(View v, int selectedItemID)
     {
-        workoutDatasource.deleteWorkout(getActivity(),selectedItemID);
+        MainActivity.workoutDatasource.deleteWorkout(getActivity(),selectedItemID);
         Toast.makeText(getActivity().getBaseContext(), "Row deleted with id: " + selectedItemID , Toast.LENGTH_SHORT).show();
         reOpenFragment();
     }

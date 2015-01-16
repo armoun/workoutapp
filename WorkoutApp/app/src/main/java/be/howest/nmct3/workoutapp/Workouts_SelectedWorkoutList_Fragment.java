@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -42,6 +43,9 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
     private CursorAdapter mAdapter;
     private Cursor mCursor;
     private ListView list;
+
+    int selectedWorkoutId;
+    int selectedExerciseId;
 
     public Workouts_SelectedWorkoutList_Fragment() {
         // Required empty public constructor
@@ -121,15 +125,12 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
 
                 Cursor filteredCursor = ((SimpleCursorAdapter)list.getAdapter()).getCursor();
                 filteredCursor.moveToPosition(pos);
-                String selectedFromList = "";
 
-                //NIELS, de lijn hieronder uit comment halen en de naam van de exercise ophalen
-
-                //selectedFromList = ""+ filteredCursor.getString(filteredCursor.getColumnIndex(Contract.WorkoutExercises.));
-
+                selectedExerciseId = mCursor.getInt(0);
+                selectedWorkoutId = mCursor.getInt(3);
 
                 //String selectedFromList = listView.getItemAtPosition(pos).toString();
-                openDialogEditDelete(v, selectedFromList);
+                openDialogEditDelete(v);
 
                 return true;
             }
@@ -141,7 +142,7 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
     }
 
 
-    public void openDialogEditDelete(View v, String SelectedText)
+    public void openDialogEditDelete(View v)
     {
         // get prompts.xml view
         LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
@@ -178,7 +179,8 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
 
     public void deleteRowMethod(View v)
     {
-        Toast.makeText(getActivity().getBaseContext(), "Row deleted" , Toast.LENGTH_SHORT).show();
+        MainActivity.workoutDatasource.deleteExerciseForWorkout(getActivity(),selectedExerciseId,selectedWorkoutId);
+        Toast.makeText(getActivity().getBaseContext(), "Row deleted with Workout ID: " + selectedWorkoutId + " and Exercise ID: " + selectedExerciseId , Toast.LENGTH_SHORT).show();
         reOpenFragment();
     }
 
