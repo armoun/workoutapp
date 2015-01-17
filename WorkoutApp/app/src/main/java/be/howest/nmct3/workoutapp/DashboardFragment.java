@@ -106,7 +106,13 @@ public class DashboardFragment extends Fragment {
 
         de.hdodenhof.circleimageview.CircleImageView profilePicture = (de.hdodenhof.circleimageview.CircleImageView) root.findViewById(R.id.profile_image);
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        //SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+/*        if(SettingsAdmin.getInstance(getActivity().getApplicationContext()).getPicture() != null)
+        {
+            String pic = SettingsAdmin.getInstance(getActivity().getApplicationContext()).getPicture();
+            profilePicture.setImageBitmap(BitmapFactory.decodeFile(pic));
+        }*/
 
         if(MainActivity.myProfilePicturePath != "Picture.jpg") {
             profilePicture.setImageBitmap(BitmapFactory.decodeFile(MainActivity.myProfilePicturePath));
