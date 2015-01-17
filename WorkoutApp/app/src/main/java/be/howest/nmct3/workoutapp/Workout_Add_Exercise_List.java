@@ -11,11 +11,16 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CursorAdapter;
+import android.widget.FilterQueryProvider;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
@@ -42,12 +47,19 @@ public class Workout_Add_Exercise_List extends Fragment implements LoaderManager
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.workout_add_exercise, menu);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         //activity melden dat er een eigen menu moet worden geladen
         setHasOptionsMenu(true);
 
-        Log.d("","NEW WORKOUT EXERCISES LIST");
+        Log.d("", "NEW WORKOUT EXERCISES LIST");
 
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.new_workout_exercises_list, null);
 
@@ -66,12 +78,13 @@ public class Workout_Add_Exercise_List extends Fragment implements LoaderManager
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
-                mCursor.moveToPosition(position);
-                String exerciseId = ""+ mCursor.getInt(mCursor.getColumnIndex(Contract.Exercises._ID));
+                Cursor filteredCursor = ((SimpleCursorAdapter)list.getAdapter()).getCursor();
+                filteredCursor.moveToPosition(position);
+                String exerciseId = ""+ filteredCursor.getInt(filteredCursor.getColumnIndex(Contract.Exercises._ID));
                 //Toast.makeText(getActivity().getBaseContext(), "" + exerciseId, Toast.LENGTH_SHORT).show();
-                String exerciseName = ""+mCursor.getString(mCursor.getColumnIndex(Contract.Exercises.EXERCISE_NAME));
+                String exerciseName = ""+filteredCursor.getString(filteredCursor.getColumnIndex(Contract.Exercises.EXERCISE_NAME));
 
-                MainActivity.EXERCICE_ID = mCursor.getInt(mCursor.getColumnIndex(Contract.Exercises._ID));
+                MainActivity.EXERCICE_ID = filteredCursor.getInt(filteredCursor.getColumnIndex(Contract.Exercises._ID));
 
                 Fragment newFragment = Fragment.instantiate(getActivity().getApplicationContext(), "be.howest.nmct3.workoutapp.Workouts_SelectedWorkoutList_Fragment");
                 // consider using Java coding conventions (upper first char class names!!!)
@@ -84,7 +97,7 @@ public class Workout_Add_Exercise_List extends Fragment implements LoaderManager
                 bundle.putString("selected_exercise", exerciseName);
                 newFragment.setArguments(bundle);
 
-                int ex_id = mCursor.getInt(mCursor.getColumnIndex(Contract.Exercises._ID));
+                int ex_id = filteredCursor.getInt(filteredCursor.getColumnIndex(Contract.Exercises._ID));
                 int wo_id = MainActivity.WORKOUT_ID;
 
                 ContentValues values = new ContentValues();
@@ -107,6 +120,67 @@ public class Workout_Add_Exercise_List extends Fragment implements LoaderManager
         getActivity().getActionBar().setTitle("Add exercise to workouts");
 
         return root;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            //Geklikt op search bij add exercise to workout
+            case R.id.action_search_workout_add_exercise:
+                Toast.makeText(getActivity(), item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
+                SearchView searchView = (SearchView)item.getActionView();
+                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String s) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String s) {
+                        Log.d("", "--------- QUERY: " + s);
+                        mAdapter.setFilterQueryProvider(new FilterQueryProvider() {
+                            @Override
+                            public Cursor runQuery(CharSequence charSequence) {
+                                Log.d("",""+charSequence);
+                                mAdapter.setFilterQueryProvider(new FilterQueryProvider() {
+                                    @Override
+                                    public Cursor runQuery(CharSequence charSequence) {
+                                        return getExercisesByExerciseName(charSequence.toString());
+                                    }
+                                });
+                                return null;
+                            }
+                        });
+                        mAdapter.runQueryOnBackgroundThread(s);
+                        mAdapter.getFilter().filter(s);
+                        return false;
+                    }
+                });
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    private Cursor getExercisesByExerciseName(String searchTerm) {
+        String[] projection = new String[]{
+                Contract.Exercises._ID,
+                Contract.Exercises.EXERCISE_NAME,
+                Contract.Exercises.DESCRIPTION,
+                Contract.Exercises.MUSCLE_GROUP
+        };
+
+        Cursor c = getActivity().getContentResolver().query(
+                Contract.Exercises.CONTENT_URI,
+                projection,
+                "(" + Contract.Exercises.EXERCISE_NAME + " like ?)",
+                new String[]{"%" + searchTerm + "%"},
+                Contract.ExerciseColumns.EXERCISE_NAME + " ASC");
+
+        return c;
     }
 
     @Override
