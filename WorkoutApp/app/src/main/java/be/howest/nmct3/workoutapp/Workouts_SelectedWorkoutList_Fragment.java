@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -23,11 +24,14 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.EditText;
+import android.widget.FilterQueryProvider;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
 import be.howest.nmct3.workoutapp.data.Contract;
+import be.howest.nmct3.workoutapp.data.DatabaseHelper;
 import be.howest.nmct3.workoutapp.data.ExercisesLoader;
 import be.howest.nmct3.workoutapp.data.SpecificWorkoutLoader;
 import be.howest.nmct3.workoutapp.json.ExercisesLoaderJson;
@@ -87,6 +91,9 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
                 columns, viewIds, 0);
 
         list.setAdapter(mAdapter);
+
+        //ENABLE SEARCH FILTERING
+        list.setTextFilterEnabled(true);
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -201,6 +208,7 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.workouts_selectedworkoutlist, menu);
     }
@@ -214,6 +222,39 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
             case R.id.action_add_exercise_to_exercises_selected_workout:
                 //Toast.makeText(this, item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
                 OpenNewWorkoutExercisesList();
+                break;
+
+            //Geklikt op search bij workouts
+            case R.id.action_search_exercises_selected_workout:
+                Toast.makeText(getActivity(), item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
+                SearchView searchView = (SearchView)item.getActionView();
+                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String s) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String s) {
+                        Log.d("", "--------- QUERY: " + s);
+                        mAdapter.setFilterQueryProvider(new FilterQueryProvider() {
+                            @Override
+                            public Cursor runQuery(CharSequence charSequence) {
+                                Log.d("", "" + charSequence);
+                                mAdapter.setFilterQueryProvider(new FilterQueryProvider() {
+                                    @Override
+                                    public Cursor runQuery(CharSequence charSequence) {
+                                        return getExercisesOfWorkoutByExerciseName(charSequence.toString());
+                                    }
+                                });
+                                return null;
+                            }
+                        });
+                        mAdapter.runQueryOnBackgroundThread(s);
+                        mAdapter.getFilter().filter(s);
+                        return false;
+                    }
+                });
                 break;
         }
 
@@ -288,4 +329,32 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
         // Commit the transaction
         transaction.commit();
     }
+
+    private Cursor getExercisesOfWorkoutByExerciseName(String searchTerm) {
+
+        DatabaseHelper helper = DatabaseHelper.getInstance(getActivity());
+        SQLiteDatabase db = helper.getReadableDatabase();
+
+        Log.d("","SELECT "
+                + Contract.WorkoutExercises.CONTENT_DIRECTORY + "." + Contract.WorkoutExerciseColumns.WORKOUT_ID + ", "
+                + Contract.WorkoutExercises.CONTENT_DIRECTORY + "." + Contract.WorkoutExerciseColumns.EXERCISE_ID + ", "
+                + Contract.WorkoutExercises.CONTENT_DIRECTORY + "." + Contract.WorkoutExerciseColumns.REPS +
+                " FROM " + Contract.WorkoutExercises.CONTENT_DIRECTORY +
+                " INNER JOIN " + Contract.Exercises.CONTENT_DIRECTORY +
+                " ON " + Contract.WorkoutExercises.CONTENT_DIRECTORY + "." + Contract.WorkoutExerciseColumns.EXERCISE_ID + " = " + Contract.Exercises.CONTENT_DIRECTORY + "." + Contract.ExerciseColumns._ID +
+                " WHERE (" + Contract.Exercises.CONTENT_DIRECTORY + "." + Contract.ExerciseColumns.EXERCISE_NAME + " like ? )");
+
+        Cursor mData = db.rawQuery("SELECT "
+                        + Contract.WorkoutExercises.CONTENT_DIRECTORY + "." + Contract.WorkoutExerciseColumns.WORKOUT_ID + ", "
+                        + Contract.WorkoutExercises.CONTENT_DIRECTORY + "." + Contract.WorkoutExerciseColumns.EXERCISE_ID + ", "
+                        + Contract.WorkoutExercises.CONTENT_DIRECTORY + "." + Contract.WorkoutExerciseColumns.REPS +
+                        " FROM " + Contract.WorkoutExercises.CONTENT_DIRECTORY +
+                        " INNER JOIN " + Contract.Exercises.CONTENT_DIRECTORY +
+                        " ON " + Contract.WorkoutExercises.CONTENT_DIRECTORY + "." + Contract.WorkoutExerciseColumns.EXERCISE_ID + " = " + Contract.Exercises.CONTENT_DIRECTORY + "." + Contract.ExerciseColumns._ID +
+                        " WHERE (" + Contract.Exercises.CONTENT_DIRECTORY + "." + Contract.ExerciseColumns.EXERCISE_NAME + " like ? )",
+                new String[]{"%" + searchTerm + "%"});
+
+        return mData;
+    }
+
 }

@@ -155,6 +155,7 @@ public class Exercises_Musclegroup_Fragment extends Fragment implements LoaderMa
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.exercises_musclegroup, menu);
     }

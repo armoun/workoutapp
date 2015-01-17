@@ -118,9 +118,6 @@ public class WorkoutsFragment extends Fragment {
             }
         });
 
-
-
-
         getActivity().getActionBar().setTitle("Choose a workout");
 
         return root;
@@ -189,6 +186,7 @@ public class WorkoutsFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.workouts, menu);
     }
