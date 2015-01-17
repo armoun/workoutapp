@@ -210,6 +210,10 @@ public class SettingsFragment extends Fragment {
 
         final EditText input_firstname = (EditText) promptView.findViewById(R.id.settings_input_firstname);
         final EditText input_lastname = (EditText) promptView.findViewById(R.id.settings_input_lastname);
+
+        input_firstname.setText(SettingsAdmin.getInstance(getActivity().getApplicationContext()).getFirstname());
+        input_lastname.setText(SettingsAdmin.getInstance(getActivity().getApplicationContext()).getLastname());
+
         // setup a dialog window
         alertDialogBuilder
                 .setCancelable(false)
@@ -334,6 +338,8 @@ public class SettingsFragment extends Fragment {
         alertDialogBuilder.setView(promptView);
 
         final EditText input_email = (EditText) promptView.findViewById(R.id.settings_input_email);
+
+        input_email.setText(SettingsAdmin.getInstance(getActivity().getApplicationContext()).getEmail());
 
         // setup a dialog window
         alertDialogBuilder

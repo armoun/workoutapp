@@ -108,10 +108,14 @@ public class DashboardFragment extends Fragment {
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-        if(SettingsAdmin.getInstance(getActivity().getApplicationContext()).getPicture() != null)
+        if(SettingsAdmin.getInstance(getActivity().getApplicationContext()).getPicture() != null && MainActivity.myProfilePicturePath != "Picture.jpg")
         {
             String pic = SettingsAdmin.getInstance(getActivity().getApplicationContext()).getPicture();
             profilePicture.setImageBitmap(BitmapFactory.decodeFile(pic));
+        }
+        else
+        {
+            profilePicture.setImageResource(R.drawable.default_profile);
         }
 
 /*        if(MainActivity.myProfilePicturePath != "Picture.jpg") {
@@ -428,6 +432,11 @@ public class DashboardFragment extends Fragment {
 
             Log.d("BMI", Double.toString(myBMI));
 
+            if(iHeight == 0)
+            {
+                myBMI = 0;
+            }
+
             pBMI.setText(Double.toString(myBMI) + " BMI");
     }
 
@@ -442,6 +451,9 @@ public class DashboardFragment extends Fragment {
         alertDialogBuilder.setView(promptView);
 
         final EditText input_weight = (EditText) promptView.findViewById(R.id.input_weight);
+
+        String[] separated = Weight.getText().toString().split(" ");
+        input_weight.setText(separated[0]);
         // setup a dialog window
         alertDialogBuilder
                 .setCancelable(false)
@@ -496,6 +508,9 @@ public class DashboardFragment extends Fragment {
         alertDialogBuilder.setView(promptView);
 
         final EditText input_height = (EditText) promptView.findViewById(R.id.input_height);
+
+        String[] separated = Height.getText().toString().split(" ");
+        input_height.setText(separated[0]);
         // setup a dialog window
         alertDialogBuilder
                 .setCancelable(false)

@@ -10,7 +10,7 @@
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Fill in your height"
+        android:text="Fill in your height (cm)"
         android:gravity="center" />
 
     <EditText
