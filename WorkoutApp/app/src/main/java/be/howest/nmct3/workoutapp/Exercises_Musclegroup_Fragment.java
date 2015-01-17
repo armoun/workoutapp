@@ -176,22 +176,27 @@ public class Exercises_Musclegroup_Fragment extends Fragment implements LoaderMa
 
                     @Override
                     public boolean onQueryTextChange(String s) {
-                        Log.d("", "--------- QUERY: " + s);
-                        mAdapter.setFilterQueryProvider(new FilterQueryProvider() {
-                            @Override
-                            public Cursor runQuery(CharSequence charSequence) {
-                                Log.d("",""+charSequence);
-                                mAdapter.setFilterQueryProvider(new FilterQueryProvider() {
-                                    @Override
-                                    public Cursor runQuery(CharSequence charSequence) {
-                                        return getExercisesByExerciseName(charSequence.toString());
-                                    }
-                                });
-                                return null;
-                            }
-                        });
-                        mAdapter.runQueryOnBackgroundThread(s);
-                        mAdapter.getFilter().filter(s);
+                        if(s.equals("")){
+                            restartLoader();
+                        }else{
+                            Log.d("", "--------- QUERY: " + s);
+                            mAdapter.setFilterQueryProvider(new FilterQueryProvider() {
+                                @Override
+                                public Cursor runQuery(CharSequence charSequence) {
+                                    Log.d("",""+charSequence);
+
+                                    mAdapter.setFilterQueryProvider(new FilterQueryProvider() {
+                                        @Override
+                                        public Cursor runQuery(CharSequence charSequence) {
+                                            return getExercisesByExerciseName(charSequence.toString());
+                                        }
+                                    });
+                                    return null;
+                                }
+                            });
+                            mAdapter.runQueryOnBackgroundThread(s);
+                            mAdapter.getFilter().filter(s);
+                        }
                         return false;
                     }
                 });
@@ -229,19 +234,27 @@ public class Exercises_Musclegroup_Fragment extends Fragment implements LoaderMa
         mAdapter.swapCursor(null);
     }
 
+    public void restartLoader(){
+        getLoaderManager().restartLoader(0, null, this);
+    }
+
     private Cursor getExercisesByExerciseName(String searchTerm) {
         String[] projection = new String[]{
                 Contract.Exercises._ID,
                 Contract.Exercises.EXERCISE_NAME,
-                Contract.Exercises.DESCRIPTION,
+                Contract.Exercises.TARGET,
                 Contract.Exercises.MUSCLE_GROUP
         };
 
-        Cursor c = getActivity().getContentResolver().query(
+        Cursor c;
+        String selection = "(" + Contract.Exercises.EXERCISE_NAME + " like ?) and " + Contract.Exercises.MUSCLE_GROUP + "=?";
+        String whereArgs[] = new String[]{"%" + searchTerm + "%", mMuscleGroup.toLowerCase()};
+
+        c = getActivity().getContentResolver().query(
                 Contract.Exercises.CONTENT_URI,
                 projection,
-                "(" + Contract.Exercises.EXERCISE_NAME + " like ?) and " + Contract.Exercises.MUSCLE_GROUP + "='" + mMuscleGroup.toLowerCase() + "'",
-                new String[]{"%" + searchTerm + "%"},
+                selection,
+                whereArgs,
                 Contract.ExerciseColumns._ID + " ASC");
 
         return c;
