@@ -28,4 +28,14 @@
         android:textSize="20dp">
     </TextView>
 
+    <ImageView
+        android:adjustViewBounds="true"
+        android:padding="10dp"
+        android:id="@+id/list_settings_item_image_preview"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:visibility="gone"
+        android:scaleType="fitCenter"
+        android:src="@drawable/default_profile"/>
+
 </LinearLayout>

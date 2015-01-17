@@ -72,6 +72,12 @@ public class SettingsFragment extends Fragment {
 
         imageViewProfilePicture = (ImageView) root.findViewById(R.id.imageViewProfile);
 
+        if(SettingsAdmin.getInstance(getActivity().getApplicationContext()).getPicture() != null)
+        {
+            String pic = SettingsAdmin.getInstance(getActivity().getApplicationContext()).getPicture();
+            imageViewProfilePicture.setImageBitmap(BitmapFactory.decodeFile(pic));
+        }
+
         myListAdapter = new CustomSettingsAdapter();
         listview = (ListView) root.findViewById(R.id.settings_list);
         listview.setAdapter(myListAdapter);
@@ -111,6 +117,8 @@ public class SettingsFragment extends Fragment {
             TextView textSettingsPreview = (TextView) row.findViewById(R.id.list_settings_item_text_preview);
             String value = SettingsAdmin.getInstance(getContext()).getValueForSetting(position);
             textSettingsPreview.setText(value);
+
+            ImageView imagePreview = (ImageView) row.findViewById(R.id.list_settings_item_image_preview);
 
             //Settings wijzigen
             if(position == 0)
@@ -160,6 +168,14 @@ public class SettingsFragment extends Fragment {
                         ((MainActivity)getActivity()).startProfilePicturePicker();
                     }
                 });
+
+                textSettingsPreview.setVisibility(View.INVISIBLE);
+
+                String pic = SettingsAdmin.getInstance(getActivity().getApplicationContext()).getPicture();
+                imagePreview.setImageBitmap(BitmapFactory.decodeFile(pic));
+
+                imagePreview.setVisibility(View.VISIBLE);
+
             }
 
             return row;

@@ -90,7 +90,7 @@ public class SettingsAdmin {
                 settingValue = getEmail();
                 break;
             case 4:
-                settingValue = getPicture();
+                settingValue = "Change picture";
                 break;
             case 5:
                 settingValue = getUnits();
