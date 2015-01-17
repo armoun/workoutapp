@@ -82,6 +82,7 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
         list = (ListView) root.findViewById(R.id.workoutselected_list);
 
         mWorkoutId = MainActivity.WORKOUT_ID;
+        selectedWorkoutId = mWorkoutId;
 
         String[] columns = new String[] {Contract.Exercises.EXERCISE_NAME, Contract.WorkoutExercises.REPS };
         int[] viewIds = new int[] { R.id.workoutselected_item_title, R.id.workoutselected_item_reps };
@@ -99,13 +100,15 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
-                mCursor.moveToPosition(position);
-                String exerciseId   = "" + mCursor.getInt(0);
-                String workoutId    = "" + mCursor.getInt(3);
+                Cursor filteredCursor = ((SimpleCursorAdapter)list.getAdapter()).getCursor();
+                filteredCursor.moveToPosition(position);
+
+                String exerciseId   = "" + filteredCursor.getInt(0);
+                String workoutId    = "" + filteredCursor.getInt(3);
                 Toast.makeText(getActivity().getBaseContext(), "ex_id " + exerciseId + " wo_id " + workoutId, Toast.LENGTH_SHORT).show();
 
-                MainActivity.EXERCICE_ID = mCursor.getInt(0);
-                MainActivity.WORKOUT_ID = mCursor.getInt(3);
+                MainActivity.EXERCICE_ID = filteredCursor.getInt(0);
+                MainActivity.WORKOUT_ID = filteredCursor.getInt(3);
 
                 Fragment newFragment = Fragment.instantiate(getActivity().getApplicationContext(), "be.howest.nmct3.workoutapp.RepList");
                 // consider using Java coding conventions (upper first char class names!!!)
@@ -335,24 +338,24 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
         DatabaseHelper helper = DatabaseHelper.getInstance(getActivity());
         SQLiteDatabase db = helper.getReadableDatabase();
 
-        Log.d("","SELECT "
-                + Contract.WorkoutExercises.CONTENT_DIRECTORY + "." + Contract.WorkoutExerciseColumns.WORKOUT_ID + ", "
-                + Contract.WorkoutExercises.CONTENT_DIRECTORY + "." + Contract.WorkoutExerciseColumns.EXERCISE_ID + ", "
-                + Contract.WorkoutExercises.CONTENT_DIRECTORY + "." + Contract.WorkoutExerciseColumns.REPS +
-                " FROM " + Contract.WorkoutExercises.CONTENT_DIRECTORY +
-                " INNER JOIN " + Contract.Exercises.CONTENT_DIRECTORY +
-                " ON " + Contract.WorkoutExercises.CONTENT_DIRECTORY + "." + Contract.WorkoutExerciseColumns.EXERCISE_ID + " = " + Contract.Exercises.CONTENT_DIRECTORY + "." + Contract.ExerciseColumns._ID +
-                " WHERE (" + Contract.Exercises.CONTENT_DIRECTORY + "." + Contract.ExerciseColumns.EXERCISE_NAME + " like ? )");
+        String selectedWorkoutIdString = "" + selectedWorkoutId;
 
-        Cursor mData = db.rawQuery("SELECT "
-                        + Contract.WorkoutExercises.CONTENT_DIRECTORY + "." + Contract.WorkoutExerciseColumns.WORKOUT_ID + ", "
-                        + Contract.WorkoutExercises.CONTENT_DIRECTORY + "." + Contract.WorkoutExerciseColumns.EXERCISE_ID + ", "
-                        + Contract.WorkoutExercises.CONTENT_DIRECTORY + "." + Contract.WorkoutExerciseColumns.REPS +
-                        " FROM " + Contract.WorkoutExercises.CONTENT_DIRECTORY +
-                        " INNER JOIN " + Contract.Exercises.CONTENT_DIRECTORY +
-                        " ON " + Contract.WorkoutExercises.CONTENT_DIRECTORY + "." + Contract.WorkoutExerciseColumns.EXERCISE_ID + " = " + Contract.Exercises.CONTENT_DIRECTORY + "." + Contract.ExerciseColumns._ID +
-                        " WHERE (" + Contract.Exercises.CONTENT_DIRECTORY + "." + Contract.ExerciseColumns.EXERCISE_NAME + " like ? )",
-                new String[]{"%" + searchTerm + "%"});
+        Log.d("","SELECT * " +
+                " FROM " + Contract.Exercises.CONTENT_DIRECTORY +
+                " INNER JOIN " + Contract.WorkoutExercises.CONTENT_DIRECTORY +
+                " ON " + Contract.Exercises.CONTENT_DIRECTORY + "." + Contract.ExerciseColumns._ID
+                + " = " + Contract.WorkoutExercises.CONTENT_DIRECTORY + "." + Contract.WorkoutExerciseColumns.EXERCISE_ID +
+                " WHERE (" + Contract.Exercises.CONTENT_DIRECTORY + "." + Contract.ExerciseColumns.EXERCISE_NAME + " like " + "%" + searchTerm + "%" + ")"
+                + " AND " + Contract.WorkoutExercises.CONTENT_DIRECTORY + "." + Contract.WorkoutExerciseColumns.WORKOUT_ID + " = " + selectedWorkoutId);
+
+        Cursor mData = db.rawQuery("SELECT * " +
+                        " FROM " + Contract.Exercises.CONTENT_DIRECTORY +
+                        " INNER JOIN " + Contract.WorkoutExercises.CONTENT_DIRECTORY +
+                        " ON " + Contract.Exercises.CONTENT_DIRECTORY + "." + Contract.ExerciseColumns._ID
+                        + " = " + Contract.WorkoutExercises.CONTENT_DIRECTORY + "." + Contract.WorkoutExerciseColumns.EXERCISE_ID +
+                        " WHERE (" + Contract.Exercises.CONTENT_DIRECTORY + "." + Contract.ExerciseColumns.EXERCISE_NAME + " like ? )"
+                        + " AND " + Contract.WorkoutExercises.CONTENT_DIRECTORY + "." + Contract.WorkoutExerciseColumns.WORKOUT_ID + " = ? ",
+                new String[]{"%" + searchTerm + "%", selectedWorkoutIdString});
 
         return mData;
     }

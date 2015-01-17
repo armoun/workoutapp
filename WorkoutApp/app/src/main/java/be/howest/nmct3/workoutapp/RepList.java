@@ -257,6 +257,8 @@ public class RepList extends Fragment {
                     new String[]{ex_id, wo_id},
                     null);
 
+            Log.d("",""+c);
+
             c.moveToFirst();
 
             Log.d("RepList", DatabaseUtils.dumpCursorToString(c));
