@@ -174,6 +174,11 @@ public class SettingsFragment extends Fragment {
                 String pic = SettingsAdmin.getInstance(getActivity().getApplicationContext()).getPicture();
                 imagePreview.setImageBitmap(BitmapFactory.decodeFile(pic));
 
+                if(SettingsAdmin.getInstance(getActivity().getApplicationContext()).getPicture() == "Picture.jpg")
+                {
+                    imagePreview.setImageResource(R.drawable.default_profile);
+                }
+
                 imagePreview.setVisibility(View.VISIBLE);
 
             }
@@ -252,6 +257,16 @@ public class SettingsFragment extends Fragment {
         alertDialogBuilder.setView(promptView);
 
         final Spinner input_gender = (Spinner) promptView.findViewById(R.id.spinner_gender);
+
+        if(SettingsAdmin.getInstance(getActivity().getApplicationContext()).getGender() == "Male")
+        {
+            input_gender.setSelection(0);
+        }
+        else
+        {
+            input_gender.setSelection(1);
+        }
+
         // setup a dialog window
         alertDialogBuilder
                 .setCancelable(false)
@@ -291,6 +306,11 @@ public class SettingsFragment extends Fragment {
         alertDialogBuilder.setView(promptView);
 
         final DatePicker input_picker = (DatePicker) promptView.findViewById(R.id.datePicker_dateofbirth);
+
+        String[] separated = SettingsAdmin.getInstance(getActivity().getApplicationContext()).getDateOfBirth().split("-");
+
+        input_picker.updateDate(Integer.parseInt(separated[2]), Integer.parseInt(separated[1]) - 1, Integer.parseInt(separated[0]));
+
         // setup a dialog window
         alertDialogBuilder
                 .setCancelable(false)

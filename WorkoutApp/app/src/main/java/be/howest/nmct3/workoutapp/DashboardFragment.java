@@ -304,6 +304,7 @@ public class DashboardFragment extends Fragment {
         /*graph.getGridLabelRenderer().setVerticalLabelsVisible(false);*/
 
 
+        getActivity().getActionBar().setTitle("Dashboard");
 
         return root;
     }
@@ -537,5 +538,9 @@ public class DashboardFragment extends Fragment {
         // create an alert dialog
         AlertDialog alert = alertDialogBuilder.create();
         alert.show();
+
+
     }
+
+
 }
