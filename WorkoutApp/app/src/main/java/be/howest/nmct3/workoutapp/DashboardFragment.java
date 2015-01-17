@@ -108,7 +108,7 @@ public class DashboardFragment extends Fragment {
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-        if(SettingsAdmin.getInstance(getActivity().getApplicationContext()).getPicture() != null && MainActivity.myProfilePicturePath != "Picture.jpg")
+        if(SettingsAdmin.getInstance(getActivity().getApplicationContext()).getPicture() != "Picture.jpg")
         {
             String pic = SettingsAdmin.getInstance(getActivity().getApplicationContext()).getPicture();
             profilePicture.setImageBitmap(BitmapFactory.decodeFile(pic));
