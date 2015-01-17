@@ -12,6 +12,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -157,7 +158,7 @@ public class RepList extends Fragment {
                                            int pos, long id) {
                 // TODO Auto-generated method stub
 
-                Toast.makeText(getActivity().getBaseContext(), "Long Clicked on" + pos , Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity().getBaseContext(), "Long Clicked on" + pos, Toast.LENGTH_SHORT).show();
 
                 //Cursor filteredCursor = ((SimpleCursorAdapter)list.getAdapter()).getCursor();
 
@@ -176,7 +177,6 @@ public class RepList extends Fragment {
                 return true;
             }
         });
-
 
         getActivity().getActionBar().setTitle("Reps for exercise");
 
@@ -237,8 +237,6 @@ public class RepList extends Fragment {
         reOpenFragment();
     }
 
-
-
     class repsAdapter extends ArrayAdapter<String>
     {
         private String[] reps;
@@ -292,11 +290,19 @@ public class RepList extends Fragment {
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
 
         MainActivity.activeFragment = frag;
+        Toast.makeText(getActivity(), "Active fragment: " + frag.getClass().getSimpleName(),Toast.LENGTH_SHORT).show();
 
         transaction.replace(R.id.main, frag);
         transaction.addToBackStack(null);
 
         // Commit the transaction
         transaction.commit();
+    }
+
+    @Override
+    public void onDestroy() {
+        Workouts_SelectedWorkoutList_Fragment.backPressedRepList = true;
+        //Toast.makeText(getActivity(), "Destroyed",Toast.LENGTH_SHORT).show();
+        super.onDestroy();
     }
 }

@@ -44,6 +44,8 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
     private Cursor mCursor;
     private ListView list;
 
+    public static boolean backPressedRepList = false;
+
     int selectedWorkoutId;
     int selectedExerciseId;
 
@@ -65,7 +67,7 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
 
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.workouts_workoutselected_list_fragment_layout, null);
 
-
+        Toast.makeText(getActivity(), "Active fragment: " + this.getClass().getSimpleName(),Toast.LENGTH_SHORT).show();
 
         Bundle args = getArguments();
         if (args  != null && args.containsKey("selected_exercise")) {
@@ -135,6 +137,12 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
                 return true;
             }
         });
+
+        if(backPressedRepList) {
+            Toast.makeText(getActivity(), "RELOAD data",Toast.LENGTH_SHORT).show();
+            reOpenFragment();
+            backPressedRepList=false;
+        }
 
         getActivity().getActionBar().setTitle("Choose an exercise");
 
@@ -245,6 +253,7 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
 
         MainActivity.activeFragment = frag;
+        Toast.makeText(getActivity(), "Active fragment: " + frag.getClass().getSimpleName(),Toast.LENGTH_SHORT).show();
 
         transaction.replace(R.id.main, frag);
         transaction.disallowAddToBackStack();
@@ -254,13 +263,26 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
     }
 
     private void reOpenFragment() {
-        // Create and set the start fragment
-        Fragment frag = Fragment.instantiate(getActivity(), "be.howest.nmct3.workoutapp.Workouts_SelectedWorkoutList_Fragment");
-        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        Cursor filteredCursor = ((SimpleCursorAdapter)WorkoutsFragment.listView.getAdapter()).getCursor();
+        filteredCursor.moveToPosition(WorkoutsFragment.currentWorkoutPosition);
 
-        MainActivity.activeFragment = frag;
+        String workoutId = filteredCursor.getString(filteredCursor.getColumnIndex(Contract.WorkoutColumns._ID));
 
-        transaction.replace(R.id.main, frag);
+        Toast.makeText(getActivity().getBaseContext(), "" + workoutId, Toast.LENGTH_SHORT).show();
+
+        MainActivity.WORKOUT_ID = Integer.parseInt(workoutId);
+
+        Fragment newFragment = Fragment.instantiate(getActivity().getApplicationContext(), "be.howest.nmct3.workoutapp.Workouts_SelectedWorkoutList_Fragment");
+        // consider using Java coding conventions (upper first char class names!!!)
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+        MainActivity.activeFragment = newFragment;
+        Toast.makeText(getActivity(), "Active fragment: " + newFragment.getClass().getSimpleName(),Toast.LENGTH_SHORT).show();
+        Log.d("", "Active fragment: " + newFragment.getClass().getSimpleName());
+
+        // Replace whatever is in the fragment_container view with this fragment,
+        // and add the transaction to the back1 stack
+        transaction.replace(R.id.main, newFragment);
         transaction.addToBackStack(null);
 
         // Commit the transaction

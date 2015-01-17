@@ -31,6 +31,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
@@ -168,6 +169,7 @@ public class DashboardFragment extends Fragment {
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
                 MainActivity.activeFragment = newFragment;
+                Toast.makeText(getActivity(), "Active fragment: " + newFragment.getClass().getSimpleName(), Toast.LENGTH_SHORT).show();
 
                 // Replace whatever is in the fragment_container view with this fragment,
                 // and add the transaction to the back1 stack
