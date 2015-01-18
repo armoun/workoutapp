@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
@@ -81,8 +82,12 @@ public class WorkoutsFragment extends Fragment {
         String[] columns = new String[]{"name"};
         int[] viewIds = new int[]{R.id.workout_item_title};
 
+
+        // VERKEERDE WERKWIJZE !
         WorkoutsLoader wl = new WorkoutsLoader(getActivity());
         final Cursor cursor = wl.loadInBackground();
+
+        Log.d("WorkoutsFragment", DatabaseUtils.dumpCursorToString(cursor));
 
         listView = (ListView) root.findViewById(R.id.workout_list);
         myWorkoutCursorAdapter = new SimpleCursorAdapter(getActivity(), R.layout.workouts_list_workout_item_rowlayout, cursor, columns, viewIds, 0);

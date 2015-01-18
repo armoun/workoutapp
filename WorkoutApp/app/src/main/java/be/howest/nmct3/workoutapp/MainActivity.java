@@ -54,6 +54,7 @@ public class MainActivity extends FragmentActivity {
     public static String[] MuscleGroups = Exercise.MuscleGroups;
     public static int WORKOUT_ID = 0;
     public static int EXERCICE_ID = 0;
+    public static int WORKOUT_EXERCICE_ID = 0;
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;

@@ -28,7 +28,13 @@ public class SpecificWorkoutLoader extends AsyncTaskLoader<Cursor> {
 
         if (!mWorkoutID.equalsIgnoreCase("") || mWorkoutID != null) {
             //  no muscle group given, load all exercises
-            mData = db.rawQuery("SELECT " + Contract.Exercises.CONTENT_DIRECTORY + "." + Contract.ExerciseColumns._ID + ", " + Contract.Exercises.CONTENT_DIRECTORY + "." + Contract.ExerciseColumns.EXERCISE_NAME + ", " + Contract.WorkoutExerciseColumns.REPS + ", " + Contract.Workouts.CONTENT_DIRECTORY + "." + Contract.WorkoutColumns._ID +
+            mData = db.rawQuery("SELECT "   + Contract.Exercises.CONTENT_DIRECTORY + "."        + Contract.ExerciseColumns._ID              + ", "
+                                            + Contract.Exercises.CONTENT_DIRECTORY + "."        + Contract.ExerciseColumns.EXERCISE_NAME    + ", "
+                                            + Contract.WorkoutExercises.CONTENT_DIRECTORY + "." + Contract.WorkoutExercises._ID             + ", "
+                                            + Contract.WorkoutExercises.EXERCISE_ID     + ", "
+                                            + Contract.WorkoutExercises.WORKOUT_ID      + ", "
+                                            + Contract.WorkoutExercises.REPS            +
+
                                 " FROM " + Contract.Exercises.CONTENT_DIRECTORY +
                                 " INNER JOIN " + Contract.WorkoutExercises.CONTENT_DIRECTORY +
                                 " ON " + Contract.Exercises.CONTENT_DIRECTORY + "." + Contract.ExerciseColumns._ID + " = " + Contract.WorkoutExercises.CONTENT_DIRECTORY + "." + Contract.WorkoutExerciseColumns.EXERCISE_ID +

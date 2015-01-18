@@ -61,6 +61,7 @@ public class WorkoutDatasoure {
         ContentValues c = new ContentValues();
         c.put(Contract.Workouts.DELETE, 1);
         context.getContentResolver().update(Contract.Workouts.CONTENT_URI, c, Contract.Workouts._ID + " =?", new String[]{wo_id});
+        Log.d("WorkoutDatasource","delete on 1 for workout id " + id);
     }
 
     public void deleteWorkoutPerma(Context context, int id){
@@ -68,16 +69,13 @@ public class WorkoutDatasoure {
         context.getContentResolver().delete(Contract.Workouts.CONTENT_URI, Contract.Workouts._ID + " =?", new String[]{wo_id});
     }
 
-    public void deleteExerciseForWorkout(Context context, int exerciseId, int workoutId){
-        //TODO op workoutExercise _id filteren
-
-        String ex_id = ""+ exerciseId;
-        String wo_id = ""+ workoutId;
+    public void deleteExerciseForWorkout(Context context, int id){
+        String we_id = ""+ id;
 
         ContentValues c = new ContentValues();
         c.put(Contract.Workouts.DELETE, 1);
 
-        context.getContentResolver().update(Contract.WorkoutExercises.CONTENT_URI, c, Contract.WorkoutExercises.WORKOUT_ID + " =? AND " + Contract.WorkoutExercises.EXERCISE_ID + " =?", new String[]{wo_id, ex_id});
+        context.getContentResolver().update(Contract.WorkoutExercises.CONTENT_URI, c, Contract.WorkoutExercises.WORKOUT_ID + " =? AND " + Contract.WorkoutExercises.EXERCISE_ID + " =?", new String[]{we_id});
     }
 
     public void deleteExerciseForWorkoutPerma(Context context, int exerciseId, int workoutId){

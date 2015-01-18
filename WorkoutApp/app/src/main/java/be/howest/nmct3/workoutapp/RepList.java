@@ -96,11 +96,10 @@ public class RepList extends Fragment {
                         Log.d("Replist","_"+input_reps.getText().toString()+ "_");
                         if(input_reps.getText().toString().length() > 0){
                             Log.d("Replist","input reps not empty");
-                            String ex_id = ""+ MainActivity.EXERCICE_ID;
-                            String wo_id = ""+ MainActivity.WORKOUT_ID;
+                            String we_id = ""+ MainActivity.WORKOUT_EXERCICE_ID;
                             Cursor c = getActivity().getContentResolver().query(Contract.WorkoutExercises.CONTENT_URI, new String[]{Contract.WorkoutExercises.REPS},
-                                    "(" + Contract.WorkoutExercises.EXERCISE_ID + " =? AND " + Contract.WorkoutExercises.WORKOUT_ID + "=?)",
-                                    new String[]{ex_id, wo_id},
+                                    Contract.WorkoutExercises._ID + " =?",
+                                    new String[]{we_id},
                                     null);
                             c.moveToFirst();
                             String reps = c.getString(c.getColumnIndex(Contract.WorkoutExercises.REPS));
@@ -110,8 +109,8 @@ public class RepList extends Fragment {
                             cv.put(Contract.WorkoutExercises.REPS, reps);
 
                             int a = getActivity().getContentResolver().update(Contract.WorkoutExercises.CONTENT_URI, cv,
-                                    "(" + Contract.WorkoutExercises.EXERCISE_ID + " =? AND " + Contract.WorkoutExercises.WORKOUT_ID + "=?)",
-                                    new String[]{ex_id, wo_id});
+                                    Contract.WorkoutExercises._ID+ " =?",
+                                    new String[]{we_id});
 
                             myListAdapter = new repsAdapter();
                             list.setAdapter(myListAdapter);
@@ -137,7 +136,7 @@ public class RepList extends Fragment {
         //activity melden dat er een eigen menu moet worden geladen
         setHasOptionsMenu(true);
 
-        Log.d("RepList", "Ex_id" + MainActivity.EXERCICE_ID + " Wo_id" + MainActivity.WORKOUT_ID);
+        Log.d("RepList", "we_id" + MainActivity.WORKOUT_EXERCICE_ID);
 
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.rep_list, null);
 
@@ -159,7 +158,7 @@ public class RepList extends Fragment {
                                            int pos, long id) {
                 // TODO Auto-generated method stub
 
-                Toast.makeText(getActivity().getBaseContext(), "Long Clicked on" + pos, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity().getBaseContext(), "Long Clicked on" + pos, Toast.LENGTH_SHORT).show();
 
                 //Cursor filteredCursor = ((SimpleCursorAdapter)list.getAdapter()).getCursor();
 
@@ -234,7 +233,7 @@ public class RepList extends Fragment {
 
     public void deleteRowMethod(View v)
     {
-        Toast.makeText(getActivity().getBaseContext(), "Row deleted" , Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity().getBaseContext(), "Row deleted" , Toast.LENGTH_SHORT).show();
         reOpenFragment();
     }
 
@@ -246,15 +245,14 @@ public class RepList extends Fragment {
         {
             super(getActivity(), R.layout.rep_list_item, R.id.rep_textview);
 
-            String ex_id = ""+ MainActivity.EXERCICE_ID;
-            String wo_id = ""+ MainActivity.WORKOUT_ID;
+            String we_id = ""+ MainActivity.WORKOUT_EXERCICE_ID;
             String[] projection = new String[]{Contract.WorkoutExercises._ID, Contract.WorkoutExercises.EXERCISE_ID, Contract.WorkoutExercises.WORKOUT_ID, Contract.WorkoutExercises.REPS};
 
             Cursor c = getActivity().getContentResolver().query(
                     Contract.WorkoutExercises.CONTENT_URI,
                     projection,
-                    "(" + Contract.WorkoutExercises.EXERCISE_ID + " =? AND " + Contract.WorkoutExercises.WORKOUT_ID + "=?)",
-                    new String[]{ex_id, wo_id},
+                    Contract.WorkoutExercises._ID + " =?",
+                    new String[]{we_id},
                     null);
 
             Log.d("",""+c);
@@ -293,7 +291,7 @@ public class RepList extends Fragment {
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
 
         MainActivity.activeFragment = frag;
-        Toast.makeText(getActivity(), "Active fragment: " + frag.getClass().getSimpleName(),Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "Active fragment: " + frag.getClass().getSimpleName(),Toast.LENGTH_SHORT).show();
 
         transaction.replace(R.id.main, frag);
         transaction.addToBackStack(null);

@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -52,6 +53,7 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
 
     int selectedWorkoutId;
     int selectedExerciseId;
+    int workoutExercisesId;
 
     public Workouts_SelectedWorkoutList_Fragment() {
         // Required empty public constructor
@@ -103,12 +105,16 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
                 Cursor filteredCursor = ((SimpleCursorAdapter)list.getAdapter()).getCursor();
                 filteredCursor.moveToPosition(position);
 
-                String exerciseId   = "" + filteredCursor.getInt(0);
-                String workoutId    = "" + filteredCursor.getInt(3);
-                Toast.makeText(getActivity().getBaseContext(), "ex_id " + exerciseId + " wo_id " + workoutId, Toast.LENGTH_SHORT).show();
+                //Log.d("workoutApp.Workouts_selected...", DatabaseUtils.dumpCursorToString(filteredCursor));
+                Log.d("workoutApp.Workouts_selected...", "WorkoutExercises ID on position " + position + " is " + filteredCursor.getInt(filteredCursor.getColumnIndex(Contract.WorkoutExercises._ID)));
 
-                MainActivity.EXERCICE_ID = filteredCursor.getInt(0);
-                MainActivity.WORKOUT_ID = filteredCursor.getInt(3);
+                //String exerciseId   = "" + filteredCursor.getInt(mCursor.getColumnIndex(Contract.WorkoutExercises.EXERCISE_ID));
+                //String workoutId    = "" + filteredCursor.getInt(mCursor.getColumnIndex(Contract.WorkoutExercises.WORKOUT_ID));
+                //Toast.makeText(getActivity().getBaseContext(), "ex_id " + exerciseId + " wo_id " + workoutId, Toast.LENGTH_SHORT).show();
+
+                //MainActivity.EXERCICE_ID = filteredCursor.getInt(mCursor.getColumnIndex(Contract.WorkoutExercises.EXERCISE_ID));
+                //MainActivity.WORKOUT_ID = filteredCursor.getInt(mCursor.getColumnIndex(Contract.WorkoutExercises.WORKOUT_ID));
+                MainActivity.WORKOUT_EXERCICE_ID = filteredCursor.getInt(filteredCursor.getColumnIndex(Contract.WorkoutExercises._ID));
 
                 Fragment newFragment = Fragment.instantiate(getActivity().getApplicationContext(), "be.howest.nmct3.workoutapp.RepList");
                 // consider using Java coding conventions (upper first char class names!!!)
@@ -138,9 +144,9 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
                 Cursor filteredCursor = ((SimpleCursorAdapter)list.getAdapter()).getCursor();
                 filteredCursor.moveToPosition(pos);
 
-                selectedExerciseId = mCursor.getInt(0);
-                selectedWorkoutId = mCursor.getInt(3);
-
+                selectedExerciseId = mCursor.getInt(mCursor.getColumnIndex(Contract.WorkoutExercises.EXERCISE_ID));
+                selectedWorkoutId = mCursor.getInt(mCursor.getColumnIndex(Contract.WorkoutExercises.WORKOUT_ID));
+                workoutExercisesId = filteredCursor.getInt(mCursor.getColumnIndex(Contract.WorkoutExercises._ID));
                 //String selectedFromList = listView.getItemAtPosition(pos).toString();
                 openDialogEditDelete(v);
 
@@ -197,7 +203,7 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
 
     public void deleteRowMethod(View v)
     {
-        MainActivity.workoutDatasource.deleteExerciseForWorkout(getActivity(),selectedExerciseId,selectedWorkoutId);
+        MainActivity.workoutDatasource.deleteExerciseForWorkout(getActivity(),workoutExercisesId);
         Toast.makeText(getActivity().getBaseContext(), "Row deleted with Workout ID: " + selectedWorkoutId + " and Exercise ID: " + selectedExerciseId , Toast.LENGTH_SHORT).show();
         reOpenFragment();
     }
