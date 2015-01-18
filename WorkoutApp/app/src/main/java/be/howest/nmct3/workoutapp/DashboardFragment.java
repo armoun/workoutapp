@@ -28,6 +28,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -198,6 +200,21 @@ public class DashboardFragment extends Fragment {
         //GRAFIEK______________________________________________
 
         graph = (GraphView) root.findViewById(R.id.graphView);
+
+        graph.setOnLongClickListener(new View.OnLongClickListener(){
+              @Override
+              public boolean onLongClick(View v) {
+                  Toast.makeText(getActivity(),"RESET GRAPH", Toast.LENGTH_SHORT).show();
+
+                  openDialogEditDelete(v);
+
+
+                  return true;
+
+              }
+
+        });
+
 
         graph.removeAllSeries();
 
@@ -531,8 +548,7 @@ public class DashboardFragment extends Fragment {
 
                         String[] parts = WeightsStringSpaced.split(" ");
 
-                        if(parts.length == 3)
-                        {
+                        if (parts.length == 3) {
                             WeightsStringSpaced = preferences.getString(SettingsAdmin.getInstance(getActivity().getApplicationContext()).getUsername() + "-WeightsForGraph", null);
 
                             String[] partss = WeightsStringSpaced.split(" ");
@@ -556,8 +572,7 @@ public class DashboardFragment extends Fragment {
 
                             }*/
 
-                            if(graphViewWeightArray.size() == 2)
-                            {
+                            if (graphViewWeightArray.size() == 2) {
                                 series.setColor(Color.rgb(246, 93, 81));
                                 series.setThickness(8);
                                 graph.addSeries(series);
@@ -566,7 +581,6 @@ public class DashboardFragment extends Fragment {
                             grapviewText.setVisibility(View.GONE);
 
                             graph.setVisibility(View.VISIBLE);
-
 
 
                         }
@@ -625,6 +639,73 @@ public class DashboardFragment extends Fragment {
         alert.show();
 
 
+    }
+
+    public void openDialogEditDelete(View v)
+    {
+        // get prompts.xml view
+        LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+        final View promptView = layoutInflater.inflate(R.layout.input_dialog_reset_graph, null);
+        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                getActivity());
+        alertDialogBuilder.setView(promptView);
+
+        // setup a dialog window
+        alertDialogBuilder
+                .setCancelable(false)
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        // create an alert dialog
+        final AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
+
+        //DELETE BUTTON
+        Button deleteRow;
+        deleteRow = (Button) promptView.findViewById(R.id.delete_row_button_dialog_id);
+        deleteRow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                deleteWeightData(v);
+                alert.cancel();
+            }
+        });
+    }
+
+    public void deleteWeightData(View v)
+    {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        editor = preferences.edit();
+
+        editor.putString(SettingsAdmin.getInstance(getActivity().getApplicationContext()).getUsername() + "-WeightsForGraph", "");
+        editor.apply();
+
+
+        reOpenFragment();
+    }
+
+    private void reOpenFragment() {
+
+
+        Fragment newFragment = Fragment.instantiate(getActivity().getApplicationContext(), "be.howest.nmct3.workoutapp.DashboardFragment");
+        // consider using Java coding conventions (upper first char class names!!!)
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+        MainActivity.activeFragment = newFragment;
+        Toast.makeText(getActivity(), "Active fragment: " + newFragment.getClass().getSimpleName(),Toast.LENGTH_SHORT).show();
+        Log.d("", "Active fragment: " + newFragment.getClass().getSimpleName());
+
+        // Replace whatever is in the fragment_container view with this fragment,
+        // and add the transaction to the back1 stack
+        transaction.replace(R.id.main, newFragment);
+        transaction.addToBackStack(null);
+
+        // Commit the transaction
+        transaction.commit();
     }
 
 

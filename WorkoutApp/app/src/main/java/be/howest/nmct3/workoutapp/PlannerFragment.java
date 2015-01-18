@@ -2,8 +2,10 @@ package be.howest.nmct3.workoutapp;
 
 
 
+import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
@@ -19,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
@@ -135,6 +138,28 @@ public class PlannerFragment extends Fragment {
             }
         });
 
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+            public boolean onItemLongClick(AdapterView<?> arg0, View v,
+                                           int pos, long id) {
+                // TODO Auto-generated method stub
+
+/*                Toast.makeText(getActivity().getBaseContext(), "Long Clicked on" + pos , Toast.LENGTH_SHORT).show();
+
+                Cursor filteredCursor = ((SimpleCursorAdapter)list.getAdapter()).getCursor();
+                filteredCursor.moveToPosition(pos);
+
+                selectedExerciseId = mCursor.getInt(mCursor.getColumnIndex(Contract.WorkoutExercises.EXERCISE_ID));
+                selectedWorkoutId = mCursor.getInt(mCursor.getColumnIndex(Contract.WorkoutExercises.WORKOUT_ID));
+                workoutExercisesId = filteredCursor.getInt(mCursor.getColumnIndex(Contract.WorkoutExercises._ID));
+                //String selectedFromList = listView.getItemAtPosition(pos).toString();*/
+
+                openDialogEditDelete(v);
+
+                return true;
+            }
+        });
+
         myPlannerAdapter = new SimpleCursorAdapter(getActivity(), R.layout.planner_list_row_layout, null, columns, viewIds, 0);
 
         listView.setAdapter(myPlannerAdapter);
@@ -146,7 +171,7 @@ public class PlannerFragment extends Fragment {
             String wo_id = ""+MainActivity.plannerSelectedWorkoutId;
             Cursor c = getActivity().getContentResolver().query(Contract.Workouts.CONTENT_URI, new String[]{Contract.Workouts._ID, Contract.Workouts.NAME, Contract.Workouts.ISPAID}, "(" + Contract.Workouts._ID + "=?)", new String[]{wo_id}, null);
             c.moveToFirst();
-            Toast.makeText(getActivity(),"Plan this workout: " + c.getString(c.getColumnIndex(Contract.Workouts.NAME)) + " for date: " + MainActivity.plannerSelectedDate, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(),"Plan this workout: " + c.getString(c.getColumnIndex(Contract.Workouts.NAME)) + " for date: " + MainActivity.plannerSelectedDate, Toast.LENGTH_SHORT).show();
 
             ContentValues cv = new ContentValues();
             cv.put(Contract.Planners.WORKOUT_ID, wo_id);
@@ -197,5 +222,74 @@ public class PlannerFragment extends Fragment {
         MainActivity.plannerSelectedDate = MainActivity.phoneCalendar.get(Calendar.DAY_OF_MONTH)+"-"+ (MainActivity.phoneCalendar.get(Calendar.MONTH)+1) +"-"+MainActivity.phoneCalendar.get(Calendar.YEAR);
         planner.setDate(MainActivity.phoneCalendar.getTimeInMillis(),true,true);
         getworkouts();
+    }
+
+    public void openDialogEditDelete(View v)
+    {
+        // get prompts.xml view
+        LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+        final View promptView = layoutInflater.inflate(R.layout.input_dialog_delete, null);
+        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                getActivity());
+        alertDialogBuilder.setView(promptView);
+
+        // setup a dialog window
+        alertDialogBuilder
+                .setCancelable(false)
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        // create an alert dialog
+        final AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
+
+        //DELETE BUTTON
+        Button deleteRow;
+        deleteRow = (Button) promptView.findViewById(R.id.delete_row_button_dialog_id);
+        deleteRow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                deleteRowMethod(v);
+                alert.cancel();
+            }
+        });
+    }
+
+    public void deleteRowMethod(View v)
+    {
+        /*MainActivity.workoutDatasource.deleteExerciseForWorkout(getActivity(),workoutExercisesId);
+        Toast.makeText(getActivity().getBaseContext(), "Row deleted with Workout ID: " + selectedWorkoutId + " and Exercise ID: " + selectedExerciseId , Toast.LENGTH_SHORT).show();*/
+        reOpenFragment();
+    }
+
+    private void reOpenFragment() {
+/*        Cursor filteredCursor = ((SimpleCursorAdapter)WorkoutsFragment.listView.getAdapter()).getCursor();
+        filteredCursor.moveToPosition(WorkoutsFragment.currentWorkoutPosition);
+
+        String workoutId = filteredCursor.getString(filteredCursor.getColumnIndex(Contract.WorkoutColumns._ID));
+
+        Toast.makeText(getActivity().getBaseContext(), "" + workoutId, Toast.LENGTH_SHORT).show();
+
+        MainActivity.WORKOUT_ID = Integer.parseInt(workoutId);*/
+
+        Fragment newFragment = Fragment.instantiate(getActivity().getApplicationContext(), "be.howest.nmct3.workoutapp.PlannerFragment");
+        // consider using Java coding conventions (upper first char class names!!!)
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+        MainActivity.activeFragment = newFragment;
+        Toast.makeText(getActivity(), "Active fragment: " + newFragment.getClass().getSimpleName(),Toast.LENGTH_SHORT).show();
+        Log.d("", "Active fragment: " + newFragment.getClass().getSimpleName());
+
+        // Replace whatever is in the fragment_container view with this fragment,
+        // and add the transaction to the back1 stack
+        transaction.replace(R.id.main, newFragment);
+        transaction.addToBackStack(null);
+
+        // Commit the transaction
+        transaction.commit();
     }
 }
