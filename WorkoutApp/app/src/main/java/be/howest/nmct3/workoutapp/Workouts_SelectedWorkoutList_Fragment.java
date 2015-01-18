@@ -55,6 +55,8 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
     int selectedExerciseId;
     int workoutExercisesId;
 
+    String Owner;
+
     public Workouts_SelectedWorkoutList_Fragment() {
         // Required empty public constructor
     }
@@ -88,6 +90,10 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
 
         String[] columns = new String[] {Contract.Exercises.EXERCISE_NAME, Contract.WorkoutExercises.REPS };
         int[] viewIds = new int[] { R.id.workoutselected_item_title, R.id.workoutselected_item_reps };
+
+        Owner = MainActivity.workoutDatasource.getOwnerOfWorkout(getActivity().getApplicationContext(), mWorkoutId);
+        Toast.makeText(getActivity().getBaseContext(), "OWNER: " + Owner, Toast.LENGTH_SHORT).show();
+
 
         mAdapter = new SimpleCursorAdapter(getActivity(),
                 R.layout.workouts_workoutselected_list_item_layout, null,
@@ -220,7 +226,7 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
         menu.clear();
         super.onCreateOptionsMenu(menu, inflater);
 
-        if("ALL" == "ALL")
+        if(Owner.equals("ALL"))
         {
             inflater.inflate(R.menu.workouts_selectedworkoutlist_all, menu);
         }
