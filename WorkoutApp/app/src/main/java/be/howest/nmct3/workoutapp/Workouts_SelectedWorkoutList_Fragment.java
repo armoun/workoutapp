@@ -260,22 +260,26 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
 
                     @Override
                     public boolean onQueryTextChange(String s) {
-                        Log.d("", "--------- QUERY: " + s);
-                        mAdapter.setFilterQueryProvider(new FilterQueryProvider() {
-                            @Override
-                            public Cursor runQuery(CharSequence charSequence) {
-                                Log.d("", "" + charSequence);
-                                mAdapter.setFilterQueryProvider(new FilterQueryProvider() {
-                                    @Override
-                                    public Cursor runQuery(CharSequence charSequence) {
-                                        return getExercisesOfWorkoutByExerciseName(charSequence.toString());
-                                    }
-                                });
-                                return null;
-                            }
-                        });
-                        mAdapter.runQueryOnBackgroundThread(s);
-                        mAdapter.getFilter().filter(s);
+                        if(s.equals("")) {
+                            restartLoader();
+                        } else {
+                            Log.d("", "--------- QUERY: " + s);
+                            mAdapter.setFilterQueryProvider(new FilterQueryProvider() {
+                                @Override
+                                public Cursor runQuery(CharSequence charSequence) {
+                                    Log.d("", "" + charSequence);
+                                    mAdapter.setFilterQueryProvider(new FilterQueryProvider() {
+                                        @Override
+                                        public Cursor runQuery(CharSequence charSequence) {
+                                            return getExercisesOfWorkoutByExerciseName(charSequence.toString());
+                                        }
+                                    });
+                                    return null;
+                                }
+                            });
+                            mAdapter.runQueryOnBackgroundThread(s);
+                            mAdapter.getFilter().filter(s);
+                        }
                         return false;
                     }
                 });
@@ -382,4 +386,7 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
         return mData;
     }
 
+    public void restartLoader(){
+        getLoaderManager().restartLoader(0, null, this);
+    }
 }
