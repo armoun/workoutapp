@@ -219,7 +219,16 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.workouts_selectedworkoutlist, menu);
+
+        if("ALL" == "ALL")
+        {
+            inflater.inflate(R.menu.workouts_selectedworkoutlist_all, menu);
+        }
+        else
+        {
+            inflater.inflate(R.menu.workouts_selectedworkoutlist, menu);
+        }
+
     }
 
     @Override
