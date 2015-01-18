@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.FilterQueryProvider;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
@@ -70,7 +71,60 @@ public class Workout_Add_Exercise_List extends Fragment implements LoaderManager
 
         mAdapter = new SimpleCursorAdapter(getActivity(),
                 R.layout.new_workout_exercise_item_layout, null,
-                columns, viewIds, 0);
+                columns, viewIds, 0)
+        {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent)
+            {
+                View row = super.getView(position, convertView, parent);
+
+                mCursor.moveToPosition(position);
+
+
+
+                String type = mCursor.getString(mCursor.getColumnIndex(Contract.Exercises.MUSCLE_GROUP));
+
+                Toast.makeText(getActivity().getBaseContext(), "type: " + type, Toast.LENGTH_SHORT).show();
+
+                if(type.equals("chest"))
+                {
+                    ImageView imgExercise = (ImageView) row.findViewById(R.id.selectedworkout_image_exercises);
+                    imgExercise.setImageResource(R.drawable.chest_red);
+                }
+
+                if(type.equals("back"))
+                {
+                    ImageView imgExercise = (ImageView) row.findViewById(R.id.selectedworkout_image_exercises);
+                    imgExercise.setImageResource(R.drawable.back1_red);
+                }
+
+                if(type.equals("legs"))
+                {
+                    ImageView imgExercise = (ImageView) row.findViewById(R.id.selectedworkout_image_exercises);
+                    imgExercise.setImageResource(R.drawable.legs_red);
+                }
+
+                if(type.equals("arms"))
+                {
+                    ImageView imgExercise = (ImageView) row.findViewById(R.id.selectedworkout_image_exercises);
+                    imgExercise.setImageResource(R.drawable.arms_red);
+                }
+
+                if(type.equals("abs"))
+                {
+                    ImageView imgExercise = (ImageView) row.findViewById(R.id.selectedworkout_image_exercises);
+                    imgExercise.setImageResource(R.drawable.abs_red);
+                }
+
+                if(type.equals("shoulders"))
+                {
+                    ImageView imgExercise = (ImageView) row.findViewById(R.id.selectedworkout_image_exercises);
+                    imgExercise.setImageResource(R.drawable.shoulders_red);
+                }
+
+                return row;
+            }
+        };
 
         list.setAdapter(mAdapter);
 

@@ -8,6 +8,7 @@
     android:background="#FFF">
 
     <ImageView
+        android:id="@+id/selectedworkout_image_exercises"
         android:padding="0dp"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
