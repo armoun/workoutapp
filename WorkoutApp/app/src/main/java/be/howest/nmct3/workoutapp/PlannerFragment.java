@@ -209,8 +209,9 @@ public class PlannerFragment extends Fragment {
                                 " FROM "         + Contract.Workouts.CONTENT_DIRECTORY +
                                 " INNER JOIN "   + Contract.Planners.CONTENT_DIRECTORY +
                                 " ON "           + Contract.Workouts.CONTENT_DIRECTORY + "." + Contract.Workouts._ID + " = " + Contract.Planners.CONTENT_DIRECTORY + "." + Contract.Planners.WORKOUT_ID +
-                                " WHERE "        + Contract.Planners.CONTENT_DIRECTORY + "." + Contract.Planners.WO_DATE    + " = ? AND "
-                                                 + Contract.Planners.CONTENT_DIRECTORY + "." + Contract.Planners.DELETE     + " = 0",
+                                " WHERE "  + "(" + Contract.Planners.CONTENT_DIRECTORY + "." + Contract.Planners.WO_DATE    + " = ?) AND "
+                                           + "(" + Contract.Planners.CONTENT_DIRECTORY + "." + Contract.Planners.DELETE     + " = 0) AND "
+                                           + "(" + Contract.Workouts.CONTENT_DIRECTORY + "." + Contract.Workouts.DELETE     + " = 0)",
                 new String[]{MainActivity.plannerSelectedDate});
 
         Log.d("",DatabaseUtils.dumpCursorToString(mCursor));
