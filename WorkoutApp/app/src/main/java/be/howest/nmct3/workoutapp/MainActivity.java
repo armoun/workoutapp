@@ -69,6 +69,8 @@ public class MainActivity extends FragmentActivity {
 
     public static WorkoutDatasoure workoutDatasource;
 
+    public static boolean todaysWorkoutClicked = false;
+
     ActionBarDrawerToggle icon;
 
     // The authority for the sync adapter's content provider

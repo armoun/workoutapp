@@ -60,7 +60,16 @@ public class RepList extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.replist, menu);
+
+        if(MainActivity.todaysWorkoutClicked) {
+
+            Log.d("","onCreateOptionsMenu todaysworkout");
+            inflater.inflate(R.menu.replist_todaysworkout, menu);
+        } else {
+
+            Log.d("","onCreateOptionsMenu");
+            inflater.inflate(R.menu.replist, menu);
+        }
     }
 
     @Override

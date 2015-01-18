@@ -184,6 +184,7 @@ public class DashboardFragment extends Fragment {
 
                 if(MainActivity.WORKOUT_ID>0) {
                     newFragment = Fragment.instantiate(getActivity().getApplicationContext(), "be.howest.nmct3.workoutapp.Workouts_SelectedWorkoutList_Fragment");
+                    MainActivity.todaysWorkoutClicked = true;
                 } else {
                     newFragment = Fragment.instantiate(getActivity().getApplicationContext(), "be.howest.nmct3.workoutapp.PlannerFragment");
                 }

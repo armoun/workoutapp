@@ -82,6 +82,7 @@ public class WorkoutsFragment extends Fragment {
         String[] columns = new String[]{"name"};
         int[] viewIds = new int[]{R.id.workout_item_title};
 
+        MainActivity.todaysWorkoutClicked = false;
 
         // VERKEERDE WERKWIJZE !
         WorkoutsLoader wl = new WorkoutsLoader(getActivity());
