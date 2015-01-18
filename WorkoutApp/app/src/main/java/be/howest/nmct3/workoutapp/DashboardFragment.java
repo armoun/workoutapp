@@ -179,7 +179,15 @@ public class DashboardFragment extends Fragment {
         TodaysWorkout.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                Fragment newFragment = Fragment.instantiate(getActivity().getApplicationContext(), "be.howest.nmct3.workoutapp.Workouts_SelectedWorkoutList_Fragment");
+
+                Fragment newFragment;
+
+                if(MainActivity.WORKOUT_ID>0) {
+                    newFragment = Fragment.instantiate(getActivity().getApplicationContext(), "be.howest.nmct3.workoutapp.Workouts_SelectedWorkoutList_Fragment");
+                } else {
+                    newFragment = Fragment.instantiate(getActivity().getApplicationContext(), "be.howest.nmct3.workoutapp.PlannerFragment");
+                }
+
                 // consider using Java coding conventions (upper first char class names!!!)
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
 

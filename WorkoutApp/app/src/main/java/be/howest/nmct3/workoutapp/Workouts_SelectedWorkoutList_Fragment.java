@@ -35,6 +35,7 @@ import be.howest.nmct3.workoutapp.data.Contract;
 import be.howest.nmct3.workoutapp.data.DatabaseHelper;
 import be.howest.nmct3.workoutapp.data.ExercisesLoader;
 import be.howest.nmct3.workoutapp.data.SpecificWorkoutLoader;
+import be.howest.nmct3.workoutapp.data.WorkoutDatasoure;
 import be.howest.nmct3.workoutapp.json.ExercisesLoaderJson;
 
 
@@ -234,7 +235,6 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
         {
             inflater.inflate(R.menu.workouts_selectedworkoutlist, menu);
         }
-
     }
 
     @Override
