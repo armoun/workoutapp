@@ -2,6 +2,7 @@ package be.howest.nmct3.workoutapp.data;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 
 import java.net.InetAddress;
 import java.util.Date;
@@ -191,6 +192,10 @@ public class SettingsAdmin {
             return false;
         }
 
+    }
+
+    public static boolean isNetworkAvailable(Context context) {
+        return ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo() != null;
     }
 
 }

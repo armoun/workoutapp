@@ -1,7 +1,10 @@
 package be.howest.nmct3.workoutapp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -14,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.apache.http.HttpEntity;
@@ -80,48 +84,93 @@ public class LoginActivity extends Activity {
 
     public void LoginButton(View v) {
 
-        EditText Username = (EditText) findViewById(R.id.LoginUsernameTextbox);
-        EditText Password = (EditText) findViewById(R.id.LoginPasswordTextbox);
-
-        String LoginUsername = Username.getText().toString();
-        String LoginPassword = Password.getText().toString();
-
-        Integer ResponseCode = 404;
-
-        if (android.os.Build.VERSION.SDK_INT > 9) {
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-            try {
-                HttpGet httpRequest = new HttpGet("http://www.viktordebock.be/mad_backend/loginURL.php?username=" + LoginUsername + "&password=" + LoginPassword);
-                HttpEntity httpEntity = null;
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpResponse response = httpclient.execute(httpRequest);
-                ResponseCode = response.getStatusLine().getStatusCode();
-            } catch (ClientProtocolException e) {
-                // I keep catching this exception
-                e.printStackTrace();
-            } catch (IOException e) {
-                System.err.println("Check network");
-            }
-        }
-
-        if(ResponseCode == 201)
+        if(SettingsAdmin.getInstance(getApplicationContext()).isNetworkAvailable(getApplicationContext()) == true)
         {
-            // USERNANE IN SHARED PREFRENCES ZETTEN
-            Log.d("USERNAMEEEEEE: ", LoginUsername);
-            SettingsAdmin.getInstance(getApplicationContext()).setUsername(LoginUsername);
+            EditText Username = (EditText) findViewById(R.id.LoginUsernameTextbox);
+            EditText Password = (EditText) findViewById(R.id.LoginPasswordTextbox);
+
+            String LoginUsername = Username.getText().toString();
+            String LoginPassword = Password.getText().toString();
+
+            Integer ResponseCode = 404;
+
+            if (android.os.Build.VERSION.SDK_INT > 9) {
+                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+                StrictMode.setThreadPolicy(policy);
+                try {
+                    HttpGet httpRequest = new HttpGet("http://www.viktordebock.be/mad_backend/loginURL.php?username=" + LoginUsername + "&password=" + LoginPassword);
+                    HttpEntity httpEntity = null;
+                    HttpClient httpclient = new DefaultHttpClient();
+                    HttpResponse response = httpclient.execute(httpRequest);
+                    ResponseCode = response.getStatusLine().getStatusCode();
+                } catch (ClientProtocolException e) {
+                    // I keep catching this exception
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    System.err.println("Check network");
+                }
+            }
+
+            if(ResponseCode == 201)
+            {
+                // USERNANE IN SHARED PREFRENCES ZETTEN
+                Log.d("USERNAMEEEEEE: ", LoginUsername);
+                SettingsAdmin.getInstance(getApplicationContext()).setUsername(LoginUsername);
 
 
-            // DOORSTUREN NAAR APP
-            Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
-            //myIntent.putExtra("key", value); //Optional parameters
-            LoginActivity.this.startActivity(myIntent);
-            finish();
+                // DOORSTUREN NAAR APP
+                Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
+                //myIntent.putExtra("key", value); //Optional parameters
+                LoginActivity.this.startActivity(myIntent);
+                finish();
+            }
+            else
+            {
+                AlertDialog.Builder builder  = new AlertDialog.Builder(this)
+                        .setTitle("Error")
+                        .setMessage("Username and/or password not correct.")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                //dialog.cancel();
+                            }
+                        });
+
+                //.show();
+
+                //The tricky part
+                Dialog d = builder.show();
+                int dividerId = d.getContext().getResources().getIdentifier("android:id/titleDivider", null, null);
+                View divider = d.findViewById(dividerId);
+                divider.setBackgroundColor(getResources().getColor(R.color.headcolor));
+
+                int textViewId = d.getContext().getResources().getIdentifier("android:id/alertTitle", null, null);
+                TextView tv = (TextView) d.findViewById(textViewId);
+                tv.setTextColor(getResources().getColor(R.color.headcolor));
+            }
+
         }
         else
         {
-            Toast.makeText(getApplicationContext(), "TRY AGAIN",
-                    Toast.LENGTH_LONG).show();
+            AlertDialog.Builder builder  = new AlertDialog.Builder(this)
+                    .setTitle("Connection error")
+                    .setMessage("Please connect to the internet and try again.")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            //dialog.cancel();
+                        }
+                    });
+
+                    //.show();
+
+            //The tricky part
+            Dialog d = builder.show();
+            int dividerId = d.getContext().getResources().getIdentifier("android:id/titleDivider", null, null);
+            View divider = d.findViewById(dividerId);
+            divider.setBackgroundColor(getResources().getColor(R.color.headcolor));
+
+            int textViewId = d.getContext().getResources().getIdentifier("android:id/alertTitle", null, null);
+            TextView tv = (TextView) d.findViewById(textViewId);
+            tv.setTextColor(getResources().getColor(R.color.headcolor));
         }
 
     }
