@@ -382,9 +382,10 @@ public class DashboardFragment extends Fragment {
                                 " FROM "         + Contract.Workouts.CONTENT_DIRECTORY +
                                 " INNER JOIN "   + Contract.Planners.CONTENT_DIRECTORY +
                                 " ON "           + Contract.Workouts.CONTENT_DIRECTORY + "." + Contract.Workouts._ID + " = " + Contract.Planners.CONTENT_DIRECTORY + "." + Contract.Planners.WORKOUT_ID +
-                                " WHERE "        + Contract.Planners.CONTENT_DIRECTORY + "." + Contract.Planners.WO_DATE + " = ? AND "
-                                                 + Contract.Planners.CONTENT_DIRECTORY + "." + Contract.Planners.DELETE     + " = 0",
-                new String[]{date});
+                                " WHERE "  + "(" + Contract.Planners.CONTENT_DIRECTORY + "." + Contract.Planners.WO_DATE + " = ?) AND ("
+                                                 + Contract.Planners.CONTENT_DIRECTORY + "." + Contract.Planners.DELETE  + " = ?)"
+                                      + " AND (" + Contract.Workouts.CONTENT_DIRECTORY + "." + Contract.Workouts.DELETE  + " = ?)",
+                new String[]{date, "0", "0"});
 
         //Cursor c1 = db.rawQuery( "SELECT * FROM " + Contract.Planners.CONTENT_DIRECTORY, null);
 

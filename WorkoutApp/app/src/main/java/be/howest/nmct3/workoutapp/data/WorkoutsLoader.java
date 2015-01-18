@@ -28,8 +28,8 @@ public class WorkoutsLoader extends AsyncTaskLoader<Cursor> {
                         Contract.WorkoutColumns.NAME,
                         Contract.WorkoutColumns.ISPAID,
                         Contract.WorkoutColumns.DELETE},
-                Contract.Workouts.USERNAME + "=? OR " + Contract.Workouts.USERNAME + "= \"ALL\" AND " + Contract.Workouts.DELETE + "= 0",
-                new String[]{SettingsAdmin.getInstance(getContext()).getUsername()},
+                "(" + Contract.Workouts.USERNAME + "=? OR " + Contract.Workouts.USERNAME + "= \"ALL\") AND " + Contract.Workouts.DELETE + "=?",
+                new String[]{SettingsAdmin.getInstance(getContext()).getUsername(), "0"},
                 null,
                 null,
                 Contract.WorkoutColumns.ISPAID + " ASC"
