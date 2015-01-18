@@ -71,6 +71,7 @@ public class DashboardFragment extends Fragment {
     TextView Height;
     TextView BMI;
     TextView TodaysWorkout;
+    TextView grapviewText;
 
     String weight;
     String height;
@@ -105,6 +106,8 @@ public class DashboardFragment extends Fragment {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.dashboard_fragment_layout, null);
 
         de.hdodenhof.circleimageview.CircleImageView profilePicture = (de.hdodenhof.circleimageview.CircleImageView) root.findViewById(R.id.profile_image);
+
+        grapviewText = (TextView) root.findViewById(R.id.graphView_noData_text);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
@@ -211,21 +214,28 @@ public class DashboardFragment extends Fragment {
         }
         else
         {
-            Date d1 = calendar.getTime();
+            //Date d1 = calendar.getTime();
 
             //graphViewWeight.add("test");
 
             series = new LineGraphSeries<DataPoint>(new DataPoint[] {
 
             });
+
+            /*
             calendar.add(Calendar.DATE, 1);
             Date d = calendar.getTime();
             calendar.add(Calendar.DATE, 1);
             Date dd = calendar.getTime();
-            series.appendData(new DataPoint(d, 1),true,40);
+            series.appendData(new DataPoint(d, 0),true,40);
             graph.onDataChanged(true, true);
-            series.appendData(new DataPoint(dd, 5),true,40);
-            graph.onDataChanged(true, true);
+            series.appendData(new DataPoint(dd, 1),true,40);
+            graph.onDataChanged(true, true);*/
+
+            TextView noDataText = (TextView) root.findViewById(R.id.graphView_noData_text);
+            noDataText.setVisibility(View.VISIBLE);
+
+            graph.setVisibility(View.GONE);
         }
 
         //String[] graphViewWeightArray = graphViewWeight.toArray(new String[graphViewWeight.size()]);
@@ -250,6 +260,31 @@ public class DashboardFragment extends Fragment {
                 graph.onDataChanged(true, true);
 
             }
+        }
+        else
+        {
+            //Date d1 = calendar.getTime();
+
+            //graphViewWeight.add("test");
+
+            series = new LineGraphSeries<DataPoint>(new DataPoint[] {
+
+            });
+
+            /*
+            calendar.add(Calendar.DATE, 1);
+            Date d = calendar.getTime();
+            calendar.add(Calendar.DATE, 1);
+            Date dd = calendar.getTime();
+            series.appendData(new DataPoint(d, 0),true,40);
+            graph.onDataChanged(true, true);
+            series.appendData(new DataPoint(dd, 1),true,40);
+            graph.onDataChanged(true, true);*/
+
+            TextView noDataText = (TextView) root.findViewById(R.id.graphView_noData_text);
+            noDataText.setVisibility(View.VISIBLE);
+
+            graph.setVisibility(View.GONE);
         }
 
         // generate Dates
@@ -295,9 +330,13 @@ public class DashboardFragment extends Fragment {
         graph.getViewport().setXAxisBoundsManual(false);
 
         //adapt style to app layout
-        series.setColor(Color.rgb(246,93,81));
-        series.setThickness(8);
-        graph.addSeries(series);
+
+        if(graphViewWeightArray.size() > 1)
+        {
+            series.setColor(Color.rgb(246, 93, 81));
+            series.setThickness(8);
+            graph.addSeries(series);
+        }
 
         //hide labels
         graph.getGridLabelRenderer().setHorizontalLabelsVisible(false);
@@ -468,7 +507,7 @@ public class DashboardFragment extends Fragment {
 
                         editor = preferences.edit();
 
-                        editor.putString(SettingsAdmin.getInstance(getActivity().getApplicationContext()).getUsername()+"-WEIGHT",input_weight.getText().toString());
+                        editor.putString(SettingsAdmin.getInstance(getActivity().getApplicationContext()).getUsername() + "-WEIGHT", input_weight.getText().toString());
                         editor.apply();
 
                         Weight.setText(input_weight.getText().toString() + " kg");
@@ -477,15 +516,60 @@ public class DashboardFragment extends Fragment {
                         //CHANGE GRAPHVIEW
                         calendar.add(Calendar.DATE, 1);
                         Date d = calendar.getTime();
-                        series.appendData(new DataPoint(d, Integer.parseInt(input_weight.getText().toString())),true,40);
+
+
+                        series.appendData(new DataPoint(d, Integer.parseInt(input_weight.getText().toString())), true, 40);
                         graph.onDataChanged(true, false);
 
 
                         WeightsStringSpaced = WeightsStringSpaced + " " + input_weight.getText().toString();
-                        editor.putString(SettingsAdmin.getInstance(getActivity().getApplicationContext()).getUsername()+"-WeightsForGraph",WeightsStringSpaced);
+                        editor.putString(SettingsAdmin.getInstance(getActivity().getApplicationContext()).getUsername() + "-WeightsForGraph", WeightsStringSpaced);
 
                         editor.commit();
                         editor.apply();
+
+
+                        String[] parts = WeightsStringSpaced.split(" ");
+
+                        if(parts.length == 3)
+                        {
+                            WeightsStringSpaced = preferences.getString(SettingsAdmin.getInstance(getActivity().getApplicationContext()).getUsername() + "-WeightsForGraph", null);
+
+                            String[] partss = WeightsStringSpaced.split(" ");
+
+                            graphViewWeightArray = new ArrayList<String>(Arrays.asList(partss));
+                            graphViewWeightArray.remove(0);
+
+/*                            graph.removeAllSeries();
+
+                            //GENERATE DATAPOINTS
+                            for(int i = 0; i < graphViewWeightArray.size(); i++ ){
+
+                                //LENGTE VAN GRAPHVIEWWEIGHT EN GRAPHVIEWDATE ZIJN HETZELFDE
+
+                                calendar.add(Calendar.DATE, 1);
+                                Date date = calendar.getTime();
+
+                                //new DataPoint(d1, Integer.parseInt(graphViewWeightArray[i].toString()));
+                                series.appendData(new DataPoint(date, Integer.parseInt(graphViewWeightArray.get(i).toString())),true,40);
+                                graph.onDataChanged(true, true);
+
+                            }*/
+
+                            if(graphViewWeightArray.size() == 2)
+                            {
+                                series.setColor(Color.rgb(246, 93, 81));
+                                series.setThickness(8);
+                                graph.addSeries(series);
+                            }
+
+                            grapviewText.setVisibility(View.GONE);
+
+                            graph.setVisibility(View.VISIBLE);
+
+
+
+                        }
                     }
                 })
                 .setNegativeButton("Cancel",
