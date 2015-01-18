@@ -332,30 +332,33 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
     }
 
     private void reOpenFragment() {
-        Cursor filteredCursor = ((SimpleCursorAdapter)WorkoutsFragment.listView.getAdapter()).getCursor();
-        filteredCursor.moveToPosition(WorkoutsFragment.currentWorkoutPosition);
 
-        String workoutId = filteredCursor.getString(filteredCursor.getColumnIndex(Contract.WorkoutColumns._ID));
+        if(WorkoutsFragment.listView!=null) {
+            Cursor filteredCursor = ((SimpleCursorAdapter)WorkoutsFragment.listView.getAdapter()).getCursor();
+            filteredCursor.moveToPosition(WorkoutsFragment.currentWorkoutPosition);
 
-        Toast.makeText(getActivity().getBaseContext(), "" + workoutId, Toast.LENGTH_SHORT).show();
+            String workoutId = filteredCursor.getString(filteredCursor.getColumnIndex(Contract.WorkoutColumns._ID));
 
-        MainActivity.WORKOUT_ID = Integer.parseInt(workoutId);
+            Toast.makeText(getActivity().getBaseContext(), "" + workoutId, Toast.LENGTH_SHORT).show();
 
-        Fragment newFragment = Fragment.instantiate(getActivity().getApplicationContext(), "be.howest.nmct3.workoutapp.Workouts_SelectedWorkoutList_Fragment");
-        // consider using Java coding conventions (upper first char class names!!!)
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            MainActivity.WORKOUT_ID = Integer.parseInt(workoutId);
 
-        MainActivity.activeFragment = newFragment;
-        Toast.makeText(getActivity(), "Active fragment: " + newFragment.getClass().getSimpleName(),Toast.LENGTH_SHORT).show();
-        Log.d("", "Active fragment: " + newFragment.getClass().getSimpleName());
+            Fragment newFragment = Fragment.instantiate(getActivity().getApplicationContext(), "be.howest.nmct3.workoutapp.Workouts_SelectedWorkoutList_Fragment");
+            // consider using Java coding conventions (upper first char class names!!!)
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
-        // Replace whatever is in the fragment_container view with this fragment,
-        // and add the transaction to the back1 stack
-        transaction.replace(R.id.main, newFragment);
-        transaction.addToBackStack(null);
+            MainActivity.activeFragment = newFragment;
+            Toast.makeText(getActivity(), "Active fragment: " + newFragment.getClass().getSimpleName(),Toast.LENGTH_SHORT).show();
+            Log.d("", "Active fragment: " + newFragment.getClass().getSimpleName());
 
-        // Commit the transaction
-        transaction.commit();
+            // Replace whatever is in the fragment_container view with this fragment,
+            // and add the transaction to the back1 stack
+            transaction.replace(R.id.main, newFragment);
+            transaction.addToBackStack(null);
+
+            // Commit the transaction
+            transaction.commit();
+        }
     }
 
     private Cursor getExercisesOfWorkoutByExerciseName(String searchTerm) {
