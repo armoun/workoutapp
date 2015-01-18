@@ -99,4 +99,12 @@ public class WorkoutDatasoure {
         Uri uri = context.getContentResolver().insert(Contract.WorkoutExercises.CONTENT_URI, c);
         return uri;
     }
+
+    public String getOwnerOfWorkout(Context context, int id){
+        String wo_id = ""+id;
+        Cursor c = context.getContentResolver().query(Contract.Workouts.CONTENT_URI,new String[]{Contract.Workouts.USERNAME},Contract.Workouts._ID + "=?", new String[]{wo_id}, null);
+        c.moveToFirst();
+        String user = c.getString(c.getColumnIndex(Contract.Workouts.USERNAME));
+        return user;
+    }
 }
