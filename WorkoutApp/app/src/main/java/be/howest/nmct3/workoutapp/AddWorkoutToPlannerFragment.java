@@ -176,7 +176,7 @@ public class AddWorkoutToPlannerFragment extends android.support.v4.app.Fragment
         Cursor c = getActivity().getContentResolver().query(
                 Contract.Workouts.CONTENT_URI,
                 projection,
-                "(" + Contract.Workouts.NAME + " like ?)",
+                Contract.Workouts.NAME + " like ? AND " + Contract.Workouts.DELETE + " = 0",
                 new String[]{"%" + searchTerm + "%"},
                 Contract.WorkoutColumns.ISPAID + " ASC");
 

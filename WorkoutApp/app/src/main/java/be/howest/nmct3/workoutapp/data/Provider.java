@@ -52,6 +52,7 @@ public class Provider extends ContentProvider{
         sWorkoutsProjectionMap.put(Contract.Workouts.NAME,                          Contract.Workouts.NAME);
         sWorkoutsProjectionMap.put(Contract.Workouts.ISPAID,                        Contract.Workouts.ISPAID);
         sWorkoutsProjectionMap.put(Contract.Workouts.USERNAME,                      Contract.Workouts.USERNAME);
+        sWorkoutsProjectionMap.put(Contract.Workouts.DELETE,                        Contract.Workouts.DELETE);
 
         sExercisesProjectionMap = new HashMap<String, String>();
         sExercisesProjectionMap.put(Contract.Exercises._ID,                         Contract.Exercises._ID);
@@ -66,12 +67,14 @@ public class Provider extends ContentProvider{
         sWorkoutExercisesProjectionMap.put(Contract.WorkoutExercises.WORKOUT_ID,    Contract.WorkoutExercises.WORKOUT_ID);
         sWorkoutExercisesProjectionMap.put(Contract.WorkoutExercises.EXERCISE_ID,   Contract.WorkoutExercises.EXERCISE_ID);
         sWorkoutExercisesProjectionMap.put(Contract.WorkoutExercises.REPS,          Contract.WorkoutExercises.REPS);
+        sWorkoutExercisesProjectionMap.put(Contract.WorkoutExercises.DELETE,        Contract.WorkoutExercises.DELETE);
 
         sPlannerProjectionMap = new HashMap<String, String>();
-        sPlannerProjectionMap.put(Contract.Planners._ID,                             Contract.Planners._ID);
-        sPlannerProjectionMap.put(Contract.Planners.WORKOUT_ID,                      Contract.Planners.WORKOUT_ID);
-        sPlannerProjectionMap.put(Contract.Planners.WO_DATE,                         Contract.Planners.WO_DATE);
-        sPlannerProjectionMap.put(Contract.Planners.USERNAME,                        Contract.Planners.USERNAME);
+        sPlannerProjectionMap.put(Contract.Planners._ID,                            Contract.Planners._ID);
+        sPlannerProjectionMap.put(Contract.Planners.WORKOUT_ID,                     Contract.Planners.WORKOUT_ID);
+        sPlannerProjectionMap.put(Contract.Planners.WO_DATE,                        Contract.Planners.WO_DATE);
+        sPlannerProjectionMap.put(Contract.Planners.USERNAME,                       Contract.Planners.USERNAME);
+        sPlannerProjectionMap.put(Contract.Planners.DELETE,                         Contract.Planners.DELETE);
     }
 
     public Provider(){
@@ -210,13 +213,15 @@ public class Provider extends ContentProvider{
     public Uri insert(Uri uri, ContentValues values) {
         SQLiteDatabase db = mOpenHelper.getWritableDatabase();
 
-        Log.d(getClass().getCanonicalName(), "INSERT VALUES NOW IN PROVIDER__________________________________________________");
+        //Log.d(getClass().getCanonicalName(), "INSERT VALUES NOW IN PROVIDER__________________________________________________");
 
         long rowId;
         switch (sUriMatcher.match(uri)){
             case WORKOUTS:
                 if (!values.containsKey(Contract.Workouts.NAME))
                     throw  new IllegalArgumentException(Contract.Workouts.NAME + " is required for " + Contract.Workouts.CONTENT_DIRECTORY);
+
+                values.put(Contract.Workouts.DELETE, 0);
 
                 rowId = db.insert(
                         Contract.Workouts.CONTENT_DIRECTORY,
@@ -251,6 +256,8 @@ public class Provider extends ContentProvider{
                 if (!values.containsKey(Contract.WorkoutExercises.WORKOUT_ID))
                     throw  new IllegalArgumentException(Contract.WorkoutExercises.WORKOUT_ID + " is required for " + Contract.WorkoutExercises.CONTENT_DIRECTORY);
 
+                values.put(Contract.WorkoutExercises.DELETE, 0);
+
                 rowId = db.insert(
                         Contract.WorkoutExercises.CONTENT_DIRECTORY,
                         Contract.WorkoutExercises._ID,
@@ -267,6 +274,8 @@ public class Provider extends ContentProvider{
                 values.get(Contract.Planners.WORKOUT_ID);
                 if (!values.containsKey(Contract.Planners.WORKOUT_ID))
                     throw  new IllegalArgumentException(Contract.Planners.WORKOUT_ID + " is required for " + Contract.Planners.CONTENT_DIRECTORY);
+
+                values.put(Contract.Planners.DELETE, 0);
 
                 rowId = db.insert(
                         Contract.Planners.CONTENT_DIRECTORY,

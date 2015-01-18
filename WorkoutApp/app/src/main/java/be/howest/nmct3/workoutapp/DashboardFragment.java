@@ -314,11 +314,12 @@ public class DashboardFragment extends Fragment {
         String date = cal.get(Calendar.DAY_OF_MONTH) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.YEAR);
         Log.d("DashboardFragment","Date:" + date);
         SQLiteDatabase db = DatabaseHelper.getInstance(getActivity().getApplicationContext()).getReadableDatabase();
-        Cursor c = db.rawQuery( "SELECT "       + Contract.Workouts.CONTENT_DIRECTORY + "." + Contract.Workouts._ID + ", " + Contract.Workouts.CONTENT_DIRECTORY + "." + Contract.Workouts.NAME +
+        Cursor c = db.rawQuery( "SELECT "        + Contract.Workouts.CONTENT_DIRECTORY + "." + Contract.Workouts._ID + ", " + Contract.Workouts.CONTENT_DIRECTORY + "." + Contract.Workouts.NAME +
                                 " FROM "         + Contract.Workouts.CONTENT_DIRECTORY +
                                 " INNER JOIN "   + Contract.Planners.CONTENT_DIRECTORY +
                                 " ON "           + Contract.Workouts.CONTENT_DIRECTORY + "." + Contract.Workouts._ID + " = " + Contract.Planners.CONTENT_DIRECTORY + "." + Contract.Planners.WORKOUT_ID +
-                                " WHERE "        + Contract.Planners.CONTENT_DIRECTORY + "." + Contract.Planners.WO_DATE + " = ?",
+                                " WHERE "        + Contract.Planners.CONTENT_DIRECTORY + "." + Contract.Planners.WO_DATE + " = ? AND "
+                                                 + Contract.Planners.CONTENT_DIRECTORY + "." + Contract.Planners.DELETE     + " = 0",
                 new String[]{date});
 
         //Cursor c1 = db.rawQuery( "SELECT * FROM " + Contract.Planners.CONTENT_DIRECTORY, null);

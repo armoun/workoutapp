@@ -15,6 +15,7 @@ public class Contract {
         public static final String NAME = "name";
         public static final String ISPAID = "ispaid";
         public static final String USERNAME = "username";
+        public static final String DELETE = "delete";
     }
 
     public static final class Workouts implements WorkoutColumns{
@@ -33,6 +34,7 @@ public class Contract {
         public static final String WORKOUT_ID = "workout_id";
         public static final String EXERCISE_ID = "exercise_id";
         public static final String REPS = "reps";
+        public static final String DELETE = "delete";
 
     }
 
@@ -73,6 +75,7 @@ public class Contract {
         public static final String WORKOUT_ID = "workout_id";
         public static final String WO_DATE = "wo_date";
         public static final String USERNAME = "username";
+        public static final String DELETE = "delete";
     }
 
     public static final class Planners implements PlannersColumns {

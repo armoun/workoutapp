@@ -34,7 +34,7 @@ public class SpecificWorkoutLoader extends AsyncTaskLoader<Cursor> {
                                 " ON " + Contract.Exercises.CONTENT_DIRECTORY + "." + Contract.ExerciseColumns._ID + " = " + Contract.WorkoutExercises.CONTENT_DIRECTORY + "." + Contract.WorkoutExerciseColumns.EXERCISE_ID +
                                 " INNER JOIN " + Contract.Workouts.CONTENT_DIRECTORY +
                                 " ON " + Contract.WorkoutExercises.CONTENT_DIRECTORY + "." + Contract.WorkoutExerciseColumns.WORKOUT_ID + " = " + Contract.Workouts.CONTENT_DIRECTORY + "." + Contract.WorkoutColumns._ID +
-                                " WHERE " + Contract.Workouts.CONTENT_DIRECTORY + "." + Contract.WorkoutColumns._ID + " = ? ",
+                                " WHERE " + Contract.Workouts.CONTENT_DIRECTORY + "." + Contract.WorkoutColumns._ID + " = ? AND " + Contract.WorkoutExercises.CONTENT_DIRECTORY + "." + Contract.WorkoutExercises.DELETE + " = 0",
                                 new String[]{mWorkoutID});
             //mData = db.rawQuery("SELECT * FROM workouts WHERE _id = ?", new String[]{mWorkoutID});
         }

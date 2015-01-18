@@ -67,7 +67,8 @@ public class DatabaseHelper extends SQLiteOpenHelper{
                 + Contract.WorkoutColumns._ID       + " INTEGER PRIMARY KEY, "
                 + Contract.WorkoutColumns.NAME      + " TEXT,"
                 + Contract.WorkoutColumns.ISPAID    + " INTEGER,"
-                + Contract.WorkoutColumns.USERNAME  + " TEXT"
+                + Contract.WorkoutColumns.USERNAME  + " TEXT, "
+                + Contract.WorkoutColumns.DELETE    + " INTEGER"
                 + ");";
 
         Log.d("DatabaseHelper","Workouts: " + SQL);
@@ -81,7 +82,8 @@ public class DatabaseHelper extends SQLiteOpenHelper{
                 + Contract.WorkoutExerciseColumns._ID           + " INTEGER PRIMARY KEY, "
                 + Contract.WorkoutExerciseColumns.WORKOUT_ID    + " INTEGER, "
                 + Contract.WorkoutExerciseColumns.EXERCISE_ID   + " INTEGER, "
-                + Contract.WorkoutExerciseColumns.REPS          + " TEXT"
+                + Contract.WorkoutExerciseColumns.REPS          + " TEXT, "
+                + Contract.WorkoutExerciseColumns.DELETE        + " INTEGER"
                 + ");";
         db.execSQL(SQL);
         Log.d("DatabaseHelper","WorkoutExercises: " + SQL);
@@ -104,7 +106,8 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         String SQL = "CREATE TABLE " + Contract.Planners.CONTENT_DIRECTORY + " ("
                 + Contract.PlannersColumns._ID                   + " INTEGER PRIMARY KEY, "
                 + Contract.PlannersColumns.WORKOUT_ID            + " INTEGER, "
-                + Contract.PlannersColumns.WO_DATE               + " TEXT"
+                + Contract.PlannersColumns.WO_DATE               + " TEXT, "
+                + Contract.PlannersColumns.DELETE                + " INTEGER "
                 + ");";
         db.execSQL(SQL);
         Log.d("DatabaseHelper","Planner: " + SQL);

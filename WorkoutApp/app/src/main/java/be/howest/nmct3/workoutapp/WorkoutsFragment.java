@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -123,8 +124,7 @@ public class WorkoutsFragment extends Fragment {
         return root;
     }
 
-    public void openDialogEditDelete(View v, String SelectedText, final int selectedID)
-    {
+    public void openDialogEditDelete(View v, String SelectedText, final int selectedID){
         // get prompts.xml view
         LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
         final View promptView = layoutInflater.inflate(R.layout.input_dialog_edit_delete, null);
@@ -171,8 +171,7 @@ public class WorkoutsFragment extends Fragment {
         });
     }
 
-    public void deleteRowMethod(View v, int selectedItemID)
-    {
+    public void deleteRowMethod(View v, int selectedItemID){
         MainActivity.workoutDatasource.deleteWorkout(getActivity(),selectedItemID);
         Toast.makeText(getActivity().getBaseContext(), "Row deleted with id: " + selectedItemID , Toast.LENGTH_SHORT).show();
         reOpenFragment();
@@ -279,7 +278,7 @@ public class WorkoutsFragment extends Fragment {
         Cursor c = getActivity().getContentResolver().query(
                 Contract.Workouts.CONTENT_URI,
                 projection,
-                "(" + Contract.Workouts.NAME + " like ?)",
+                Contract.Workouts.NAME + " like ? AND " + Contract.Workouts.DELETE + " = 0",
                 new String[]{"%" + searchTerm + "%"},
                 Contract.WorkoutColumns.ISPAID + " ASC");
 
