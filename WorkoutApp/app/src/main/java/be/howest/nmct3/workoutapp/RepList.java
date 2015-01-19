@@ -35,7 +35,7 @@ public class RepList extends Fragment {
 
     private ListAdapter myListAdapter;
     ListView list;
-
+    private String[] reps;
     String Owner;
 
     public RepList() {
@@ -173,7 +173,7 @@ public class RepList extends Fragment {
 
             public boolean onItemLongClick(AdapterView<?> arg0, View v,
                                            int pos, long id) {
-                // TODO Auto-generated method stub
+                //
 
                 //Toast.makeText(getActivity().getBaseContext(), "Long Clicked on" + pos, Toast.LENGTH_SHORT).show();
 
@@ -186,7 +186,7 @@ public class RepList extends Fragment {
                 //HIER MOET DE REP OPGEHAALD WORDEN
 
                 //selectedFromList = ""+ filteredCursor.getString(filteredCursor.getColumnIndex(Contract.WorkoutExercises.REPS));
-
+                selectedFromList = reps[pos];
 
                 if(Owner.equals("ALL"))
                 {
@@ -214,7 +214,7 @@ public class RepList extends Fragment {
                 else
                 {
                     //String selectedFromList = listView.getItemAtPosition(pos).toString();
-                    openDialogEditDelete(v, selectedFromList);
+                    openDialogEditDelete(v, selectedFromList, pos);
                 }
 
                 return true;
@@ -227,7 +227,7 @@ public class RepList extends Fragment {
     }
 
 
-    public void openDialogEditDelete(View v, String SelectedText)
+    public void openDialogEditDelete(View v, String SelectedText, int pos)
     {
         // get prompts.xml view
         LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
@@ -240,14 +240,37 @@ public class RepList extends Fragment {
         final EditText input_for_row = (EditText) promptView.findViewById(R.id.input_for_row);
         input_for_row.setText(SelectedText);
 
+        final int posi = pos;
+
         // setup a dialog window
         alertDialogBuilder
                 .setCancelable(false)
                 .setPositiveButton("Edit", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
 
+                        String newRep = input_for_row.getText().toString();
+                        Log.d("Edit rep", newRep);
+                        reps[posi] = newRep;
+                        Log.d("Edit rep", newRep + " " + posi + " " + reps[posi]);
+                        String allreps = "";
+                        if(reps.length > 1){
+                            for(String str: reps) {
+                                if(!str.equals("")){
+                                    allreps = allreps + " " + str;
+                                }
+                            }
+                            allreps = allreps.substring(1);
+                        }else{
+                            allreps = newRep;
+                        }
 
+                        Log.d("Edit rep", newRep + " " + posi + " " + reps[posi] + " " + allreps);
 
+                        ContentValues c = new ContentValues();
+                        c.put(Contract.WorkoutExercises.REPS, allreps);
+                        String w = "" + MainActivity.WORKOUT_EXERCICE_ID;
+                        getActivity().getContentResolver().update(Contract.WorkoutExercises.CONTENT_URI, c, Contract.WorkoutExercises._ID + "=?", new String[]{w});
+                        reOpenFragment();
 
                     }
                 })
@@ -263,26 +286,47 @@ public class RepList extends Fragment {
         alert.show();
 
         //DELETE BUTTON
+
         Button deleteRow;
         deleteRow = (Button) promptView.findViewById(R.id.delete_row_button_dialog_id);
         deleteRow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                deleteRowMethod(v);
+                deleteRowMethod(v, posi);
                 alert.cancel();
             }
         });
     }
 
-    public void deleteRowMethod(View v)
+    public void deleteRowMethod(View v, int pos)
     {
+        //TODO
+
+        reps[pos] = "";
+        String allreps = "";
+        if(reps.length > 1){
+            for(String str: reps) {
+                if(!str.equals("")){
+                    allreps = allreps + " " + str;
+                }
+            }
+            allreps = allreps.substring(1);
+        }else{
+            //TODO DIALOG MUST HAVE AT LEAST 1 REPETITION
+        }
+
+        ContentValues c = new ContentValues();
+        c.put(Contract.WorkoutExercises.REPS, allreps);
+        String w = "" + MainActivity.WORKOUT_EXERCICE_ID;
+        getActivity().getContentResolver().update(Contract.WorkoutExercises.CONTENT_URI, c, Contract.WorkoutExercises._ID + "=?", new String[]{w});
+
         //Toast.makeText(getActivity().getBaseContext(), "Row deleted" , Toast.LENGTH_SHORT).show();
         reOpenFragment();
     }
 
     class repsAdapter extends ArrayAdapter<String>
     {
-        private String[] reps;
+        //private String[] reps;
 
         public repsAdapter()
         {
