@@ -55,6 +55,7 @@ public class Workout_Add_Exercise_List extends Fragment implements LoaderManager
         inflater.inflate(R.menu.workout_add_exercise, menu);
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -140,6 +141,16 @@ public class Workout_Add_Exercise_List extends Fragment implements LoaderManager
                                     long id) {
                 Cursor filteredCursor = ((SimpleCursorAdapter)list.getAdapter()).getCursor();
                 filteredCursor.moveToPosition(position);
+
+                int ex_id = filteredCursor.getInt(filteredCursor.getColumnIndex(Contract.Exercises._ID));
+                int wo_id = MainActivity.WORKOUT_ID;
+
+                ContentValues values = new ContentValues();
+                values.put(Contract.WorkoutExercises.WORKOUT_ID, wo_id);
+                values.put(Contract.WorkoutExercises.EXERCISE_ID, ex_id);
+                values.put(Contract.WorkoutExercises.REPS, "12 12 12");
+                getActivity().getContentResolver().insert(Contract.WorkoutExercises.CONTENT_URI, values);
+
                 String exerciseId = ""+ filteredCursor.getInt(filteredCursor.getColumnIndex(Contract.Exercises._ID));
                 //Toast.makeText(getActivity().getBaseContext(), "" + exerciseId, Toast.LENGTH_SHORT).show();
                 String exerciseName = ""+filteredCursor.getString(filteredCursor.getColumnIndex(Contract.Exercises.EXERCISE_NAME));
@@ -156,15 +167,6 @@ public class Workout_Add_Exercise_List extends Fragment implements LoaderManager
                 final Bundle bundle = new Bundle();
                 bundle.putString("selected_exercise", exerciseName);
                 newFragment.setArguments(bundle);
-
-                int ex_id = filteredCursor.getInt(filteredCursor.getColumnIndex(Contract.Exercises._ID));
-                int wo_id = MainActivity.WORKOUT_ID;
-
-                ContentValues values = new ContentValues();
-                values.put(Contract.WorkoutExercises.WORKOUT_ID, wo_id);
-                values.put(Contract.WorkoutExercises.EXERCISE_ID, ex_id);
-                values.put(Contract.WorkoutExercises.REPS, "12 12 12");
-                getActivity().getContentResolver().insert(Contract.WorkoutExercises.CONTENT_URI, values);
 
                 // Replace whatever is in the fragment_container view with this fragment,
                 // and add the transaction to the back1 stack
@@ -198,9 +200,7 @@ public class Workout_Add_Exercise_List extends Fragment implements LoaderManager
 
                     @Override
                     public boolean onQueryTextChange(String s) {
-                        if(s.equals("")){
-                            restartLoader();
-                        }else{
+
                             Log.d("", "--------- QUERY: " + s);
                             mAdapter.setFilterQueryProvider(new FilterQueryProvider() {
                                 @Override
@@ -217,7 +217,7 @@ public class Workout_Add_Exercise_List extends Fragment implements LoaderManager
                             });
                             mAdapter.runQueryOnBackgroundThread(s);
                             mAdapter.getFilter().filter(s);
-                        }
+
                         return false;
                     }
                 });
@@ -228,7 +228,7 @@ public class Workout_Add_Exercise_List extends Fragment implements LoaderManager
     }
 
     public void restartLoader(){
-        getLoaderManager().restartLoader(0, null, this);
+        //getLoaderManager().restartLoader(0, null, this);
     }
 
     private Cursor getExercisesByExerciseName(String searchTerm) {
@@ -238,13 +238,24 @@ public class Workout_Add_Exercise_List extends Fragment implements LoaderManager
                 Contract.Exercises.DESCRIPTION,
                 Contract.Exercises.MUSCLE_GROUP
         };
+        Cursor c;
+        if(searchTerm.equals("")){
+                c = getActivity().getContentResolver().query(
+                    Contract.Exercises.CONTENT_URI,
+                    projection,
+                    null,
+                    null,
+                    Contract.ExerciseColumns.EXERCISE_NAME + " ASC");
+        }else {
+            c = getActivity().getContentResolver().query(
+                    Contract.Exercises.CONTENT_URI,
+                    projection,
+                    "(" + Contract.Exercises.EXERCISE_NAME + " like ?)",
+                    new String[]{"%" + searchTerm + "%"},
+                    Contract.ExerciseColumns.EXERCISE_NAME + " ASC");
+        }
 
-        Cursor c = getActivity().getContentResolver().query(
-                Contract.Exercises.CONTENT_URI,
-                projection,
-                "(" + Contract.Exercises.EXERCISE_NAME + " like ?)",
-                new String[]{"%" + searchTerm + "%"},
-                Contract.ExerciseColumns.EXERCISE_NAME + " ASC");
+
 
         return c;
     }
