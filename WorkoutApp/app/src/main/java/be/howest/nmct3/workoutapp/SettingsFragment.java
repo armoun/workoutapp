@@ -26,6 +26,7 @@ import android.widget.CursorAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -52,7 +53,7 @@ public class SettingsFragment extends Fragment {
     public ImageView imageViewProfilePicture;
     public static ListView listview;
 
-    public static final String[] Settings = {"Name", "Gender", "Date of Birth", "E-mail", "Picture"};
+    public static final String[] Settings = {"Name", "Gender", "Date of Birth", "E-mail", "Picture", "Support"};
     //public static final String[] Settings = {"Name", "Gender", "Date of Birth", "E-mail", "Picture", "Units"};
 
     public SettingsFragment() {
@@ -181,6 +182,16 @@ public class SettingsFragment extends Fragment {
 
                 imagePreview.setVisibility(View.VISIBLE);
 
+            }
+
+            if(position == 5)
+            {
+                row.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(final View v) {
+                        donatePaypal(v);
+                    }
+                });
             }
 
             return row;
@@ -376,6 +387,41 @@ public class SettingsFragment extends Fragment {
 
                     }
                 })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        // create an alert dialog
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
+    }
+
+    public void donatePaypal(View v) {
+        // get prompts.xml view
+        LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+        View promptView = layoutInflater.inflate(R.layout.settings_dialog_donatepaypal, null);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                getActivity());
+        alertDialogBuilder.setView(promptView);
+
+        final Button donateButton = (Button) promptView.findViewById(R.id.donate_button);
+
+        donateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String url = "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QW3G6TGKNS9JJ";
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+            }
+        });
+
+        // setup a dialog window
+        alertDialogBuilder
+                .setCancelable(false)
                 .setNegativeButton("Cancel",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {

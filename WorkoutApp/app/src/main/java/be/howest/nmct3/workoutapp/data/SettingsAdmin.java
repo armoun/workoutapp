@@ -94,7 +94,7 @@ public class SettingsAdmin {
                 settingValue = "Change picture";
                 break;
             case 5:
-                settingValue = getUnits();
+                settingValue = "Donate €5,00 via paypal";
                 break;
             default:
                 settingValue = "No value";
