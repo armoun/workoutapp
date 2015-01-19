@@ -166,7 +166,7 @@ public class PlannerFragment extends Fragment {
             String wo_id = ""+MainActivity.plannerSelectedWorkoutId;
             Cursor c = getActivity().getContentResolver().query(Contract.Workouts.CONTENT_URI, new String[]{Contract.Workouts._ID, Contract.Workouts.NAME, Contract.Workouts.ISPAID}, "(" + Contract.Workouts._ID + "=?)", new String[]{wo_id}, null);
             c.moveToFirst();
-                        Toast.makeText(getActivity(),"Plan this workout: " + c.getString(c.getColumnIndex(Contract.Workouts.NAME)) + " for date: " + MainActivity.plannerSelectedDate, Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getActivity(),"Plan this workout: " + c.getString(c.getColumnIndex(Contract.Workouts.NAME)) + " for date: " + MainActivity.plannerSelectedDate, Toast.LENGTH_SHORT).show();
 
             ContentValues cv = new ContentValues();
             cv.put(Contract.Planners.WORKOUT_ID, wo_id);
@@ -280,7 +280,7 @@ public class PlannerFragment extends Fragment {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
         MainActivity.activeFragment = newFragment;
-        Toast.makeText(getActivity(), "Active fragment: " + newFragment.getClass().getSimpleName(),Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "Active fragment: " + newFragment.getClass().getSimpleName(),Toast.LENGTH_SHORT).show();
         Log.d("", "Active fragment: " + newFragment.getClass().getSimpleName());
 
         // Replace whatever is in the fragment_container view with this fragment,

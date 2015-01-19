@@ -344,7 +344,7 @@ public class RepList extends Fragment {
 
             c.moveToFirst();
 
-            Toast.makeText(getActivity(), "ID: " + we_id,Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), "ID: " + we_id,Toast.LENGTH_SHORT).show();
 
             Log.d("RepList", DatabaseUtils.dumpCursorToString(c));
 

@@ -137,7 +137,7 @@ public class WorkoutsFragment extends Fragment implements LoaderManager.LoaderCa
                                            int pos, long id) {
                 // TODO Auto-generated method stub
 
-                Toast.makeText(getActivity().getBaseContext(), "Long Clicked on" + pos , Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity().getBaseContext(), "Long Clicked on" + pos , Toast.LENGTH_SHORT).show();
 
                 Cursor filteredCursor = ((SimpleCursorAdapter)listView.getAdapter()).getCursor();
                 filteredCursor.moveToPosition(pos);
@@ -205,7 +205,7 @@ public class WorkoutsFragment extends Fragment implements LoaderManager.LoaderCa
                     public void onClick(DialogInterface dialog, int id) {
 
                         MainActivity.workoutDatasource.updateWorkoutName(getActivity(),selectedID, input_for_row.getText().toString());
-                        Toast.makeText(getActivity(), "Workout name changed to " + input_for_row.getText().toString() + " with ID: " + selectedID,Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getActivity(), "Workout name changed to " + input_for_row.getText().toString() + " with ID: " + selectedID,Toast.LENGTH_LONG).show();
                         reOpenFragment();
 
                     }
@@ -235,7 +235,7 @@ public class WorkoutsFragment extends Fragment implements LoaderManager.LoaderCa
 
     public void deleteRowMethod(View v, int selectedItemID){
         MainActivity.workoutDatasource.deleteWorkout(getActivity(),selectedItemID);
-        Toast.makeText(getActivity().getBaseContext(), "Row deleted with id: " + selectedItemID , Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity().getBaseContext(), "Row deleted with id: " + selectedItemID , Toast.LENGTH_SHORT).show();
         reOpenFragment();
     }
 
@@ -265,7 +265,7 @@ public class WorkoutsFragment extends Fragment implements LoaderManager.LoaderCa
 
             //Geklikt op search bij workouts
             case R.id.action_search_workouts:
-                Toast.makeText(getActivity(), item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
                 SearchView searchView = (SearchView)item.getActionView();
                 searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                     @Override
@@ -306,7 +306,7 @@ public class WorkoutsFragment extends Fragment implements LoaderManager.LoaderCa
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
 
         MainActivity.activeFragment = frag;
-        Toast.makeText(getActivity(), "Active fragment: " + frag.getClass().getSimpleName(),Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "Active fragment: " + frag.getClass().getSimpleName(),Toast.LENGTH_SHORT).show();
 
         transaction.replace(R.id.main, frag);
         transaction.addToBackStack(null);
@@ -321,7 +321,7 @@ public class WorkoutsFragment extends Fragment implements LoaderManager.LoaderCa
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
 
         MainActivity.activeFragment = frag;
-        Toast.makeText(getActivity(), "Active fragment: " + frag.getClass().getSimpleName(),Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "Active fragment: " + frag.getClass().getSimpleName(),Toast.LENGTH_SHORT).show();
 
         transaction.replace(R.id.main, frag);
         transaction.addToBackStack(null);
@@ -353,7 +353,7 @@ public class WorkoutsFragment extends Fragment implements LoaderManager.LoaderCa
 
         String workoutId = filteredCursor.getString(filteredCursor.getColumnIndex(Contract.WorkoutColumns._ID));
 
-        Toast.makeText(getActivity().getBaseContext(), "" + workoutId, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity().getBaseContext(), "" + workoutId, Toast.LENGTH_SHORT).show();
 
         MainActivity.WORKOUT_ID = Integer.parseInt(workoutId);
 

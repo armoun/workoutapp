@@ -103,7 +103,7 @@ public class AddWorkoutToPlannerFragment extends android.support.v4.app.Fragment
         switch (item.getItemId()) {
             //Geklikt op search bij workouts
             case R.id.action_search_workouts:
-                Toast.makeText(getActivity(), item.getTitle() + " clicked!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), item.getTitle() + " clicked!", Toast.LENGTH_SHORT).show();
                 SearchView searchView = (SearchView)item.getActionView();
                 searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                     @Override

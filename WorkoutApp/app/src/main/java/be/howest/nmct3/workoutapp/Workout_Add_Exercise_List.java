@@ -84,7 +84,7 @@ public class Workout_Add_Exercise_List extends Fragment implements LoaderManager
 
                 String type = mCursor.getString(mCursor.getColumnIndex(Contract.Exercises.MUSCLE_GROUP));
 
-                Toast.makeText(getActivity().getBaseContext(), "type: " + type, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity().getBaseContext(), "type: " + type, Toast.LENGTH_SHORT).show();
 
                 if(type.equals("chest"))
                 {
@@ -183,7 +183,7 @@ public class Workout_Add_Exercise_List extends Fragment implements LoaderManager
 
             //Geklikt op search bij add exercise to workout
             case R.id.action_search_workout_add_exercise:
-                Toast.makeText(getActivity(), item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
                 SearchView searchView = (SearchView)item.getActionView();
                 searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                     @Override

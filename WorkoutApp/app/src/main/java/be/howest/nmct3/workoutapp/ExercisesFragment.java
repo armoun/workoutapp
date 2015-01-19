@@ -64,7 +64,7 @@ public class ExercisesFragment extends Fragment {
         {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id)
             {
-                Toast.makeText(getActivity().getBaseContext(), "Musclegroup " + MainActivity.MuscleGroups[position] + " selected", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity().getBaseContext(), "Musclegroup " + MainActivity.MuscleGroups[position] + " selected", Toast.LENGTH_SHORT).show();
                 MainActivity.EXTRA_SELECTED_MUSCLEGROUP = MainActivity.MuscleGroups[position];
 
                 Fragment newFragment = Fragment.instantiate(getActivity().getApplicationContext(), "be.howest.nmct3.workoutapp.Exercises_Musclegroup_Fragment");

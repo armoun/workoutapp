@@ -193,7 +193,7 @@ public class DashboardFragment extends Fragment {
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
                 MainActivity.activeFragment = newFragment;
-                Toast.makeText(getActivity(), "Active fragment: " + newFragment.getClass().getSimpleName(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "Active fragment: " + newFragment.getClass().getSimpleName(), Toast.LENGTH_SHORT).show();
 
                 // Replace whatever is in the fragment_container view with this fragment,
                 // and add the transaction to the back1 stack
@@ -213,7 +213,7 @@ public class DashboardFragment extends Fragment {
         graph.setOnLongClickListener(new View.OnLongClickListener(){
               @Override
               public boolean onLongClick(View v) {
-                  Toast.makeText(getActivity(),"RESET GRAPH", Toast.LENGTH_SHORT).show();
+                  //Toast.makeText(getActivity(),"RESET GRAPH", Toast.LENGTH_SHORT).show();
 
                   openDialogEditDelete(v);
 
@@ -706,7 +706,7 @@ public class DashboardFragment extends Fragment {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
         MainActivity.activeFragment = newFragment;
-        Toast.makeText(getActivity(), "Active fragment: " + newFragment.getClass().getSimpleName(),Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "Active fragment: " + newFragment.getClass().getSimpleName(),Toast.LENGTH_SHORT).show();
         Log.d("", "Active fragment: " + newFragment.getClass().getSimpleName());
 
         // Replace whatever is in the fragment_container view with this fragment,
