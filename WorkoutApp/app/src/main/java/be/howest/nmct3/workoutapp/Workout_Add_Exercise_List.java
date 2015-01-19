@@ -79,24 +79,11 @@ public class Workout_Add_Exercise_List extends Fragment implements LoaderManager
             {
                 View row = super.getView(position, convertView, parent);
 
-<<<<<<< HEAD
-                mCursor.moveToPosition(position);
-
-                String type = mCursor.getString(mCursor.getColumnIndex(Contract.Exercises.MUSCLE_GROUP));
-=======
                 Cursor filteredCursor = ((SimpleCursorAdapter)list.getAdapter()).getCursor();
                 filteredCursor.moveToPosition(position);
->>>>>>> FETCH_HEAD
 
-                String target = mCursor.getString(mCursor.getColumnIndex(Contract.Exercises.TARGET));
-
-<<<<<<< HEAD
-                TextView targetTextView = (TextView) row.findViewById(R.id.exercises_target);
-
-                targetTextView.setText(target);
-=======
                 String type = filteredCursor.getString(filteredCursor.getColumnIndex(Contract.Exercises.MUSCLE_GROUP));
->>>>>>> FETCH_HEAD
+
 
                 //Toast.makeText(getActivity().getBaseContext(), "type: " + type, Toast.LENGTH_SHORT).show();
 
