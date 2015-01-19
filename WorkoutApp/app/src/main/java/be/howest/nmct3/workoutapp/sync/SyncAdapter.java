@@ -8,6 +8,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.SyncResult;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -24,6 +25,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.HttpURLConnection;
+import java.net.URLEncoder;
 
 import be.howest.nmct3.workoutapp.data.Contract;
 import be.howest.nmct3.workoutapp.data.SettingsAdmin;
@@ -55,6 +57,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     public static final String UPLOAD_URL_WORKOUTEXERCISES = "http://www.viktordebock.be/mad_backend/add/addexercisetoworkout/?";
     public static final String FEED_URL_PLANNER = "http://viktordebock.be/mad_backend/api/plannerworkoutsbyusernameanddate/index.php?username=";
     public static final String UPLOAD_URL_PLANNER = "http://www.viktordebock.be/mad_backend/add/addplannerworkoutbyusernameandworkoutidanddate/?";
+    public static final String DELETE_URL_WORKOUTS = "http://www.viktordebock.be/mad_backend/delete/deleteworkout/index.php?";
+    public static final String DELETE_URL_PLANNER = "http://www.viktordebock.be/mad_backend/delete/deleteplannerworkout/index.php?";
 
     private static final int NET_CONNECT_TIMEOUT_MILLIS = 15000;  // 15 seconds
 
@@ -64,7 +68,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     public void onPerformSync(Account account, Bundle bundle, String s, ContentProviderClient contentProviderClient, SyncResult syncResult) {
         //  exercises
         if(SyncAdmin.getInstance(mContext).getAllowExercisesDownload()){
-            if(SettingsAdmin.getInstance(getContext()).isInternetAvailable()){
+            if(SettingsAdmin.isNetworkAvailable(getContext())){
                 downloadExercises(contentProviderClient, syncResult);
                 SyncAdmin.getInstance(mContext).setAllowExercisesDownload(false);
             }
@@ -72,7 +76,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
         //  workouts
         if (SyncAdmin.getInstance(mContext).getAllowWorkoutsDownload()){
-            if(SettingsAdmin.getInstance(getContext()).isInternetAvailable()){
+            if(SettingsAdmin.isNetworkAvailable(getContext())){
                 downloadWorkouts(contentProviderClient, syncResult);
                 SyncAdmin.getInstance(mContext).setAllowWorkoutsDownload(false);
             }
@@ -80,23 +84,26 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         }
 
         if(SyncAdmin.getInstance(mContext).getAllowWorkoutsUpload()){
-            if(SettingsAdmin.getInstance(getContext()).isInternetAvailable()){
+            if(SettingsAdmin.isNetworkAvailable(getContext())){
                 uploadWorkouts(contentProviderClient, syncResult);
+                SyncAdmin.getInstance(mContext).setAllowWorkoutsUpload(false);
             }
 
         }
 
         //  planner
         if(SyncAdmin.getInstance(mContext).getAllowPlannersDownload()){
-            if(SettingsAdmin.getInstance(getContext()).isInternetAvailable()){
+            if(SettingsAdmin.isNetworkAvailable(getContext())){
                 downloadPlanner(contentProviderClient, syncResult);
+                SyncAdmin.getInstance(mContext).setAllowPlannersUpload(false);
             }
 
         }
 
         if(SyncAdmin.getInstance(mContext).getAllowPlannersUpload()){
-            if(SettingsAdmin.getInstance(getContext()).isInternetAvailable()){
+            if(SettingsAdmin.isNetworkAvailable(getContext())){
                 uploadPlanner(contentProviderClient, syncResult);
+                SyncAdmin.getInstance(mContext).setAllowPlannersUpload(false);
             }
 
         }
@@ -120,7 +127,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 try {
 
 
-                    String[] proj = new String[]{Contract.Workouts._ID, Contract.Workouts.NAME, Contract.Workouts.ISPAID, Contract.Workouts.USERNAME};
+                    String[] proj = new String[]{Contract.Workouts._ID, Contract.Workouts.NAME, Contract.Workouts.ISPAID, Contract.Workouts.USERNAME, Contract.Workouts.DELETE};
                     String username = SettingsAdmin.getInstance(getContext()).getUsername();
                     Cursor c = contentProviderClient.query(Contract.Workouts.CONTENT_URI, proj, Contract.Workouts.USERNAME + "=?", new String[]{username}, null);
 
@@ -130,59 +137,80 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
                     // voor elke workouts moet dit gebeuren
                     while(c.moveToNext()){
-                        Log.d("","____________________________________________________________________________________________________________________________________________________________");
-                        Log.d(TAG,"Trying to SYNC for " + username + ": " + c.getString(c.getColumnIndex(Contract.Workouts._ID)) + "; " + c.getString(c.getColumnIndex(Contract.Workouts.NAME)));
+                        if(c.getInt(c.getColumnIndex(Contract.Workouts.DELETE)) == 0){
+                            Log.d("","____________________________________________________________________________________________________________________________________________________________");
+                            Log.d(TAG,"Trying to SYNC for " + username + ": " + c.getString(c.getColumnIndex(Contract.Workouts._ID)) + "; " + c.getString(c.getColumnIndex(Contract.Workouts.NAME)));
 
-                        URL url = new URL(UPLOAD_URL_WORKOUTS + "username=" + username + "&name=" + c.getString(c.getColumnIndex(Contract.Workouts.NAME)));
+                            URL url = new URL(UPLOAD_URL_WORKOUTS + "username=" + username + "&name=" + URLEncoder.encode(c.getString(c.getColumnIndex(Contract.Workouts.NAME)),"UTF-8"));
 
-                        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                        connection.setReadTimeout(NET_READ_TIMEOUT_MILLIS);
-                        connection.setConnectTimeout(NET_CONNECT_TIMEOUT_MILLIS);
-                        connection.setRequestMethod("GET");
-                        connection.setRequestProperty("Accept", "application/json");
-                        connection.setRequestProperty("charset", "utf-8");
-                        connection.setDoInput(true);
+                            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                            connection.setReadTimeout(NET_READ_TIMEOUT_MILLIS);
+                            connection.setConnectTimeout(NET_CONNECT_TIMEOUT_MILLIS);
+                            connection.setRequestMethod("GET");
+                            connection.setRequestProperty("Accept", "application/json");
+                            connection.setRequestProperty("charset", "utf-8");
+                            connection.setDoInput(true);
 
-                        connection.connect();
+                            connection.connect();
 
-                        Log.d("","_____________________________response code : "+ connection.getResponseCode());
-                        //Log.d("","______________CONNECTION: ");
-                        InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+                            Log.d("","_____________________________response code : "+ connection.getResponseCode());
 
-                        Log.d("","Stream from workouts: " + getStringFromInputStream(connection.getInputStream()));
+                            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
 
-                        connection.disconnect();
+                            Log.d("","Stream from workouts: " + getStringFromInputStream(connection.getInputStream()));
 
-                        String wo_id = c.getString(c.getColumnIndex(Contract.Workouts._ID));
+                            connection.disconnect();
 
-                        String[] proj2 = new String[]{Contract.WorkoutExercises._ID, Contract.WorkoutExercises.EXERCISE_ID, Contract.WorkoutExercises.WORKOUT_ID, Contract.WorkoutExercises.REPS};
-                        Cursor c2 = contentProviderClient.query(Contract.WorkoutExercises.CONTENT_URI, proj2, Contract.WorkoutExercises.WORKOUT_ID +"=?", new String[]{wo_id}, null);
+                            String wo_id = c.getString(c.getColumnIndex(Contract.Workouts._ID));
 
-                        Log.d("","Aantal workoutExercises to sync: " + c2.getCount());
+                            String[] proj2 = new String[]{Contract.WorkoutExercises._ID, Contract.WorkoutExercises.EXERCISE_ID, Contract.WorkoutExercises.WORKOUT_ID, Contract.WorkoutExercises.REPS};
+                            Cursor c2 = contentProviderClient.query(Contract.WorkoutExercises.CONTENT_URI, proj2, Contract.WorkoutExercises.WORKOUT_ID +"=?", new String[]{wo_id}, null);
 
-                        while (c2.moveToNext()){
-                            Log.d("","------------------------------------------------------------------------------");
-                            Log.d(TAG,"Trying to SYNC for wo_id: " + wo_id + ": wo_id " + c2.getString(c2.getColumnIndex(Contract.WorkoutExercises.WORKOUT_ID)) + "; ex_id" + c2.getString(c2.getColumnIndex(Contract.WorkoutExercises.EXERCISE_ID)));
+                            Log.d("","Aantal workoutExercises to sync: " + c2.getCount());
 
-                            URL url2 = new URL(UPLOAD_URL_WORKOUTEXERCISES + "workoutid=" + c2.getString(c2.getColumnIndex(Contract.WorkoutExercises.WORKOUT_ID)) + "&exerciseid=" + c2.getString(c2.getColumnIndex(Contract.WorkoutExercises.EXERCISE_ID)));
+                            while (c2.moveToNext()){
+                                Log.d("","------------------------------------------------------------------------------");
+                                Log.d(TAG,"Trying to SYNC for wo_id: " + wo_id + ": wo_id " + c2.getString(c2.getColumnIndex(Contract.WorkoutExercises.WORKOUT_ID)) + "; ex_id" + c2.getString(c2.getColumnIndex(Contract.WorkoutExercises.EXERCISE_ID)));
 
-                            HttpURLConnection connection2 = (HttpURLConnection) url2.openConnection();
-                            connection2.setReadTimeout(NET_READ_TIMEOUT_MILLIS);
-                            connection2.setConnectTimeout(NET_CONNECT_TIMEOUT_MILLIS);
-                            connection2.setRequestMethod("GET");
-                            connection2.setRequestProperty("Accept", "application/json");
-                            connection2.setRequestProperty("charset", "utf-8");
-                            connection2.setDoInput(true);
+                                URL url2 = new URL(UPLOAD_URL_WORKOUTEXERCISES + "workoutid=" + c2.getString(c2.getColumnIndex(Contract.WorkoutExercises.WORKOUT_ID)) + "&exerciseid=" + c2.getString(c2.getColumnIndex(Contract.WorkoutExercises.EXERCISE_ID)));
 
-                            connection2.connect();
+                                HttpURLConnection connection2 = (HttpURLConnection) url2.openConnection();
+                                connection2.setReadTimeout(NET_READ_TIMEOUT_MILLIS);
+                                connection2.setConnectTimeout(NET_CONNECT_TIMEOUT_MILLIS);
+                                connection2.setRequestMethod("GET");
+                                connection2.setRequestProperty("Accept", "application/json");
+                                connection2.setRequestProperty("charset", "utf-8");
+                                connection2.setDoInput(true);
 
-                            Log.d("","_____________________________response code : "+ connection2.getResponseCode());
-                            //Log.d("","______________CONNECTION: ");
-                            InputStreamReader reader2 = new InputStreamReader(connection2.getInputStream());
+                                connection2.connect();
 
-                            Log.d("","Stream from exercise: " + getStringFromInputStream(connection2.getInputStream()));
+                                Log.d("","_____________________________response code : "+ connection2.getResponseCode());
 
-                            connection2.disconnect();
+                                InputStreamReader reader2 = new InputStreamReader(connection2.getInputStream());
+
+                                Log.d("","Stream from exercise: " + getStringFromInputStream(connection2.getInputStream()));
+
+                                connection2.disconnect();
+                            }
+                        }else{
+                            URL url = new URL(DELETE_URL_WORKOUTS + "username=" + username + "&workoutname=" + URLEncoder.encode(c.getString(c.getColumnIndex(Contract.Workouts.NAME)),"UTF-8"));
+
+                            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                            connection.setReadTimeout(NET_READ_TIMEOUT_MILLIS);
+                            connection.setConnectTimeout(NET_CONNECT_TIMEOUT_MILLIS);
+                            connection.setRequestMethod("GET");
+                            connection.setRequestProperty("Accept", "application/json");
+                            connection.setRequestProperty("charset", "utf-8");
+                            connection.setDoInput(true);
+
+                            connection.connect();
+
+                            Log.d("","_____________________________response code : "+ connection.getResponseCode());
+                            Log.d("","Stream from workouts: " + getStringFromInputStream(connection.getInputStream()));
+
+                            connection.disconnect();
+
+
                         }
                     }
 
@@ -214,8 +242,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         Log.d(TAG, "On perform sync is called");
         Log.d(TAG, "Beginning network synchronization");
 
+        String username = SettingsAdmin.getInstance(getContext()).getUsername();
+
         try {
-            final URL location = new URL(UPLOAD_URL_WORKOUTS + "//username=" + SettingsAdmin.getInstance(getContext()).getUsername() + "&workoutid=Y&date=Z");
+            final URL location = new URL(UPLOAD_URL_PLANNER + "username=" + username + "&workoutid=Y&date=Z");
             InputStream stream = null;
 
             try {
@@ -224,42 +254,72 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
                 try {
 
-
-                    String[] proj = new String[]{Contract.Planners._ID, Contract.Planners.WO_DATE, Contract.Planners.WORKOUT_ID, Contract.Planners.USERNAME};
-                    String username = SettingsAdmin.getInstance(getContext()).getUsername();
+                    String[] proj = new String[]{Contract.Planners._ID, Contract.Planners.WO_DATE, Contract.Planners.WORKOUT_ID, Contract.Planners.USERNAME, Contract.Planners.DELETE};
                     Cursor c = contentProviderClient.query(Contract.Planners.CONTENT_URI, proj, Contract.Planners.USERNAME + "=?", new String[]{username}, null);
-
-                    //c.moveToFirst();
 
                     Log.d("","Aantal planners to sync: " + c.getCount());
 
-                    // voor elke workouts moet dit gebeuren
                     while(c.moveToNext()){
-                        Log.d("","____________________________________________________________________________________________________________________________________________________________");
-                        Log.d(TAG,"Trying to SYNC for " + username + ": " + c.getString(c.getColumnIndex(Contract.Planners._ID)) + "; " + c.getString(c.getColumnIndex(Contract.Planners.WO_DATE)));
+                        Cursor wn = contentProviderClient.query(Contract.Workouts.CONTENT_URI, new String[]{Contract.Workouts.NAME}, Contract.Workouts._ID + "=?", new String[]{c.getString(c.getColumnIndex(Contract.Planners.WORKOUT_ID))}, null);
 
-                        URL url = new URL(UPLOAD_URL_PLANNER
-                                + "username=" + username
-                                + "&workoutid=" + c.getString(c.getColumnIndex(Contract.Planners.WORKOUT_ID))
-                                + "&date=" + c.getString(c.getColumnIndex(Contract.Planners.WO_DATE)));
+                        Log.d("upload planner", DatabaseUtils.dumpCursorToString(wn));
+                        wn.moveToFirst();
+                        String workoutname = wn.getString(0);
 
-                        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                        connection.setReadTimeout(NET_READ_TIMEOUT_MILLIS);
-                        connection.setConnectTimeout(NET_CONNECT_TIMEOUT_MILLIS);
-                        connection.setRequestMethod("GET");
-                        connection.setRequestProperty("Accept", "application/json");
-                        connection.setRequestProperty("charset", "utf-8");
-                        connection.setDoInput(true);
+                        if(c.getInt(c.getColumnIndex(Contract.Planners.DELETE)) == 0){
 
-                        connection.connect();
+                            Log.d("","____________________________________________________________________________________________________________________________________________________________");
+                            Log.d(TAG,"Trying to SYNC for " + username + ": " + c.getString(c.getColumnIndex(Contract.Planners._ID)) + "; " + c.getString(c.getColumnIndex(Contract.Planners.WO_DATE)));
 
-                        Log.d("","_____________________________response code : "+ connection.getResponseCode());
-                        //Log.d("","______________CONNECTION: ");
-                        InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+                            URL url = new URL(UPLOAD_URL_PLANNER
+                                    + "username=" + username
+                                    + "&workoutname=" + URLEncoder.encode(workoutname, "UTF-8")
+                                    + "&date=" + c.getString(c.getColumnIndex(Contract.Planners.WO_DATE)));
 
-                        Log.d("","Stream from planner: " + getStringFromInputStream(connection.getInputStream()));
+                            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                            connection.setReadTimeout(NET_READ_TIMEOUT_MILLIS);
+                            connection.setConnectTimeout(NET_CONNECT_TIMEOUT_MILLIS);
+                            connection.setRequestMethod("GET");
+                            connection.setRequestProperty("Accept", "application/json");
+                            connection.setRequestProperty("charset", "utf-8");
+                            connection.setDoInput(true);
 
-                        connection.disconnect();
+                            connection.connect();
+
+                            Log.d("","_____________________________response code : "+ connection.getResponseCode());
+                            //Log.d("","______________CONNECTION: ");
+                            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+
+                            Log.d("","Stream from planner: " + getStringFromInputStream(connection.getInputStream()));
+
+                            connection.disconnect();
+                        }else {
+
+                            Log.d("","____________________________________________________________________________________________________________________________________________________________");
+                            Log.d(TAG,"Trying to SYNC for " + username + ": " + c.getString(c.getColumnIndex(Contract.Planners._ID)) + "; " + c.getString(c.getColumnIndex(Contract.Planners.WO_DATE)));
+
+                            URL url = new URL(DELETE_URL_PLANNER
+                                    + "username=" + username
+                                    + "&workoutname=" + URLEncoder.encode(workoutname, "UTF-8")
+                                    + "&date=" + c.getString(c.getColumnIndex(Contract.Planners.WO_DATE)));
+
+                            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                            connection.setReadTimeout(NET_READ_TIMEOUT_MILLIS);
+                            connection.setConnectTimeout(NET_CONNECT_TIMEOUT_MILLIS);
+                            connection.setRequestMethod("GET");
+                            connection.setRequestProperty("Accept", "application/json");
+                            connection.setRequestProperty("charset", "utf-8");
+                            connection.setDoInput(true);
+
+                            connection.connect();
+
+                            Log.d("","_____________________________response code : "+ connection.getResponseCode());
+                            Log.d("","Stream from planner: " + getStringFromInputStream(connection.getInputStream()));
+
+                            connection.disconnect();
+
+                        }
+
                     }
 
                 } catch (Exception e){
