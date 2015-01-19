@@ -5,15 +5,12 @@ import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,15 +21,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import be.howest.nmct3.workoutapp.data.Contract;
-import be.howest.nmct3.workoutapp.data.SettingsAdmin;
 
 /**
  * Created by nielslammens on 2/12/14.
@@ -64,14 +58,23 @@ public class RepList extends Fragment {
         menu.clear();
         super.onCreateOptionsMenu(menu, inflater);
 
-        if(MainActivity.todaysWorkoutClicked) {
+        if(Owner.equals("ALL"))
+        {
+            inflater.inflate(R.menu.replist_all, menu);
+        }
+        else
+        {
+            if(MainActivity.todaysWorkoutClicked) {
 
-            Log.d("","onCreateOptionsMenu todaysworkout");
-            inflater.inflate(R.menu.replist_todaysworkout, menu);
-        } else {
+                Log.d("","onCreateOptionsMenu todaysworkout");
+                inflater.inflate(R.menu.replist_todaysworkout, menu);
 
-            Log.d("","onCreateOptionsMenu");
-            inflater.inflate(R.menu.replist, menu);
+            } else
+            {
+
+
+                inflater.inflate(R.menu.replist, menu);
+            }
         }
     }
 
