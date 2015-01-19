@@ -59,11 +59,11 @@ public class WorkoutsFragment extends Fragment implements LoaderManager.LoaderCa
     //public final String[] Workouts = {"Workout 1", "Workout 2", "Workout 3"};
     private CursorAdapter myWorkoutCursorAdapter;
 
-<<<<<<< HEAD
+
     String Owner;
-=======
+
     private Cursor mCursor;
->>>>>>> FETCH_HEAD
+
 
     public static ListView listView;
 

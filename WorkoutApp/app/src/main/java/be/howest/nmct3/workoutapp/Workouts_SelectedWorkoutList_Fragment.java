@@ -3,6 +3,7 @@ package be.howest.nmct3.workoutapp;
 
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
@@ -214,8 +215,35 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
                 selectedExerciseId = filteredCursor.getInt(filteredCursor.getColumnIndex(Contract.WorkoutExercises.EXERCISE_ID));
                 selectedWorkoutId = filteredCursor.getInt(filteredCursor.getColumnIndex(Contract.WorkoutExercises.WORKOUT_ID));
                 workoutExercisesId = filteredCursor.getInt(filteredCursor.getColumnIndex(Contract.WorkoutExercises._ID));
-                //String selectedFromList = listView.getItemAtPosition(pos).toString();
-                openDialogEditDelete(v);
+
+
+                if(Owner.equals("ALL"))
+                {
+                    AlertDialog.Builder builder  = new AlertDialog.Builder(getActivity())
+                            .setTitle("Error")
+                            .setMessage("You can't delete exercises from this workout.")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //dialog.cancel();
+                                }
+                            });
+
+                    //.show();
+
+                    //The tricky part
+                    Dialog d = builder.show();
+                    int dividerId = d.getContext().getResources().getIdentifier("android:id/titleDivider", null, null);
+                    View divider = d.findViewById(dividerId);
+                    divider.setBackgroundColor(getResources().getColor(R.color.headcolor));
+
+                    int textViewId = d.getContext().getResources().getIdentifier("android:id/alertTitle", null, null);
+                    TextView tv = (TextView) d.findViewById(textViewId);
+                    tv.setTextColor(getResources().getColor(R.color.headcolor));
+                }
+                else {
+                    //String selectedFromList = listView.getItemAtPosition(pos).toString();
+                    openDialogEditDelete(v);
+                }
 
                 return true;
             }
