@@ -69,6 +69,8 @@ public class MainActivity extends FragmentActivity {
 
     public static WorkoutDatasoure workoutDatasource;
 
+    public static Context baseContext;
+
     ActionBarDrawerToggle icon;
 
     // The authority for the sync adapter's content provider
@@ -105,6 +107,8 @@ public class MainActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        baseContext = getBaseContext();
 
         mAccount = CreateSyncAccount(this);
         workoutDatasource = new WorkoutDatasoure();
@@ -177,6 +181,30 @@ public class MainActivity extends FragmentActivity {
         SyncAdmin.getInstance(getApplicationContext()).setAllowWorkoutsDownload(true);
 
         Log.d("MainActivity","runSyncAdapter() all set to true" );
+
+        Bundle settingsBundle = new Bundle();
+        settingsBundle.putBoolean(
+                ContentResolver.SYNC_EXTRAS_MANUAL, true);
+        settingsBundle.putBoolean(
+                ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+        ContentResolver.requestSync(mAccount, AUTHORITY, settingsBundle);
+    }
+
+    public static void syncWorkoutsUp(){
+
+        SyncAdmin.getInstance(baseContext).setAllowWorkoutsUpload(true);
+
+        Bundle settingsBundle = new Bundle();
+        settingsBundle.putBoolean(
+                ContentResolver.SYNC_EXTRAS_MANUAL, true);
+        settingsBundle.putBoolean(
+                ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+        ContentResolver.requestSync(mAccount, AUTHORITY, settingsBundle);
+    }
+
+    public static void syncPlannerUp(){
+
+        SyncAdmin.getInstance(baseContext).setAllowPlannersUpload(true);
 
         Bundle settingsBundle = new Bundle();
         settingsBundle.putBoolean(
