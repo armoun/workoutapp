@@ -69,12 +69,11 @@ public class MainActivity extends FragmentActivity {
 
     public static WorkoutDatasoure workoutDatasource;
 
-<<<<<<< HEAD
     public static Context baseContext;
-=======
+
     public static boolean todaysWorkoutClicked = false;
     public static int currentWorkoutPosition = -1;
->>>>>>> FETCH_HEAD
+
 
     ActionBarDrawerToggle icon;
 
