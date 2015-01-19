@@ -75,7 +75,7 @@ public class WorkoutDatasoure {
         String we_id = ""+ id;
 
         ContentValues c = new ContentValues();
-        c.put(Contract.Workouts.DELETE, 1);
+        c.put(Contract.WorkoutExercises.DELETE, 1);
 
         context.getContentResolver().update(Contract.WorkoutExercises.CONTENT_URI, c, Contract.WorkoutExercises.WORKOUT_ID + " =? AND " + Contract.WorkoutExercises.EXERCISE_ID + " =?", new String[]{we_id});
     }
