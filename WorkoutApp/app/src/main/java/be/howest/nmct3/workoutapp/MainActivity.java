@@ -174,8 +174,7 @@ public class MainActivity extends FragmentActivity {
 
         String name = SettingsAdmin.getInstance(getBaseContext()).getUsername();
 
-        Toast.makeText(getApplicationContext(), "Logged in as: " + name,
-                Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(), "Logged in as: " + name, Toast.LENGTH_LONG).show();
 
     }
 
@@ -234,7 +233,7 @@ public class MainActivity extends FragmentActivity {
         transaction.replace(R.id.main, frag).commit();
 
         activeFragment = frag;
-        Toast.makeText(getBaseContext(), "Active fragment: " + frag.getClass().getSimpleName(),Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getBaseContext(), "Active fragment: " + frag.getClass().getSimpleName(),Toast.LENGTH_SHORT).show();
 
         // Highlight the selected item, update the title, and close the drawer
         mDrawerList.setItemChecked(position, true);
@@ -351,7 +350,7 @@ public class MainActivity extends FragmentActivity {
             cursor.close();
 
             // String picturePath contains the path of selected Image
-            Toast.makeText(getBaseContext(), "Selected Profile Picture Path: " + BitmapFactory.decodeFile(myProfilePicturePath), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getBaseContext(), "Selected Profile Picture Path: " + BitmapFactory.decodeFile(myProfilePicturePath), Toast.LENGTH_SHORT).show();
             SettingsAdmin.getInstance(getApplicationContext()).setPicture(myProfilePicturePath);
 
             ((SettingsFragment.CustomSettingsAdapter)SettingsFragment.listview.getAdapter()).updateImage(selectedImage);

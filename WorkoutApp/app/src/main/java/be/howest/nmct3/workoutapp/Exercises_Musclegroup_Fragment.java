@@ -133,7 +133,7 @@ public class Exercises_Musclegroup_Fragment extends Fragment implements LoaderMa
                 Cursor filteredCursor = ((SimpleCursorAdapter)list.getAdapter()).getCursor();
                 filteredCursor.moveToPosition(position);
                 String exerciseId = ""+ filteredCursor.getInt(filteredCursor.getColumnIndex(Contract.Exercises._ID));
-                Toast.makeText(getActivity().getBaseContext(), "" + exerciseId, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity().getBaseContext(), "" + exerciseId, Toast.LENGTH_SHORT).show();
 
                 MainActivity.EXERCICE_ID = filteredCursor.getInt(filteredCursor.getColumnIndex(Contract.Exercises._ID));
 
@@ -177,7 +177,7 @@ public class Exercises_Musclegroup_Fragment extends Fragment implements LoaderMa
         switch (item.getItemId()) {
             //Geklikt op search
             case R.id.action_search_exercises_musclegroup:
-                Toast.makeText(getActivity(), item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
                 SearchView searchView = (SearchView)item.getActionView();
                 searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                     @Override

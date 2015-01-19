@@ -76,16 +76,16 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
 
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.workouts_workoutselected_list_fragment_layout, null);
 
-        Toast.makeText(getActivity(), "Active fragment: " + this.getClass().getSimpleName(),Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "Active fragment: " + this.getClass().getSimpleName(),Toast.LENGTH_SHORT).show();
 
         Bundle args = getArguments();
         if (args  != null && args.containsKey("selected_exercise")) {
             String selectedExercise = args.getString("selected_exercise");
-            Toast.makeText(getActivity().getBaseContext(), "Selected exercise: " + selectedExercise, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity().getBaseContext(), "Selected exercise: " + selectedExercise, Toast.LENGTH_SHORT).show();
         }
 
         if(backPressedRepList) {
-            Toast.makeText(getActivity(), "RELOAD data",Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), "RELOAD data",Toast.LENGTH_SHORT).show();
             reOpenFragment();
             backPressedRepList=false;
         }
@@ -99,7 +99,7 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
         int[] viewIds = new int[] { R.id.workoutselected_item_title, R.id.workoutselected_item_reps };
 
         Owner = MainActivity.workoutDatasource.getOwnerOfWorkout(getActivity().getApplicationContext(), mWorkoutId);
-        Toast.makeText(getActivity().getBaseContext(), "OWNER: " + Owner, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity().getBaseContext(), "OWNER: " + Owner, Toast.LENGTH_SHORT).show();
 
 
         mAdapter = new SimpleCursorAdapter(getActivity(),
@@ -113,13 +113,9 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
                 Cursor filteredCursor = ((SimpleCursorAdapter)list.getAdapter()).getCursor();
                 filteredCursor.moveToPosition(position);
 
-                filteredCursor.moveToPosition(position);
-
-
-
                 String type = filteredCursor.getString(filteredCursor.getColumnIndex(Contract.Exercises.MUSCLE_GROUP));
 
-                Toast.makeText(getActivity().getBaseContext(), "type: " + type, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity().getBaseContext(), "type: " + type, Toast.LENGTH_SHORT).show();
 
                 if(type.equals("chest"))
                 {
@@ -207,7 +203,7 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
                                            int pos, long id) {
                 // TODO Auto-generated method stub
 
-                Toast.makeText(getActivity().getBaseContext(), "Long Clicked on" + pos , Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity().getBaseContext(), "Long Clicked on" + pos , Toast.LENGTH_SHORT).show();
 
                 Cursor filteredCursor = ((SimpleCursorAdapter)list.getAdapter()).getCursor();
                 filteredCursor.moveToPosition(pos);
@@ -293,7 +289,7 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
     public void deleteRowMethod(View v)
     {
         MainActivity.workoutDatasource.deleteExerciseForWorkout(getActivity(),workoutExercisesId);
-        Toast.makeText(getActivity().getBaseContext(), "Row deleted with Workout ID: " + selectedWorkoutId + " and Exercise ID: " + selectedExerciseId , Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity().getBaseContext(), "Row deleted with Workout ID: " + selectedWorkoutId + " and Exercise ID: " + selectedExerciseId , Toast.LENGTH_SHORT).show();
         reOpenFragment();
     }
 
@@ -332,7 +328,7 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
 
             //Geklikt op search bij workouts
             case R.id.action_search_exercises_selected_workout:
-                Toast.makeText(getActivity(), item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
                 SearchView searchView = (SearchView)item.getActionView();
                 searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                     @Override
@@ -404,7 +400,7 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
 
         MainActivity.activeFragment = frag;
-        Toast.makeText(getActivity(), "Active fragment: " + frag.getClass().getSimpleName(),Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "Active fragment: " + frag.getClass().getSimpleName(),Toast.LENGTH_SHORT).show();
 
         transaction.replace(R.id.main, frag);
         transaction.disallowAddToBackStack();
@@ -423,7 +419,7 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
 
             String workoutId = filteredCursor.getString(filteredCursor.getColumnIndex(Contract.WorkoutColumns._ID));
 
-            Toast.makeText(getActivity().getBaseContext(), "" + workoutId, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity().getBaseContext(), "" + workoutId, Toast.LENGTH_SHORT).show();
 
             MainActivity.WORKOUT_ID = Integer.parseInt(workoutId);
 
@@ -432,7 +428,7 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
             MainActivity.activeFragment = newFragment;
-            Toast.makeText(getActivity(), "Active fragment: " + newFragment.getClass().getSimpleName(),Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), "Active fragment: " + newFragment.getClass().getSimpleName(),Toast.LENGTH_SHORT).show();
             Log.d("", "Active fragment: " + newFragment.getClass().getSimpleName());
 
             // Replace whatever is in the fragment_container view with this fragment,
@@ -464,9 +460,9 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
                         " ON " + Contract.Exercises.CONTENT_DIRECTORY + "." + Contract.ExerciseColumns._ID
                         + " = " + Contract.WorkoutExercises.CONTENT_DIRECTORY + "." + Contract.WorkoutExerciseColumns.EXERCISE_ID +
                         " WHERE (" + Contract.Exercises.CONTENT_DIRECTORY + "." + Contract.ExerciseColumns.EXERCISE_NAME + " like ? )"
-                        + " AND " + Contract.WorkoutExercises.CONTENT_DIRECTORY + "." + Contract.WorkoutExerciseColumns.WORKOUT_ID + " = ? "
-                        + " AND " + Contract.WorkoutExercises.CONTENT_DIRECTORY + "." + Contract.WorkoutExerciseColumns.DELETE + " = 0 ",
-                new String[]{"%" + searchTerm + "%", selectedWorkoutIdString});
+                        + " AND (" + Contract.WorkoutExercises.CONTENT_DIRECTORY + "." + Contract.WorkoutExerciseColumns.WORKOUT_ID + " = ?) "
+                        + " AND (" + Contract.WorkoutExercises.CONTENT_DIRECTORY + "." + Contract.WorkoutExerciseColumns.DELETE + " = ?)",
+                new String[]{"%" + searchTerm + "%", selectedWorkoutIdString, "0"});
 
         return mData;
     }

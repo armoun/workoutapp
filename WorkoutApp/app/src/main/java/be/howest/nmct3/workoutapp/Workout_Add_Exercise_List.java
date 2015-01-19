@@ -79,17 +79,26 @@ public class Workout_Add_Exercise_List extends Fragment implements LoaderManager
             {
                 View row = super.getView(position, convertView, parent);
 
+<<<<<<< HEAD
                 mCursor.moveToPosition(position);
 
                 String type = mCursor.getString(mCursor.getColumnIndex(Contract.Exercises.MUSCLE_GROUP));
+=======
+                Cursor filteredCursor = ((SimpleCursorAdapter)list.getAdapter()).getCursor();
+                filteredCursor.moveToPosition(position);
+>>>>>>> FETCH_HEAD
 
                 String target = mCursor.getString(mCursor.getColumnIndex(Contract.Exercises.TARGET));
 
+<<<<<<< HEAD
                 TextView targetTextView = (TextView) row.findViewById(R.id.exercises_target);
 
                 targetTextView.setText(target);
+=======
+                String type = filteredCursor.getString(filteredCursor.getColumnIndex(Contract.Exercises.MUSCLE_GROUP));
+>>>>>>> FETCH_HEAD
 
-                Toast.makeText(getActivity().getBaseContext(), "type: " + type, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity().getBaseContext(), "type: " + type, Toast.LENGTH_SHORT).show();
 
                 if(type.equals("chest"))
                 {
@@ -188,7 +197,7 @@ public class Workout_Add_Exercise_List extends Fragment implements LoaderManager
 
             //Geklikt op search bij add exercise to workout
             case R.id.action_search_workout_add_exercise:
-                Toast.makeText(getActivity(), item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), item.getTitle()+" clicked!", Toast.LENGTH_SHORT).show();
                 SearchView searchView = (SearchView)item.getActionView();
                 searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                     @Override
@@ -198,22 +207,26 @@ public class Workout_Add_Exercise_List extends Fragment implements LoaderManager
 
                     @Override
                     public boolean onQueryTextChange(String s) {
-                        Log.d("", "--------- QUERY: " + s);
-                        mAdapter.setFilterQueryProvider(new FilterQueryProvider() {
-                            @Override
-                            public Cursor runQuery(CharSequence charSequence) {
-                                Log.d("",""+charSequence);
-                                mAdapter.setFilterQueryProvider(new FilterQueryProvider() {
-                                    @Override
-                                    public Cursor runQuery(CharSequence charSequence) {
-                                        return getExercisesByExerciseName(charSequence.toString());
-                                    }
-                                });
-                                return null;
-                            }
-                        });
-                        mAdapter.runQueryOnBackgroundThread(s);
-                        mAdapter.getFilter().filter(s);
+                        if(s.equals("")){
+                            restartLoader();
+                        }else{
+                            Log.d("", "--------- QUERY: " + s);
+                            mAdapter.setFilterQueryProvider(new FilterQueryProvider() {
+                                @Override
+                                public Cursor runQuery(CharSequence charSequence) {
+                                    Log.d("",""+charSequence);
+                                    mAdapter.setFilterQueryProvider(new FilterQueryProvider() {
+                                        @Override
+                                        public Cursor runQuery(CharSequence charSequence) {
+                                            return getExercisesByExerciseName(charSequence.toString());
+                                        }
+                                    });
+                                    return null;
+                                }
+                            });
+                            mAdapter.runQueryOnBackgroundThread(s);
+                            mAdapter.getFilter().filter(s);
+                        }
                         return false;
                     }
                 });
@@ -223,6 +236,9 @@ public class Workout_Add_Exercise_List extends Fragment implements LoaderManager
         return super.onOptionsItemSelected(item);
     }
 
+    public void restartLoader(){
+        getLoaderManager().restartLoader(0, null, this);
+    }
 
     private Cursor getExercisesByExerciseName(String searchTerm) {
         String[] projection = new String[]{
