@@ -54,7 +54,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     private static final String FEED_URL_EXERCISES = "https://viktordebock.be/mad_backend/api/exercises/index.php";
     private static final String FEED_URL_WORKOUTS = "http://www.viktordebock.be/mad_backend/api/workoutsbyuser/index.php?username=";
     private static final String UPLOAD_URL_WORKOUTS = "http://www.viktordebock.be/mad_backend/add/addworkoutbyusername/index.php?";
-    public static final String UPLOAD_URL_WORKOUTEXERCISES = "http://www.viktordebock.be/mad_backend/add/addexercisetoworkout/?";
+    //public static final String UPLOAD_URL_WORKOUTEXERCISES = "http://www.viktordebock.be/mad_backend/add/addexercisetoworkout/?";
     public static final String FEED_URL_PLANNER = "http://viktordebock.be/mad_backend/api/plannerworkoutsbyusernameanddate/index.php?username=";
     public static final String UPLOAD_URL_PLANNER = "http://www.viktordebock.be/mad_backend/add/addplannerworkoutbyusernameandworkoutidanddate/?";
     public static final String DELETE_URL_WORKOUTS = "http://www.viktordebock.be/mad_backend/delete/deleteworkout/index.php?";
@@ -123,9 +123,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             try {
                 Log.d(TAG, "Streaming data from network: " + location);
 
-
                 try {
-
 
                     String[] proj = new String[]{Contract.Workouts._ID, Contract.Workouts.NAME, Contract.Workouts.ISPAID, Contract.Workouts.USERNAME, Contract.Workouts.DELETE};
                     String username = SettingsAdmin.getInstance(getContext()).getUsername();
@@ -161,6 +159,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
                             connection.disconnect();
 
+                            /*
                             String wo_id = c.getString(c.getColumnIndex(Contract.Workouts._ID));
 
                             String[] proj2 = new String[]{Contract.WorkoutExercises._ID, Contract.WorkoutExercises.EXERCISE_ID, Contract.WorkoutExercises.WORKOUT_ID, Contract.WorkoutExercises.REPS};
@@ -191,7 +190,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                                 Log.d("","Stream from exercise: " + getStringFromInputStream(connection2.getInputStream()));
 
                                 connection2.disconnect();
-                            }
+                            }*/
                         }else{
                             URL url = new URL(DELETE_URL_WORKOUTS + "username=" + username + "&workoutname=" + URLEncoder.encode(c.getString(c.getColumnIndex(Contract.Workouts.NAME)),"UTF-8"));
 
@@ -209,7 +208,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                             Log.d("","Stream from workouts: " + getStringFromInputStream(connection.getInputStream()));
 
                             connection.disconnect();
-
 
                         }
                     }
@@ -692,7 +690,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 c_e.moveToFirst();
                 String ex_id_l = c_e.getString(c_e.getColumnIndex(Contract.Exercises._ID));
 
-                Log.d("SyncAdapter Exercises",DatabaseUtils.dumpCursorToString(c_e));
+                //Log.d("SyncAdapter Exercises",DatabaseUtils.dumpCursorToString(c_e));
 
                 Cursor cursor_we = contentProviderClient.query(
                         Contract.WorkoutExercises.CONTENT_URI,
@@ -703,7 +701,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 );
                 cursor_we.moveToFirst();
 
-                Log.d("SyncAdapter WorkoutExercises",workout_id_l + " " + ex_id_l + " " + DatabaseUtils.dumpCursorToString(cursor_we));
+                //Log.d("SyncAdapter WorkoutExercises",workout_id_l + " " + ex_id_l + " " + DatabaseUtils.dumpCursorToString(cursor_we));
 
                 valuesExercise.put(Contract.WorkoutExercises.WORKOUT_ID, workout_id_l);
                 valuesExercise.put(Contract.WorkoutExercises.EXERCISE_ID, ex_id_l);
@@ -711,11 +709,11 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 if (cursor_we.getCount() > 0) {
                     String workoutExerciseId = cursor_we.getString(cursor_we.getColumnIndex(Contract.WorkoutExercises._ID));
                     contentProviderClient.update(Contract.WorkoutExercises.CONTENT_URI, valuesExercise, Contract.WorkoutExercises._ID + "=?", new String[]{workoutExerciseId});
-                    Log.d("SyncAdapter WorkoutExercises", "UPDATED ");
+                    //Log.d("SyncAdapter WorkoutExercises", "UPDATED ");
                 } else {
                     //Log.d("","TO INSERT: " + valuesExercise.get(Contract.WorkoutExercises.WORKOUT_ID));
                     Uri u = contentProviderClient.insert(Contract.WorkoutExercises.CONTENT_URI, valuesExercise);
-                    Log.d("SyncAdapter WorkoutExercises", "INSERTED ");
+                    //Log.d("SyncAdapter WorkoutExercises", "INSERTED ");
                 }
             }
 
