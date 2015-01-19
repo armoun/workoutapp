@@ -23,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import be.howest.nmct3.workoutapp.data.Contract;
@@ -80,9 +81,13 @@ public class Workout_Add_Exercise_List extends Fragment implements LoaderManager
 
                 mCursor.moveToPosition(position);
 
-
-
                 String type = mCursor.getString(mCursor.getColumnIndex(Contract.Exercises.MUSCLE_GROUP));
+
+                String target = mCursor.getString(mCursor.getColumnIndex(Contract.Exercises.TARGET));
+
+                TextView targetTextView = (TextView) row.findViewById(R.id.exercises_target);
+
+                targetTextView.setText(target);
 
                 Toast.makeText(getActivity().getBaseContext(), "type: " + type, Toast.LENGTH_SHORT).show();
 
