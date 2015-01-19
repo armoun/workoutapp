@@ -34,6 +34,7 @@ import java.util.Date;
 
 import be.howest.nmct3.workoutapp.data.Contract;
 import be.howest.nmct3.workoutapp.data.DatabaseHelper;
+import be.howest.nmct3.workoutapp.data.SettingsAdmin;
 
 
 /**
@@ -45,6 +46,7 @@ public class PlannerFragment extends Fragment {
     private CursorAdapter myPlannerAdapter;
     private Cursor mCursor;
     private ListView listView;
+    private int plannerId;
 
     public PlannerFragment() {
         // Required empty public constructor
@@ -144,15 +146,8 @@ public class PlannerFragment extends Fragment {
                                            int pos, long id) {
                 // TODO Auto-generated method stub
 
-/*                Toast.makeText(getActivity().getBaseContext(), "Long Clicked on" + pos , Toast.LENGTH_SHORT).show();
-
-                Cursor filteredCursor = ((SimpleCursorAdapter)list.getAdapter()).getCursor();
-                filteredCursor.moveToPosition(pos);
-
-                selectedExerciseId = mCursor.getInt(mCursor.getColumnIndex(Contract.WorkoutExercises.EXERCISE_ID));
-                selectedWorkoutId = mCursor.getInt(mCursor.getColumnIndex(Contract.WorkoutExercises.WORKOUT_ID));
-                workoutExercisesId = filteredCursor.getInt(mCursor.getColumnIndex(Contract.WorkoutExercises._ID));
-                //String selectedFromList = listView.getItemAtPosition(pos).toString();*/
+                mCursor.moveToPosition(pos);
+                plannerId = mCursor.getInt(mCursor.getColumnIndex(Contract.WorkoutExercises._ID));
 
                 openDialogEditDelete(v);
 
@@ -176,9 +171,11 @@ public class PlannerFragment extends Fragment {
             ContentValues cv = new ContentValues();
             cv.put(Contract.Planners.WORKOUT_ID, wo_id);
             cv.put(Contract.Planners.WO_DATE, MainActivity.plannerSelectedDate);
+            cv.put(Contract.Planners.USERNAME, SettingsAdmin.getInstance(getActivity().getApplicationContext()).getUsername());
 
             Uri uri = getActivity().getContentResolver().insert(Contract.Planners.CONTENT_URI, cv);
             Log.d("","Inserted " + uri.toString());
+            MainActivity.syncPlannerUp();
             MainActivity.plannerSelectedWorkoutId = -1;
         }
         final TextView plannerCurrentDate = (TextView) root.findViewById(R.id.plannerCurrentDate);
@@ -205,14 +202,15 @@ public class PlannerFragment extends Fragment {
     private void getworkouts(){
 
         SQLiteDatabase db = DatabaseHelper.getInstance(getActivity().getApplicationContext()).getReadableDatabase();
-        mCursor = db.rawQuery(  "SELECT "        + Contract.Workouts.CONTENT_DIRECTORY + "." + Contract.Workouts._ID + ", " + Contract.Workouts.CONTENT_DIRECTORY + "." + Contract.Workouts.NAME +
+        mCursor = db.rawQuery(  "SELECT "        + Contract.Workouts.CONTENT_DIRECTORY + "." + Contract.Workouts._ID + ", " + Contract.Workouts.CONTENT_DIRECTORY + "." + Contract.Workouts.NAME + ", " + Contract.Planners.CONTENT_DIRECTORY + "." + Contract.Planners._ID+
                                 " FROM "         + Contract.Workouts.CONTENT_DIRECTORY +
                                 " INNER JOIN "   + Contract.Planners.CONTENT_DIRECTORY +
                                 " ON "           + Contract.Workouts.CONTENT_DIRECTORY + "." + Contract.Workouts._ID + " = " + Contract.Planners.CONTENT_DIRECTORY + "." + Contract.Planners.WORKOUT_ID +
                                 " WHERE "  + "(" + Contract.Planners.CONTENT_DIRECTORY + "." + Contract.Planners.WO_DATE    + " = ?) AND "
+                                           + "(" + Contract.Planners.CONTENT_DIRECTORY + "." + Contract.Planners.USERNAME   + " = ? OR " + Contract.Planners.CONTENT_DIRECTORY + "." + Contract.Planners.USERNAME + " = \"ALL\") AND "
                                            + "(" + Contract.Planners.CONTENT_DIRECTORY + "." + Contract.Planners.DELETE     + " = 0) AND "
                                            + "(" + Contract.Workouts.CONTENT_DIRECTORY + "." + Contract.Workouts.DELETE     + " = 0)",
-                new String[]{MainActivity.plannerSelectedDate});
+                new String[]{MainActivity.plannerSelectedDate, SettingsAdmin.getInstance(getActivity().getApplicationContext()).getUsername()});
 
         Log.d("",DatabaseUtils.dumpCursorToString(mCursor));
 
@@ -262,8 +260,7 @@ public class PlannerFragment extends Fragment {
 
     public void deleteRowMethod(View v)
     {
-        /*MainActivity.workoutDatasource.deleteExerciseForWorkout(getActivity(),workoutExercisesId);
-        Toast.makeText(getActivity().getBaseContext(), "Row deleted with Workout ID: " + selectedWorkoutId + " and Exercise ID: " + selectedExerciseId , Toast.LENGTH_SHORT).show();*/
+        MainActivity.workoutDatasource.deleteWorkoutFromPlanner(getActivity().getApplicationContext(), plannerId);
         reOpenFragment();
     }
 
