@@ -71,6 +71,7 @@ public class AddNewWorkoutFragment extends android.support.v4.app.Fragment {
         values.put(Contract.Workouts.ISPAID, 0);
         values.put(Contract.Workouts.USERNAME, SettingsAdmin.getInstance(getActivity().getApplicationContext()).getUsername());
         getActivity().getContentResolver().insert(Contract.Workouts.CONTENT_URI, values);
+        MainActivity.syncWorkoutsUp();
     }
 
     public void goNextButton(View v)
