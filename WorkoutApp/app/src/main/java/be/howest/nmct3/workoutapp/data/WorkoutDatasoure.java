@@ -77,7 +77,7 @@ public class WorkoutDatasoure {
         ContentValues c = new ContentValues();
         c.put(Contract.WorkoutExercises.DELETE, 1);
 
-        context.getContentResolver().update(Contract.WorkoutExercises.CONTENT_URI, c, Contract.WorkoutExercises.WORKOUT_ID + " =? AND " + Contract.WorkoutExercises.EXERCISE_ID + " =?", new String[]{we_id});
+        context.getContentResolver().update(Contract.WorkoutExercises.CONTENT_URI, c, Contract.WorkoutExercises._ID + " =?", new String[]{we_id});
     }
 
     public void deleteExerciseForWorkoutPerma(Context context, int id){

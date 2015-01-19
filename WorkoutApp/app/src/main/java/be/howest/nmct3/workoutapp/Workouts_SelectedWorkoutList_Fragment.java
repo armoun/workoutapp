@@ -464,9 +464,9 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
                         " ON " + Contract.Exercises.CONTENT_DIRECTORY + "." + Contract.ExerciseColumns._ID
                         + " = " + Contract.WorkoutExercises.CONTENT_DIRECTORY + "." + Contract.WorkoutExerciseColumns.EXERCISE_ID +
                         " WHERE (" + Contract.Exercises.CONTENT_DIRECTORY + "." + Contract.ExerciseColumns.EXERCISE_NAME + " like ? )"
-                        + " AND " + Contract.WorkoutExercises.CONTENT_DIRECTORY + "." + Contract.WorkoutExerciseColumns.WORKOUT_ID + " = ? "
-                        + " AND " + Contract.WorkoutExercises.CONTENT_DIRECTORY + "." + Contract.WorkoutExerciseColumns.DELETE + " = 0 ",
-                new String[]{"%" + searchTerm + "%", selectedWorkoutIdString});
+                        + " AND (" + Contract.WorkoutExercises.CONTENT_DIRECTORY + "." + Contract.WorkoutExerciseColumns.WORKOUT_ID + " = ?) "
+                        + " AND (" + Contract.WorkoutExercises.CONTENT_DIRECTORY + "." + Contract.WorkoutExerciseColumns.DELETE + " = ?)",
+                new String[]{"%" + searchTerm + "%", selectedWorkoutIdString, "0"});
 
         return mData;
     }
