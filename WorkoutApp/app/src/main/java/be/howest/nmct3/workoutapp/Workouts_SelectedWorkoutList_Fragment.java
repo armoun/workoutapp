@@ -113,10 +113,6 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
                 Cursor filteredCursor = ((SimpleCursorAdapter)list.getAdapter()).getCursor();
                 filteredCursor.moveToPosition(position);
 
-                filteredCursor.moveToPosition(position);
-
-
-
                 String type = filteredCursor.getString(filteredCursor.getColumnIndex(Contract.Exercises.MUSCLE_GROUP));
 
                 //Toast.makeText(getActivity().getBaseContext(), "type: " + type, Toast.LENGTH_SHORT).show();
