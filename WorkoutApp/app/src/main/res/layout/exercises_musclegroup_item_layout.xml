@@ -7,15 +7,27 @@
     android:padding="20dp"
     android:background="#FFF">
 
-    <ImageView
-        android:id="@+id/musclegroup_list_icon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@drawable/chest_red"/>
+
+
+        <ImageView
+            android:id="@+id/musclegroup_list_icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/chest_red"
+            android:layout_marginTop="5dp"/>
+
+
+
+
+
+    <LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" android:orientation="vertical"
+        android:layout_marginTop="-5dp">
 
     <TextView
         android:id="@+id/list_musclegroup_item_text"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:text="exercise name"
@@ -23,6 +35,18 @@
         android:textSize="20dp"
         android:layout_marginLeft="10dp">
     </TextView>
+
+    <TextView
+        android:id="@+id/exercises_target"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="test"
+        android:layout_marginTop="-10dp"
+        android:textStyle="normal"
+        android:fontFamily="sans-serif-light"
+        android:layout_marginLeft="21dp"/>
+
+    </LinearLayout>
 
 
 </LinearLayout>

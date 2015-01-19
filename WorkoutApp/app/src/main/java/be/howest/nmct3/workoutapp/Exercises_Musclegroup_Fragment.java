@@ -27,6 +27,8 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
 import be.howest.nmct3.workoutapp.data.Contract;
 import be.howest.nmct3.workoutapp.data.ExercisesLoader;
 import be.howest.nmct3.workoutapp.json.ExercisesLoaderJson;
@@ -109,6 +111,14 @@ public class Exercises_Musclegroup_Fragment extends Fragment implements LoaderMa
                 {
                     imgMusclegroupIcon.setImageResource(R.drawable.legs_red);
                 }
+
+                Cursor filteredCursor = ((SimpleCursorAdapter)list.getAdapter()).getCursor();
+                filteredCursor.moveToPosition(position);
+                String Target = ""+ filteredCursor.getString(filteredCursor.getColumnIndex(Contract.Exercises.TARGET));
+
+                TextView target = (TextView) row.findViewById(R.id.exercises_target);
+
+                target.setText(Target);
 
                 return row;
             }

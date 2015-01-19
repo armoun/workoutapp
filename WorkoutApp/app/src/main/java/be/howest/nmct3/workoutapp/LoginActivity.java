@@ -10,6 +10,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -44,6 +46,24 @@ public class LoginActivity extends Activity {
         setContentView(R.layout.login_layout);
 
         getActionBar().hide();
+
+        EditText usernamebox = (EditText) findViewById(R.id.LoginUsernameTextbox);
+        EditText passwordbox = (EditText) findViewById(R.id.LoginPasswordTextbox);
+
+        InputFilter filter = new InputFilter() {
+            public CharSequence filter(CharSequence source, int start, int end,
+                                       Spanned dest, int dstart, int dend) {
+                for (int i = start; i < end; i++) {
+                    if (!Character.isLetterOrDigit(source.charAt(i))) {
+                        return "";
+                    }
+                }
+                return null;
+            }
+        };
+
+        usernamebox.setFilters(new InputFilter[] { filter });
+        passwordbox.setFilters(new InputFilter[] { filter });
 
         // CHECK IF THERE IS A SHARED PREFERENCE USERNAME
         String username = SettingsAdmin.getInstance(getApplicationContext()).getUsername();
