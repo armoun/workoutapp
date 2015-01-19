@@ -121,6 +121,7 @@ public class PlannerFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 mCursor.moveToPosition(i);
                 int id = mCursor.getInt(mCursor.getColumnIndex(Contract.Workouts._ID));
+                Log.d("PlannerFragment",DatabaseUtils.dumpCursorToString(mCursor));
                 Log.d("PlannerFragment","Workout ID: " + id);
                 MainActivity.WORKOUT_ID = id;
 
@@ -166,7 +167,7 @@ public class PlannerFragment extends Fragment {
             String wo_id = ""+MainActivity.plannerSelectedWorkoutId;
             Cursor c = getActivity().getContentResolver().query(Contract.Workouts.CONTENT_URI, new String[]{Contract.Workouts._ID, Contract.Workouts.NAME, Contract.Workouts.ISPAID}, "(" + Contract.Workouts._ID + "=?)", new String[]{wo_id}, null);
             c.moveToFirst();
-                        //Toast.makeText(getActivity(),"Plan this workout: " + c.getString(c.getColumnIndex(Contract.Workouts.NAME)) + " for date: " + MainActivity.plannerSelectedDate, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(),"Plan this workout: " + c.getString(c.getColumnIndex(Contract.Workouts.NAME)) + " for date: " + MainActivity.plannerSelectedDate, Toast.LENGTH_SHORT).show();
 
             ContentValues cv = new ContentValues();
             cv.put(Contract.Planners.WORKOUT_ID, wo_id);
@@ -202,7 +203,7 @@ public class PlannerFragment extends Fragment {
     private void getworkouts(){
 
         SQLiteDatabase db = DatabaseHelper.getInstance(getActivity().getApplicationContext()).getReadableDatabase();
-        mCursor = db.rawQuery(  "SELECT "        + Contract.Workouts.CONTENT_DIRECTORY + "." + Contract.Workouts._ID + ", " + Contract.Workouts.CONTENT_DIRECTORY + "." + Contract.Workouts.NAME + ", " + Contract.Planners.CONTENT_DIRECTORY + "." + Contract.Planners._ID+
+        mCursor = db.rawQuery(  "SELECT "        + Contract.Workouts.CONTENT_DIRECTORY + "." + Contract.Workouts._ID + ", " + Contract.Workouts.CONTENT_DIRECTORY + "." + Contract.Workouts.NAME +
                                 " FROM "         + Contract.Workouts.CONTENT_DIRECTORY +
                                 " INNER JOIN "   + Contract.Planners.CONTENT_DIRECTORY +
                                 " ON "           + Contract.Workouts.CONTENT_DIRECTORY + "." + Contract.Workouts._ID + " = " + Contract.Planners.CONTENT_DIRECTORY + "." + Contract.Planners.WORKOUT_ID +

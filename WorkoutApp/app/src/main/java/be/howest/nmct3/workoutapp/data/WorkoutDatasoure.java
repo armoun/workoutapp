@@ -3,6 +3,7 @@ package be.howest.nmct3.workoutapp.data;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.net.Uri;
 import android.util.Log;
 
@@ -103,7 +104,22 @@ public class WorkoutDatasoure {
 
     public String getOwnerOfWorkout(Context context, int id){
         String wo_id = ""+id;
-        Cursor c = context.getContentResolver().query(Contract.Workouts.CONTENT_URI,new String[]{Contract.Workouts.USERNAME},Contract.Workouts._ID + "=?", new String[]{wo_id}, null);
+        Cursor c = context.getContentResolver().query(
+                Contract.Workouts.CONTENT_URI,
+                new String[]{Contract.Workouts.USERNAME},
+                Contract.Workouts._ID + "=?",
+                new String[]{wo_id},
+                null);
+
+        /*Cursor c = context.getContentResolver().query(
+                Contract.Workouts.CONTENT_URI,
+                new String[]{Contract.Workouts._ID, Contract.Workouts.NAME, Contract.Workouts.USERNAME},
+                null,
+                null,
+                null);*/
+
+        Log.d("getOwnerOfWorkout", DatabaseUtils.dumpCursorToString(c));
+
         c.moveToFirst();
         String user = c.getString(c.getColumnIndex(Contract.Workouts.USERNAME));
         return user;
