@@ -8,6 +8,8 @@ import android.util.Log;
 
 import java.util.List;
 
+import be.howest.nmct3.workoutapp.MainActivity;
+
 /**
  * Created by nielslammens on 27/10/14.
  */
@@ -61,7 +63,7 @@ public class WorkoutDatasoure {
         ContentValues c = new ContentValues();
         c.put(Contract.Workouts.DELETE, 1);
         context.getContentResolver().update(Contract.Workouts.CONTENT_URI, c, Contract.Workouts._ID + " =?", new String[]{wo_id});
-        Log.d("WorkoutDatasource","delete on 1 for workout id " + id);
+        MainActivity.syncWorkoutsUp();
     }
 
     public void deleteWorkoutPerma(Context context, int id){
@@ -78,10 +80,9 @@ public class WorkoutDatasoure {
         context.getContentResolver().update(Contract.WorkoutExercises.CONTENT_URI, c, Contract.WorkoutExercises.WORKOUT_ID + " =? AND " + Contract.WorkoutExercises.EXERCISE_ID + " =?", new String[]{we_id});
     }
 
-    public void deleteExerciseForWorkoutPerma(Context context, int exerciseId, int workoutId){
-        String ex_id = ""+ exerciseId;
-        String wo_id = ""+ workoutId;
-        context.getContentResolver().delete(Contract.WorkoutExercises.CONTENT_URI, Contract.WorkoutExercises.WORKOUT_ID + " =? AND " + Contract.WorkoutExercises.EXERCISE_ID + " =?", new String[]{wo_id, ex_id});
+    public void deleteExerciseForWorkoutPerma(Context context, int id){
+        String w = ""+id;
+        context.getContentResolver().delete(Contract.WorkoutExercises.CONTENT_URI, Contract.WorkoutExercises._ID + " =?", new String[]{w});
     }
 
     public void updateWorkoutName(Context context, int id, String newName){
@@ -107,4 +108,13 @@ public class WorkoutDatasoure {
         String user = c.getString(c.getColumnIndex(Contract.Workouts.USERNAME));
         return user;
     }
+
+    public void deleteWorkoutFromPlanner(Context context, int id){
+        ContentValues c = new ContentValues();
+        c.put(Contract.Planners.DELETE, 1);
+        String p = ""+id;
+        context.getContentResolver().update(Contract.Planners.CONTENT_URI, c, Contract.Planners._ID + " =?", new String[]{p});
+        MainActivity.syncPlannerUp();
+    }
+
 }
