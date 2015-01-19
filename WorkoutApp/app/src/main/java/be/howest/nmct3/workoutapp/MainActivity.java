@@ -70,6 +70,7 @@ public class MainActivity extends FragmentActivity {
     public static WorkoutDatasoure workoutDatasource;
 
     public static boolean todaysWorkoutClicked = false;
+    public static int currentWorkoutPosition = -1;
 
     ActionBarDrawerToggle icon;
 
