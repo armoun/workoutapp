@@ -345,18 +345,18 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     }
 
     private void downloadExercises(ContentProviderClient contentProviderClient, SyncResult syncResult){
-        Log.d(TAG, "On perform sync is called");
-        Log.d(TAG, "Beginning network synchronization");
+        //Log.d(TAG, "On perform sync is called");
+        //Log.d(TAG, "Beginning network synchronization");
         try {
             final URL location = new URL(FEED_URL_EXERCISES);
             InputStream stream = null;
 
             try {
-                Log.d(TAG, "Streaming data from network: " + location);
+                //Log.d(TAG, "Streaming data from network: " + location);
 
 
                 try {
-                    Log.d(TAG,"Trying to SYNC Exercises");
+                    //Log.d(TAG,"Trying to SYNC Exercises");
 
                     URL url = new URL(FEED_URL_EXERCISES);
 
@@ -370,8 +370,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
                     connection.connect();
 
-                    Log.d("","_____________________________response code : "+ connection.getResponseCode());
-                    Log.d("","______________CONNECTION: ");// + getStringFromInputStream(connection.getInputStream()));
+                    //Log.d("","_____________________________response code : "+ connection.getResponseCode());
+                    //Log.d("","______________CONNECTION: ");// + getStringFromInputStream(connection.getInputStream()));
                     JsonReader reader = new JsonReader(new InputStreamReader(connection.getInputStream()));
                     //Log.d("","______________INPUTSTREAM: " + reader.nextName());
 
@@ -389,27 +389,26 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 }
             }
         } catch (MalformedURLException e) {
-            Log.d(TAG, "Feed URL is malformed", e);
+            //Log.d(TAG, "Feed URL is malformed", e);
             syncResult.stats.numParseExceptions++;
             return;
         } catch (IOException e) {
-            Log.d(TAG, "Error reading from network: " + e.toString());
+            //Log.d(TAG, "Error reading from network: " + e.toString());
             syncResult.stats.numIoExceptions++;
             return;
         }
-        Log.d(TAG, "Network synchronization complete");
+        //Log.d(TAG, "Network synchronization complete");
     }
 
     private void downloadWorkouts(ContentProviderClient contentProviderClient, SyncResult syncResult){
-        Log.d(TAG, "On perform sync is called");
-        Log.d(TAG, "Beginning network synchronization");
+        Log.d(TAG, "Beginning network synchronization for WORKOUTS");
         try {
             String username = SettingsAdmin.getInstance(getContext()).getUsername();
             final URL location = new URL(FEED_URL_WORKOUTS + username);
             InputStream stream = null;
 
             try {
-                Log.d(TAG, "Streaming data from network: " + location);
+                //Log.d(TAG, "Streaming data from network: " + location);
 
 
                 try {
@@ -428,7 +427,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     connection.connect();
 
                     Log.d("","_____________________________response code : "+ connection.getResponseCode());
-                    //Log.d("","_____________________________CONNECTION: " + getStringFromInputStream(connection.getInputStream()));
+
                     JsonReader reader = new JsonReader(new InputStreamReader(connection.getInputStream()));
 
                     parseWorkouts(reader, contentProviderClient);
@@ -521,14 +520,14 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         String image = "";
 
 
-        Log.d("", "______________DECLARED");
+        //Log.d("", "______________DECLARED");
 
 
         reader.beginObject();
         reader.nextName();
         reader.beginArray();
 
-        Log.d("","______________BEGIN ARRAY");
+        //Log.d("","______________BEGIN ARRAY");
 
         while (reader.hasNext()){
             ContentValues values = new ContentValues();
@@ -574,10 +573,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             if (cursor.getCount() > 0) {
                 values.remove(Contract.Exercises._ID);
                 contentProviderClient.update(uri, values, null, null);
-                Log.d("", "UPDATED " + id + ";" + name + ";" + musclegroup + ";" + target + ";" + description + ";" + image + "__________________________________________________");
+                //Log.d("", "UPDATED " + id + ";" + name + ";" + musclegroup + ";" + target + ";" + description + ";" + image + "__________________________________________________");
             } else {
                 contentProviderClient.insert(Contract.Exercises.CONTENT_URI, values);
-                Log.d("", "INSERTED " + id + ";" + name + ";" + musclegroup + ";" + target + ";" + description + ";" + image + "__________________________________________________");
+                //Log.d("", "INSERTED " + id + ";" + name + ";" + musclegroup + ";" + target + ";" + description + ";" + image + "__________________________________________________");
             }
 
 
@@ -610,7 +609,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
             reader.nextName();
             id = reader.nextInt();
-            values.put(Contract.Workouts._ID, id);
+            //values.put(Contract.Workouts._ID, id);
 
             reader.nextName();
             name = reader.nextString();
@@ -623,6 +622,31 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             reader.nextName();
             isPaid = reader.nextInt();
             values.put(Contract.Workouts.ISPAID, isPaid);
+
+            Cursor cursor = contentProviderClient.query(
+                    Contract.Workouts.CONTENT_URI,
+                    new String[]{Contract.Workouts._ID},
+                    Contract.Workouts.NAME + "=? AND " + Contract.Workouts.USERNAME + "=?",
+                    new String[]{name, owner},
+                    null);
+            //Log.d("SyncAdapter",DatabaseUtils.dumpCursorToString(cursor));
+            cursor.moveToFirst();
+            String workout_id_l = "";
+
+            if (cursor.getCount() > 0) {
+                //values.remove(Contract.Workouts._ID);
+                workout_id_l = cursor.getString(cursor.getColumnIndex(Contract.Workouts._ID));
+                contentProviderClient.update(Contract.Workouts.CONTENT_URI, values, Contract.Workouts._ID + "=?", new String[]{workout_id_l});
+                //Log.d("", "UPDATED " + id + ";" + name + ";" + isPaid);
+            } else {
+                Uri idUri = contentProviderClient.insert(Contract.Workouts.CONTENT_URI, values);
+                //Log.d("SyncAdapter Inserted",idUri.toString());
+                Cursor w = contentProviderClient.query(idUri,new String[]{Contract.Workouts._ID},null,null,null);
+                w.moveToFirst();
+                //Log.d("SyncAdapter Inserted",DatabaseUtils.dumpCursorToString(w));
+                workout_id_l = w.getString(w.getColumnIndex(Contract.Workouts._ID));
+                //Log.d("", "INSERTED " + id + ";" + name + ";" + isPaid);
+            }
 
             reader.nextName();      // exercises
 
@@ -640,15 +664,15 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
                 reader.nextName();
                 e_id = reader.nextInt();
-                valuesExercise.put(Contract.WorkoutExercises._ID, e_id);
+                //valuesExercise.put(Contract.WorkoutExercises._ID, e_id);
 
                 reader.nextName();
                 workout_id = reader.nextInt();
-                valuesExercise.put(Contract.WorkoutExercises.WORKOUT_ID, workout_id);
+                //valuesExercise.put(Contract.WorkoutExercises.WORKOUT_ID, workout_id);
 
                 reader.nextName();
                 exercsise_id = reader.nextInt();
-                valuesExercise.put(Contract.WorkoutExercises.EXERCISE_ID, exercsise_id);
+                //valuesExercise.put(Contract.WorkoutExercises.EXERCISE_ID, exercsise_id);
 
                 reader.nextName();
                 ex_name = reader.nextString();
@@ -659,43 +683,45 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
                 reader.endObject();
 
-                //Log.d("", "CONTENTVALUES FORMED " + e_id + ";" + workout_id + ";" + exercsise_id + ";" + reps);
+                Cursor c_e = contentProviderClient.query(
+                        Contract.Exercises.CONTENT_URI,
+                        new String[]{Contract.Exercises._ID},
+                        Contract.Exercises.EXERCISE_NAME + "=?",
+                        new String[]{ex_name},
+                        null);
+                c_e.moveToFirst();
+                String ex_id_l = c_e.getString(c_e.getColumnIndex(Contract.Exercises._ID));
 
-                Uri uriEx = Contract.WorkoutExercises.ITEM_CONTENT_URI.buildUpon().appendEncodedPath(valuesExercise.getAsString(Contract.WorkoutExercises._ID)).build();
-                Cursor cursor = contentProviderClient.query(
-                        uriEx,
-                        new String[]{Contract.WorkoutExercises._ID}, null, null, null);
+                Log.d("SyncAdapter Exercises",DatabaseUtils.dumpCursorToString(c_e));
 
-                if (cursor.getCount() > 0) {
-                    valuesExercise.remove(Contract.WorkoutExercises._ID);
-                    contentProviderClient.update(uriEx, valuesExercise, null, null);
-                    Log.d("", "UPDATED " + e_id + ";" + workout_id + ";" + exercsise_id + ";" + reps);
+                Cursor cursor_we = contentProviderClient.query(
+                        Contract.WorkoutExercises.CONTENT_URI,
+                        new String[]{Contract.WorkoutExercises._ID},
+                        Contract.WorkoutExercises.WORKOUT_ID + "=? AND " + Contract.WorkoutExercises.EXERCISE_ID + "=?",
+                        new String[]{workout_id_l, ex_id_l},
+                        null
+                );
+                cursor_we.moveToFirst();
+
+                Log.d("SyncAdapter WorkoutExercises",workout_id_l + " " + ex_id_l + " " + DatabaseUtils.dumpCursorToString(cursor_we));
+
+                valuesExercise.put(Contract.WorkoutExercises.WORKOUT_ID, workout_id_l);
+                valuesExercise.put(Contract.WorkoutExercises.EXERCISE_ID, ex_id_l);
+
+                if (cursor_we.getCount() > 0) {
+                    String workoutExerciseId = cursor_we.getString(cursor_we.getColumnIndex(Contract.WorkoutExercises._ID));
+                    contentProviderClient.update(Contract.WorkoutExercises.CONTENT_URI, valuesExercise, Contract.WorkoutExercises._ID + "=?", new String[]{workoutExerciseId});
+                    Log.d("SyncAdapter WorkoutExercises", "UPDATED ");
                 } else {
-                    Log.d("","TO INSERT: " + valuesExercise.get(Contract.WorkoutExercises.WORKOUT_ID));
-                    contentProviderClient.insert(Contract.WorkoutExercises.CONTENT_URI, valuesExercise);
-                    Log.d("", "INSERTED " + e_id + ";" + workout_id + ";" + exercsise_id + ";" + reps);
+                    //Log.d("","TO INSERT: " + valuesExercise.get(Contract.WorkoutExercises.WORKOUT_ID));
+                    Uri u = contentProviderClient.insert(Contract.WorkoutExercises.CONTENT_URI, valuesExercise);
+                    Log.d("SyncAdapter WorkoutExercises", "INSERTED ");
                 }
             }
 
             reader.endArray();
 
             reader.endObject();
-
-            Log.d("", "CONTENTVALUES FORMED wks " + id + ";" + name + ";" + isPaid);
-
-            Uri uriWorkout = Contract.Workouts.ITEM_CONTENT_URI.buildUpon().appendEncodedPath(values.getAsString(Contract.Workouts._ID)).build();
-            Cursor cursor = contentProviderClient.query(
-                    uriWorkout,
-                    new String[]{Contract.Workouts._ID}, null, null, null);
-
-            if (cursor.getCount() > 0) {
-                values.remove(Contract.Workouts._ID);
-                contentProviderClient.update(uriWorkout, values, null, null);
-                Log.d("", "UPDATED " + id + ";" + name + ";" + isPaid);
-            } else {
-                contentProviderClient.insert(Contract.Workouts.CONTENT_URI, values);
-                Log.d("", "INSERTED " + id + ";" + name + ";" + isPaid);
-            }
         }
 
         reader.endArray();
