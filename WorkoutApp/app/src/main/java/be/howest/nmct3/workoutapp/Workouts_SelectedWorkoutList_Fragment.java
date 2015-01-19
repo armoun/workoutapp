@@ -414,7 +414,7 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
     }
 
     private void reOpenFragment() {
-        //if(WorkoutsFragment.listView!=null) {
+        if(WorkoutsFragment.listView!=null) {
             Cursor filteredCursor = ((SimpleCursorAdapter)WorkoutsFragment.listView.getAdapter()).getCursor();
 
             Log.d("Current Workout Position: ", "------- "+MainActivity.currentWorkoutPosition);
@@ -441,7 +441,7 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
 
             // Commit the transaction
             transaction.commit();
-        //}
+        }
     }
 
     private Cursor getExercisesOfWorkoutByExerciseName(String searchTerm) {
