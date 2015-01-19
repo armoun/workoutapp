@@ -73,9 +73,6 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        //activity melden dat er een eigen menu moet worden geladen
-        setHasOptionsMenu(true);
-
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.workouts_workoutselected_list_fragment_layout, null);
 
         Toast.makeText(getActivity(), "Active fragment: " + this.getClass().getSimpleName(),Toast.LENGTH_SHORT).show();
@@ -84,6 +81,12 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
         if (args  != null && args.containsKey("selected_exercise")) {
             String selectedExercise = args.getString("selected_exercise");
             Toast.makeText(getActivity().getBaseContext(), "Selected exercise: " + selectedExercise, Toast.LENGTH_SHORT).show();
+        }
+
+        if(backPressedRepList) {
+            Toast.makeText(getActivity(), "RELOAD data",Toast.LENGTH_SHORT).show();
+            reOpenFragment();
+            backPressedRepList=false;
         }
 
         list = (ListView) root.findViewById(R.id.workoutselected_list);
@@ -175,7 +178,7 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
                 //Toast.makeText(getActivity().getBaseContext(), "ex_id " + exerciseId + " wo_id " + workoutId, Toast.LENGTH_SHORT).show();
 
                 //MainActivity.EXERCICE_ID = filteredCursor.getInt(mCursor.getColumnIndex(Contract.WorkoutExercises.EXERCISE_ID));
-                //MainActivity.WORKOUT_ID = filteredCursor.getInt(mCursor.getColumnIndex(Contract.WorkoutExercises.WORKOUT_ID));
+                //MainActivity.WORKOUT_ID = filteredCursor.getInt(filteredCursor.getColumnIndex(Contract.WorkoutExercises.WORKOUT_ID));
                 MainActivity.WORKOUT_EXERCICE_ID = filteredCursor.getInt(filteredCursor.getColumnIndex(Contract.WorkoutExercises._ID));
 
                 Fragment newFragment = Fragment.instantiate(getActivity().getApplicationContext(), "be.howest.nmct3.workoutapp.RepList");
@@ -206,21 +209,15 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
                 Cursor filteredCursor = ((SimpleCursorAdapter)list.getAdapter()).getCursor();
                 filteredCursor.moveToPosition(pos);
 
-                selectedExerciseId = mCursor.getInt(mCursor.getColumnIndex(Contract.WorkoutExercises.EXERCISE_ID));
-                selectedWorkoutId = mCursor.getInt(mCursor.getColumnIndex(Contract.WorkoutExercises.WORKOUT_ID));
-                workoutExercisesId = filteredCursor.getInt(mCursor.getColumnIndex(Contract.WorkoutExercises._ID));
+                selectedExerciseId = filteredCursor.getInt(filteredCursor.getColumnIndex(Contract.WorkoutExercises.EXERCISE_ID));
+                selectedWorkoutId = filteredCursor.getInt(filteredCursor.getColumnIndex(Contract.WorkoutExercises.WORKOUT_ID));
+                workoutExercisesId = filteredCursor.getInt(filteredCursor.getColumnIndex(Contract.WorkoutExercises._ID));
                 //String selectedFromList = listView.getItemAtPosition(pos).toString();
                 openDialogEditDelete(v);
 
                 return true;
             }
         });
-
-        if(backPressedRepList) {
-            Toast.makeText(getActivity(), "RELOAD data",Toast.LENGTH_SHORT).show();
-            reOpenFragment();
-            backPressedRepList=false;
-        }
 
         getActivity().getActionBar().setTitle("Choose an exercise");
 
@@ -387,10 +384,12 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
     }
 
     private void reOpenFragment() {
-
-        if(WorkoutsFragment.listView!=null) {
+        //if(WorkoutsFragment.listView!=null) {
             Cursor filteredCursor = ((SimpleCursorAdapter)WorkoutsFragment.listView.getAdapter()).getCursor();
-            filteredCursor.moveToPosition(WorkoutsFragment.currentWorkoutPosition);
+
+            Log.d("Current Workout Position: ", "------- "+MainActivity.currentWorkoutPosition);
+
+            filteredCursor.moveToPosition(MainActivity.currentWorkoutPosition);
 
             String workoutId = filteredCursor.getString(filteredCursor.getColumnIndex(Contract.WorkoutColumns._ID));
 
@@ -409,15 +408,13 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
             // Replace whatever is in the fragment_container view with this fragment,
             // and add the transaction to the back1 stack
             transaction.replace(R.id.main, newFragment);
-            transaction.addToBackStack(null);
 
             // Commit the transaction
             transaction.commit();
-        }
+        //}
     }
 
     private Cursor getExercisesOfWorkoutByExerciseName(String searchTerm) {
-
         DatabaseHelper helper = DatabaseHelper.getInstance(getActivity());
         SQLiteDatabase db = helper.getReadableDatabase();
 

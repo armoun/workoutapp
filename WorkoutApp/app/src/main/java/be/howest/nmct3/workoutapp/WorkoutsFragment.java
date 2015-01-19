@@ -11,8 +11,11 @@ import android.database.DatabaseUtils;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -49,13 +52,14 @@ import be.howest.nmct3.workoutapp.data.WorkoutsLoader;
  * A simple {@link android.support.v4.app.Fragment} subclass.
  *
  */
-public class WorkoutsFragment extends Fragment {
+public class WorkoutsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     //public final String[] Workouts = {"Workout 1", "Workout 2", "Workout 3"};
     private CursorAdapter myWorkoutCursorAdapter;
 
+    private Cursor mCursor;
+
     public static ListView listView;
-    public static int currentWorkoutPosition = -1;
 
     public WorkoutsFragment() {
         // Required empty public constructor
@@ -71,27 +75,18 @@ public class WorkoutsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-
-        //activity melden dat er een eigen menu moet worden geladen
-        setHasOptionsMenu(true);
-
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.workouts_fragment_layout, null);
+        restartLoader();
 
-        MainActivity.workoutDatasource = new WorkoutDatasoure();
+        listView = (ListView) root.findViewById(R.id.workout_list);
 
         String[] columns = new String[]{"name"};
         int[] viewIds = new int[]{R.id.workout_item_title};
 
         MainActivity.todaysWorkoutClicked = false;
+        //Log.d("WorkoutsFragment", DatabaseUtils.dumpCursorToString(mCursor));
 
-        // VERKEERDE WERKWIJZE !
-        WorkoutsLoader wl = new WorkoutsLoader(getActivity());
-        final Cursor cursor = wl.loadInBackground();
-
-        Log.d("WorkoutsFragment", DatabaseUtils.dumpCursorToString(cursor));
-
-        listView = (ListView) root.findViewById(R.id.workout_list);
-        myWorkoutCursorAdapter = new SimpleCursorAdapter(getActivity(), R.layout.workouts_list_workout_item_rowlayout, cursor, columns, viewIds, 0);
+        myWorkoutCursorAdapter = new SimpleCursorAdapter(getActivity(), R.layout.workouts_list_workout_item_rowlayout, null, columns, viewIds, 0);
         listView.setAdapter(myWorkoutCursorAdapter);
 
         //ENABLE SEARCH FILTERING
@@ -101,8 +96,8 @@ public class WorkoutsFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
-                currentWorkoutPosition = position;
-                openWorkoutExercises(position);
+                MainActivity.currentWorkoutPosition = position;
+                openWorkoutExercises();
             }
         });
 
@@ -291,9 +286,9 @@ public class WorkoutsFragment extends Fragment {
         return c;
     }
 
-    public void openWorkoutExercises(int position) {
+    public void openWorkoutExercises() {
         Cursor filteredCursor = ((SimpleCursorAdapter)listView.getAdapter()).getCursor();
-        filteredCursor.moveToPosition(position);
+        filteredCursor.moveToPosition(MainActivity.currentWorkoutPosition);
 
         String workoutId = filteredCursor.getString(filteredCursor.getColumnIndex(Contract.WorkoutColumns._ID));
 
@@ -314,6 +309,38 @@ public class WorkoutsFragment extends Fragment {
 
         // Commit the transaction
         transaction.commit();
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        //return new ExercisesLoaderJson(getActivity(), mMuscleGroup, null);
+        return new WorkoutsLoader(getActivity());
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
+        myWorkoutCursorAdapter.swapCursor(cursor);
+        mCursor = cursor;
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> cursorLoader) {
+        myWorkoutCursorAdapter.swapCursor(null);
+    }
+
+    public void restartLoader(){
+        getLoaderManager().restartLoader(0, null, this);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getLoaderManager().initLoader(0, null, this);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 }
 
