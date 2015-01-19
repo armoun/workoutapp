@@ -78,11 +78,11 @@ public class Workout_Add_Exercise_List extends Fragment implements LoaderManager
             {
                 View row = super.getView(position, convertView, parent);
 
-                mCursor.moveToPosition(position);
+                Cursor filteredCursor = ((SimpleCursorAdapter)list.getAdapter()).getCursor();
+                filteredCursor.moveToPosition(position);
 
 
-
-                String type = mCursor.getString(mCursor.getColumnIndex(Contract.Exercises.MUSCLE_GROUP));
+                String type = filteredCursor.getString(filteredCursor.getColumnIndex(Contract.Exercises.MUSCLE_GROUP));
 
                 //Toast.makeText(getActivity().getBaseContext(), "type: " + type, Toast.LENGTH_SHORT).show();
 
@@ -193,22 +193,26 @@ public class Workout_Add_Exercise_List extends Fragment implements LoaderManager
 
                     @Override
                     public boolean onQueryTextChange(String s) {
-                        Log.d("", "--------- QUERY: " + s);
-                        mAdapter.setFilterQueryProvider(new FilterQueryProvider() {
-                            @Override
-                            public Cursor runQuery(CharSequence charSequence) {
-                                Log.d("",""+charSequence);
-                                mAdapter.setFilterQueryProvider(new FilterQueryProvider() {
-                                    @Override
-                                    public Cursor runQuery(CharSequence charSequence) {
-                                        return getExercisesByExerciseName(charSequence.toString());
-                                    }
-                                });
-                                return null;
-                            }
-                        });
-                        mAdapter.runQueryOnBackgroundThread(s);
-                        mAdapter.getFilter().filter(s);
+                        if(s.equals("")){
+                            restartLoader();
+                        }else{
+                            Log.d("", "--------- QUERY: " + s);
+                            mAdapter.setFilterQueryProvider(new FilterQueryProvider() {
+                                @Override
+                                public Cursor runQuery(CharSequence charSequence) {
+                                    Log.d("",""+charSequence);
+                                    mAdapter.setFilterQueryProvider(new FilterQueryProvider() {
+                                        @Override
+                                        public Cursor runQuery(CharSequence charSequence) {
+                                            return getExercisesByExerciseName(charSequence.toString());
+                                        }
+                                    });
+                                    return null;
+                                }
+                            });
+                            mAdapter.runQueryOnBackgroundThread(s);
+                            mAdapter.getFilter().filter(s);
+                        }
                         return false;
                     }
                 });
@@ -218,6 +222,9 @@ public class Workout_Add_Exercise_List extends Fragment implements LoaderManager
         return super.onOptionsItemSelected(item);
     }
 
+    public void restartLoader(){
+        getLoaderManager().restartLoader(0, null, this);
+    }
 
     private Cursor getExercisesByExerciseName(String searchTerm) {
         String[] projection = new String[]{
