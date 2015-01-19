@@ -112,6 +112,8 @@ public class MainActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(MainActivity.this));
+
         baseContext = getBaseContext();
 
         mAccount = CreateSyncAccount(this);

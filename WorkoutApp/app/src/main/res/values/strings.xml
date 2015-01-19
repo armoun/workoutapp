@@ -9,11 +9,13 @@
     <string name="action_add">Add</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_register">RegisterActivity</string>
-
     <string name="gender_prompt">gender</string>
+
     <string-array name="gender_array">
         <item>Male</item>
         <item>Female</item>
     </string-array>
+
+    <string name="title_activity_error">errorActivity</string>
 
 </resources>
