@@ -3,6 +3,7 @@ package be.howest.nmct3.workoutapp;
 
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -29,6 +30,7 @@ import android.widget.FilterQueryProvider;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jjoe64.graphview.series.DataPoint;
@@ -53,6 +55,8 @@ public class WorkoutsFragment extends Fragment {
 
     //public final String[] Workouts = {"Workout 1", "Workout 2", "Workout 3"};
     private CursorAdapter myWorkoutCursorAdapter;
+
+    String Owner;
 
     public static ListView listView;
     public static int currentWorkoutPosition = -1;
@@ -119,7 +123,38 @@ public class WorkoutsFragment extends Fragment {
                 String selectedFromList = ""+ filteredCursor.getString(filteredCursor.getColumnIndex(Contract.Workouts.NAME));
                 int selectedId = filteredCursor.getInt(filteredCursor.getColumnIndex(Contract.Workouts._ID));
                 //String selectedFromList = listView.getItemAtPosition(pos).toString();
-                openDialogEditDelete(v, selectedFromList,selectedId);
+
+
+                Owner = MainActivity.workoutDatasource.getOwnerOfWorkout(getActivity().getApplicationContext(), selectedId);
+
+                if(Owner.equals("ALL"))
+                {
+                    AlertDialog.Builder builder  = new AlertDialog.Builder(getActivity())
+                            .setTitle("Error")
+                            .setMessage("You can't edit or delete this workout.")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //dialog.cancel();
+                                }
+                            });
+
+                    //.show();
+
+                    //The tricky part
+                    Dialog d = builder.show();
+                    int dividerId = d.getContext().getResources().getIdentifier("android:id/titleDivider", null, null);
+                    View divider = d.findViewById(dividerId);
+                    divider.setBackgroundColor(getResources().getColor(R.color.headcolor));
+
+                    int textViewId = d.getContext().getResources().getIdentifier("android:id/alertTitle", null, null);
+                    TextView tv = (TextView) d.findViewById(textViewId);
+                    tv.setTextColor(getResources().getColor(R.color.headcolor));
+                }
+                else
+                {
+                    openDialogEditDelete(v, selectedFromList,selectedId);
+                }
+
 
                 return true;
             }
