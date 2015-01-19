@@ -262,6 +262,7 @@ public class PlannerFragment extends Fragment {
     {
         MainActivity.workoutDatasource.deleteWorkoutFromPlanner(getActivity().getApplicationContext(), plannerId);
         reOpenFragment();
+        MainActivity.WORKOUT_ID = 0;
     }
 
     private void reOpenFragment() {
