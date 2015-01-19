@@ -30,6 +30,7 @@ public class SpecificWorkoutLoader extends AsyncTaskLoader<Cursor> {
             //  no muscle group given, load all exercises
             mData = db.rawQuery("SELECT "   + Contract.Exercises.CONTENT_DIRECTORY + "."        + Contract.ExerciseColumns._ID              + ", "
                                             + Contract.Exercises.CONTENT_DIRECTORY + "."        + Contract.ExerciseColumns.EXERCISE_NAME    + ", "
+                                            + Contract.Exercises.CONTENT_DIRECTORY + "."        + Contract.ExerciseColumns.MUSCLE_GROUP    + ", "
                                             + Contract.WorkoutExercises.CONTENT_DIRECTORY + "." + Contract.WorkoutExercises._ID             + ", "
                                             + Contract.WorkoutExercises.EXERCISE_ID     + ", "
                                             + Contract.WorkoutExercises.WORKOUT_ID      + ", "

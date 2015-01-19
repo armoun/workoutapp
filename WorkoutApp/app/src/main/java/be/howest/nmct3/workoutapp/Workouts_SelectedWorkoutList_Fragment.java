@@ -3,6 +3,7 @@ package be.howest.nmct3.workoutapp;
 
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
@@ -26,9 +27,11 @@ import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.EditText;
 import android.widget.FilterQueryProvider;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import be.howest.nmct3.workoutapp.data.Contract;
@@ -71,9 +74,6 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        //activity melden dat er een eigen menu moet worden geladen
-        setHasOptionsMenu(true);
-
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.workouts_workoutselected_list_fragment_layout, null);
 
         Toast.makeText(getActivity(), "Active fragment: " + this.getClass().getSimpleName(),Toast.LENGTH_SHORT).show();
@@ -82,6 +82,12 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
         if (args  != null && args.containsKey("selected_exercise")) {
             String selectedExercise = args.getString("selected_exercise");
             Toast.makeText(getActivity().getBaseContext(), "Selected exercise: " + selectedExercise, Toast.LENGTH_SHORT).show();
+        }
+
+        if(backPressedRepList) {
+            Toast.makeText(getActivity(), "RELOAD data",Toast.LENGTH_SHORT).show();
+            reOpenFragment();
+            backPressedRepList=false;
         }
 
         list = (ListView) root.findViewById(R.id.workoutselected_list);
@@ -98,7 +104,62 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
 
         mAdapter = new SimpleCursorAdapter(getActivity(),
                 R.layout.workouts_workoutselected_list_item_layout, null,
-                columns, viewIds, 0);
+                columns, viewIds, 0)
+        {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent)
+            {
+                View row = super.getView(position, convertView, parent);
+                Cursor filteredCursor = ((SimpleCursorAdapter)list.getAdapter()).getCursor();
+                filteredCursor.moveToPosition(position);
+
+                filteredCursor.moveToPosition(position);
+
+
+
+                String type = filteredCursor.getString(filteredCursor.getColumnIndex(Contract.Exercises.MUSCLE_GROUP));
+
+                Toast.makeText(getActivity().getBaseContext(), "type: " + type, Toast.LENGTH_SHORT).show();
+
+                if(type.equals("chest"))
+                {
+                    ImageView imgExercise = (ImageView) row.findViewById(R.id.selectedworkout_image_exercises);
+                    imgExercise.setImageResource(R.drawable.chest_red);
+                }
+
+                if(type.equals("back"))
+                {
+                    ImageView imgExercise = (ImageView) row.findViewById(R.id.selectedworkout_image_exercises);
+                    imgExercise.setImageResource(R.drawable.back1_red);
+                }
+
+                if(type.equals("legs"))
+                {
+                    ImageView imgExercise = (ImageView) row.findViewById(R.id.selectedworkout_image_exercises);
+                    imgExercise.setImageResource(R.drawable.legs_red);
+                }
+
+                if(type.equals("arms"))
+                {
+                    ImageView imgExercise = (ImageView) row.findViewById(R.id.selectedworkout_image_exercises);
+                    imgExercise.setImageResource(R.drawable.arms_red);
+                }
+
+                if(type.equals("abs"))
+                {
+                    ImageView imgExercise = (ImageView) row.findViewById(R.id.selectedworkout_image_exercises);
+                    imgExercise.setImageResource(R.drawable.abs_red);
+                }
+
+                if(type.equals("shoulders"))
+                {
+                    ImageView imgExercise = (ImageView) row.findViewById(R.id.selectedworkout_image_exercises);
+                    imgExercise.setImageResource(R.drawable.shoulders_red);
+                }
+
+                return row;
+            }
+        };
 
         list.setAdapter(mAdapter);
 
@@ -120,7 +181,7 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
                 //Toast.makeText(getActivity().getBaseContext(), "ex_id " + exerciseId + " wo_id " + workoutId, Toast.LENGTH_SHORT).show();
 
                 //MainActivity.EXERCICE_ID = filteredCursor.getInt(mCursor.getColumnIndex(Contract.WorkoutExercises.EXERCISE_ID));
-                //MainActivity.WORKOUT_ID = filteredCursor.getInt(mCursor.getColumnIndex(Contract.WorkoutExercises.WORKOUT_ID));
+                //MainActivity.WORKOUT_ID = filteredCursor.getInt(filteredCursor.getColumnIndex(Contract.WorkoutExercises.WORKOUT_ID));
                 MainActivity.WORKOUT_EXERCICE_ID = filteredCursor.getInt(filteredCursor.getColumnIndex(Contract.WorkoutExercises._ID));
 
                 Fragment newFragment = Fragment.instantiate(getActivity().getApplicationContext(), "be.howest.nmct3.workoutapp.RepList");
@@ -151,21 +212,42 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
                 Cursor filteredCursor = ((SimpleCursorAdapter)list.getAdapter()).getCursor();
                 filteredCursor.moveToPosition(pos);
 
-                selectedExerciseId = mCursor.getInt(mCursor.getColumnIndex(Contract.WorkoutExercises.EXERCISE_ID));
-                selectedWorkoutId = mCursor.getInt(mCursor.getColumnIndex(Contract.WorkoutExercises.WORKOUT_ID));
-                workoutExercisesId = filteredCursor.getInt(mCursor.getColumnIndex(Contract.WorkoutExercises._ID));
-                //String selectedFromList = listView.getItemAtPosition(pos).toString();
-                openDialogEditDelete(v);
+                selectedExerciseId = filteredCursor.getInt(filteredCursor.getColumnIndex(Contract.WorkoutExercises.EXERCISE_ID));
+                selectedWorkoutId = filteredCursor.getInt(filteredCursor.getColumnIndex(Contract.WorkoutExercises.WORKOUT_ID));
+                workoutExercisesId = filteredCursor.getInt(filteredCursor.getColumnIndex(Contract.WorkoutExercises._ID));
+
+
+                if(Owner.equals("ALL"))
+                {
+                    AlertDialog.Builder builder  = new AlertDialog.Builder(getActivity())
+                            .setTitle("Error")
+                            .setMessage("You can't delete exercises from this workout.")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //dialog.cancel();
+                                }
+                            });
+
+                    //.show();
+
+                    //The tricky part
+                    Dialog d = builder.show();
+                    int dividerId = d.getContext().getResources().getIdentifier("android:id/titleDivider", null, null);
+                    View divider = d.findViewById(dividerId);
+                    divider.setBackgroundColor(getResources().getColor(R.color.headcolor));
+
+                    int textViewId = d.getContext().getResources().getIdentifier("android:id/alertTitle", null, null);
+                    TextView tv = (TextView) d.findViewById(textViewId);
+                    tv.setTextColor(getResources().getColor(R.color.headcolor));
+                }
+                else {
+                    //String selectedFromList = listView.getItemAtPosition(pos).toString();
+                    openDialogEditDelete(v);
+                }
 
                 return true;
             }
         });
-
-        if(backPressedRepList) {
-            Toast.makeText(getActivity(), "RELOAD data",Toast.LENGTH_SHORT).show();
-            reOpenFragment();
-            backPressedRepList=false;
-        }
 
         getActivity().getActionBar().setTitle("Choose an exercise");
 
@@ -332,34 +414,37 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
     }
 
     private void reOpenFragment() {
-        Cursor filteredCursor = ((SimpleCursorAdapter)WorkoutsFragment.listView.getAdapter()).getCursor();
-        filteredCursor.moveToPosition(WorkoutsFragment.currentWorkoutPosition);
+        //if(WorkoutsFragment.listView!=null) {
+            Cursor filteredCursor = ((SimpleCursorAdapter)WorkoutsFragment.listView.getAdapter()).getCursor();
 
-        String workoutId = filteredCursor.getString(filteredCursor.getColumnIndex(Contract.WorkoutColumns._ID));
+            Log.d("Current Workout Position: ", "------- "+MainActivity.currentWorkoutPosition);
 
-        Toast.makeText(getActivity().getBaseContext(), "" + workoutId, Toast.LENGTH_SHORT).show();
+            filteredCursor.moveToPosition(MainActivity.currentWorkoutPosition);
 
-        MainActivity.WORKOUT_ID = Integer.parseInt(workoutId);
+            String workoutId = filteredCursor.getString(filteredCursor.getColumnIndex(Contract.WorkoutColumns._ID));
 
-        Fragment newFragment = Fragment.instantiate(getActivity().getApplicationContext(), "be.howest.nmct3.workoutapp.Workouts_SelectedWorkoutList_Fragment");
-        // consider using Java coding conventions (upper first char class names!!!)
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            Toast.makeText(getActivity().getBaseContext(), "" + workoutId, Toast.LENGTH_SHORT).show();
 
-        MainActivity.activeFragment = newFragment;
-        Toast.makeText(getActivity(), "Active fragment: " + newFragment.getClass().getSimpleName(),Toast.LENGTH_SHORT).show();
-        Log.d("", "Active fragment: " + newFragment.getClass().getSimpleName());
+            MainActivity.WORKOUT_ID = Integer.parseInt(workoutId);
 
-        // Replace whatever is in the fragment_container view with this fragment,
-        // and add the transaction to the back1 stack
-        transaction.replace(R.id.main, newFragment);
-        transaction.addToBackStack(null);
+            Fragment newFragment = Fragment.instantiate(getActivity().getApplicationContext(), "be.howest.nmct3.workoutapp.Workouts_SelectedWorkoutList_Fragment");
+            // consider using Java coding conventions (upper first char class names!!!)
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
-        // Commit the transaction
-        transaction.commit();
+            MainActivity.activeFragment = newFragment;
+            Toast.makeText(getActivity(), "Active fragment: " + newFragment.getClass().getSimpleName(),Toast.LENGTH_SHORT).show();
+            Log.d("", "Active fragment: " + newFragment.getClass().getSimpleName());
+
+            // Replace whatever is in the fragment_container view with this fragment,
+            // and add the transaction to the back1 stack
+            transaction.replace(R.id.main, newFragment);
+
+            // Commit the transaction
+            transaction.commit();
+        //}
     }
 
     private Cursor getExercisesOfWorkoutByExerciseName(String searchTerm) {
-
         DatabaseHelper helper = DatabaseHelper.getInstance(getActivity());
         SQLiteDatabase db = helper.getReadableDatabase();
 
