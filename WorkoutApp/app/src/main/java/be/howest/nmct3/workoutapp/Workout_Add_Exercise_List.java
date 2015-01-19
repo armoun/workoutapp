@@ -84,6 +84,12 @@ public class Workout_Add_Exercise_List extends Fragment implements LoaderManager
 
                 String type = filteredCursor.getString(filteredCursor.getColumnIndex(Contract.Exercises.MUSCLE_GROUP));
 
+                String target = mCursor.getString(mCursor.getColumnIndex(Contract.Exercises.TARGET));
+
+                TextView targetTextView = (TextView) row.findViewById(R.id.exercises_target);
+
+                targetTextView.setText(target);
+
                 //Toast.makeText(getActivity().getBaseContext(), "type: " + type, Toast.LENGTH_SHORT).show();
 
                 if(type.equals("chest"))
