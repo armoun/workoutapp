@@ -109,12 +109,14 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
             public View getView(int position, View convertView, ViewGroup parent)
             {
                 View row = super.getView(position, convertView, parent);
+                Cursor filteredCursor = ((SimpleCursorAdapter)list.getAdapter()).getCursor();
+                filteredCursor.moveToPosition(position);
 
-                mCursor.moveToPosition(position);
+                filteredCursor.moveToPosition(position);
 
 
 
-                String type = mCursor.getString(mCursor.getColumnIndex(Contract.Exercises.MUSCLE_GROUP));
+                String type = filteredCursor.getString(filteredCursor.getColumnIndex(Contract.Exercises.MUSCLE_GROUP));
 
                 Toast.makeText(getActivity().getBaseContext(), "type: " + type, Toast.LENGTH_SHORT).show();
 
