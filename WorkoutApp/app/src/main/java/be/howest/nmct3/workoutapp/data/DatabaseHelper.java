@@ -107,6 +107,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
                 + Contract.PlannersColumns._ID                   + " INTEGER PRIMARY KEY, "
                 + Contract.PlannersColumns.WORKOUT_ID            + " INTEGER, "
                 + Contract.PlannersColumns.WO_DATE               + " TEXT, "
+                + Contract.PlannersColumns.USERNAME              + " TEXT, "
                 + Contract.PlannersColumns.DELETE                + " INTEGER "
                 + ");";
         db.execSQL(SQL);
