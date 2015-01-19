@@ -411,8 +411,13 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
 
     private void reOpenFragment() {
         if(WorkoutsFragment.listView!=null) {
-            Cursor filteredCursor = ((SimpleCursorAdapter)WorkoutsFragment.listView.getAdapter()).getCursor();
 
+            SimpleCursorAdapter filteredAdapter = (SimpleCursorAdapter)WorkoutsFragment.listView.getAdapter();
+            Cursor filteredCursor = filteredAdapter.getCursor();
+
+            Log.d("Current Workout Position: ", "------- "+MainActivity.currentWorkoutPosition);
+            Log.d("filteredAdapter: ", "------- "+filteredAdapter);
+            Log.d("filteredCursor: ", "------- "+filteredCursor);
             Log.d("Current Workout Position: ", "------- "+MainActivity.currentWorkoutPosition);
 
             filteredCursor.moveToPosition(MainActivity.currentWorkoutPosition);
@@ -434,6 +439,7 @@ public class Workouts_SelectedWorkoutList_Fragment extends Fragment implements L
             // Replace whatever is in the fragment_container view with this fragment,
             // and add the transaction to the back1 stack
             transaction.replace(R.id.main, newFragment);
+            transaction.disallowAddToBackStack();
 
             // Commit the transaction
             transaction.commit();

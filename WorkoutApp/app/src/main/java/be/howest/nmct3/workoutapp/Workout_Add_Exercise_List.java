@@ -84,7 +84,6 @@ public class Workout_Add_Exercise_List extends Fragment implements LoaderManager
 
                 String type = filteredCursor.getString(filteredCursor.getColumnIndex(Contract.Exercises.MUSCLE_GROUP));
 
-
                 //Toast.makeText(getActivity().getBaseContext(), "type: " + type, Toast.LENGTH_SHORT).show();
 
                 if(type.equals("chest"))
@@ -164,7 +163,6 @@ public class Workout_Add_Exercise_List extends Fragment implements LoaderManager
                 // Replace whatever is in the fragment_container view with this fragment,
                 // and add the transaction to the back1 stack
                 transaction.replace(R.id.main, newFragment);
-                //transaction.addToBackStack(null);
 
                 // Commit the transaction
                 transaction.commit();
