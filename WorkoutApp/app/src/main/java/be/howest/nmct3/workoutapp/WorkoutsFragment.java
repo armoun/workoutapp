@@ -30,6 +30,7 @@ import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.EditText;
 import android.widget.FilterQueryProvider;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
@@ -92,7 +93,30 @@ public class WorkoutsFragment extends Fragment implements LoaderManager.LoaderCa
         MainActivity.todaysWorkoutClicked = false;
         //Log.d("WorkoutsFragment", DatabaseUtils.dumpCursorToString(mCursor));
 
-        myWorkoutCursorAdapter = new SimpleCursorAdapter(getActivity(), R.layout.workouts_list_workout_item_rowlayout, null, columns, viewIds, 0);
+        myWorkoutCursorAdapter = new SimpleCursorAdapter(getActivity(), R.layout.workouts_list_workout_item_rowlayout, null, columns, viewIds, 0)
+        {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                final View row = super.getView(position, convertView, parent);
+
+
+
+                Cursor filteredCursor = ((SimpleCursorAdapter)listView.getAdapter()).getCursor();
+                filteredCursor.moveToPosition(position);
+                String selectedFromList = ""+ filteredCursor.getString(filteredCursor.getColumnIndex(Contract.Workouts.NAME));
+                int selectedId = filteredCursor.getInt(filteredCursor.getColumnIndex(Contract.Workouts._ID));
+                //String selectedFromList = listView.getItemAtPosition(pos).toString();
+
+                TextView OwnerTxtView = (TextView) row.findViewById(R.id.workout_owner);
+
+                Owner = MainActivity.workoutDatasource.getOwnerOfWorkout(getActivity().getApplicationContext(), selectedId);
+
+                OwnerTxtView.setText(Owner);
+
+                return row;
+            }
+        };
+
         listView.setAdapter(myWorkoutCursorAdapter);
 
         //ENABLE SEARCH FILTERING

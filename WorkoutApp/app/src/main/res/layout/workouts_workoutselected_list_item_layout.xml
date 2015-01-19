@@ -12,7 +12,7 @@
 
         <ImageView
             android:id="@+id/selectedworkout_image_exercises"
-            android:padding="5dp"
+            android:padding="8dp"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_width="60dp"
@@ -25,16 +25,18 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:layout_marginLeft="5dp">
         <TextView
             android:id="@+id/workoutselected_item_title"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Exercise Title"
             android:background="#FFF"
-            android:padding="10dp"
+            android:padding="5dp"
             android:fontFamily="sans-serif-condensed"
-            android:textSize="25dp">
+            android:textSize="25dp"
+            android:layout_marginTop="5dp">
         </TextView>
 
         <TextView
@@ -43,11 +45,12 @@
             android:layout_height="wrap_content"
             android:text="10, 10, 10"
             android:background="#FFF"
-            android:paddingLeft="10dp"
+            android:paddingLeft="5dp"
             android:paddingTop="0dp"
             android:paddingBottom="10dp"
             android:fontFamily="sans-serif-light"
-            android:textSize="15dp">
+            android:textSize="15dp"
+            android:layout_marginTop="-5dp">
         </TextView>
     </LinearLayout>
 
