@@ -340,8 +340,8 @@ public class WorkoutsFragment extends Fragment implements LoaderManager.LoaderCa
         Cursor c = getActivity().getContentResolver().query(
                 Contract.Workouts.CONTENT_URI,
                 projection,
-                Contract.Workouts.NAME + " like ? AND " + Contract.Workouts.DELETE + " = 0",
-                new String[]{"%" + searchTerm + "%"},
+                "(" + Contract.Workouts.NAME + " like ?) AND (" + Contract.Workouts.DELETE + " = ?) AND (" + Contract.Workouts.USERNAME + " =? OR " + Contract.Workouts.USERNAME +" = \"ALL\")",
+                new String[]{"%" + searchTerm + "%", "0", SettingsAdmin.getInstance(getActivity().getApplicationContext()).getUsername()},
                 Contract.WorkoutColumns.ISPAID + " ASC");
 
         return c;
