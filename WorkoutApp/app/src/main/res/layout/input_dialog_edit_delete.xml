@@ -30,6 +30,7 @@
         android:layout_marginBottom="5dp"
         android:background="@color/headcolor"
         android:textColor="#FFF"
+
         android:text="DELETE"
         android:id="@+id/delete_row_button_dialog_id"
         />

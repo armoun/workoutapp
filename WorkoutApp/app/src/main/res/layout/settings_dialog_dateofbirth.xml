@@ -10,12 +10,14 @@
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-light"
         android:text="Choose your date of birth"
         android:gravity="center" />
 
     <DatePicker
         android:id="@+id/datePicker_dateofbirth"
         android:layout_width="fill_parent"
+        android:fontFamily="sans-serif-condensed"
         android:layout_height="wrap_content"
         android:calendarViewShown="false">
 

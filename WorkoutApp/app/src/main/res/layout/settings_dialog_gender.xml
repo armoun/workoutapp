@@ -11,6 +11,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="Choose your gender"
+        android:fontFamily="sans-serif-light"
         android:gravity="center" />
 
     <Spinner

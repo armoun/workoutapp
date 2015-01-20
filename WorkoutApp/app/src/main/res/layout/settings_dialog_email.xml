@@ -10,12 +10,14 @@
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-light"
         android:text="Fill in your e-mail"
         android:gravity="center" />
 
     <EditText
         android:id="@+id/settings_input_email"
         android:layout_width="match_parent"
+        android:fontFamily="sans-serif-condensed"
         android:singleLine="true"
         android:layout_height="wrap_content"
         android:hint="e-mail"/>

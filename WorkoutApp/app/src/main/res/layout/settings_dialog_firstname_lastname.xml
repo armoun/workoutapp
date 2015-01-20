@@ -10,6 +10,7 @@
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-light"
         android:text="Fill in your firstname and lastname"
         android:gravity="center" />
 
@@ -17,6 +18,7 @@
         android:id="@+id/settings_input_firstname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-condensed"
         android:singleLine="true"
         android:hint="firstname"/>
 
@@ -24,6 +26,7 @@
         android:id="@+id/settings_input_lastname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-condensed"
         android:singleLine="true"
         android:hint="lastname"/>
 
