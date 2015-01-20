@@ -826,24 +826,29 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             String filename=exName;
             Log.i("Local filename:",""+filename);
             File file = new File(SDCardRoot,filename);
-            if(file.createNewFile())
-            {
-                file.createNewFile();
+            try {
+                if(file.createNewFile())
+                {
+                    file.createNewFile();
+                }
+                FileOutputStream fileOutput = new FileOutputStream(file);
+                InputStream inputStream = urlConnection.getInputStream();
+                int totalSize = urlConnection.getContentLength();
+                int downloadedSize = 0;
+                byte[] buffer = new byte[1024];
+                int bufferLength = 0;
+                while ( (bufferLength = inputStream.read(buffer)) > 0 )
+                {
+                    fileOutput.write(buffer, 0, bufferLength);
+                    downloadedSize += bufferLength;
+                    Log.i("Progress:","downloadedSize:"+downloadedSize+"totalSize:"+ totalSize) ;
+                }
+                fileOutput.close();
+                if(downloadedSize==totalSize) filepath=file.getPath();
+            }catch (Exception e){
+                //jammer
             }
-            FileOutputStream fileOutput = new FileOutputStream(file);
-            InputStream inputStream = urlConnection.getInputStream();
-            int totalSize = urlConnection.getContentLength();
-            int downloadedSize = 0;
-            byte[] buffer = new byte[1024];
-            int bufferLength = 0;
-            while ( (bufferLength = inputStream.read(buffer)) > 0 )
-            {
-                fileOutput.write(buffer, 0, bufferLength);
-                downloadedSize += bufferLength;
-                Log.i("Progress:","downloadedSize:"+downloadedSize+"totalSize:"+ totalSize) ;
-            }
-            fileOutput.close();
-            if(downloadedSize==totalSize) filepath=file.getPath();
+
         }
         catch (MalformedURLException e)
         {
