@@ -68,12 +68,6 @@
             android:screenOrientation="portrait">
         </activity>
 
-        <activity
-            android:name=".errorActivity"
-            android:label="@string/title_activity_error"
-            android:screenOrientation="portrait">
-        </activity>
-
     </application>
 
 </manifest>
