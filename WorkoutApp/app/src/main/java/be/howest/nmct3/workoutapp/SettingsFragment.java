@@ -53,7 +53,7 @@ public class SettingsFragment extends Fragment {
     public ImageView imageViewProfilePicture;
     public static ListView listview;
 
-    public static final String[] Settings = {"Name", "Gender", "Date of Birth", "E-mail", "Picture", "Support"};
+    public static final String[] Settings = {"Name", "Gender", "Date of Birth", "E-mail", "Picture", "Support", "Twitter"};
     //public static final String[] Settings = {"Name", "Gender", "Date of Birth", "E-mail", "Picture", "Units"};
 
     public SettingsFragment() {
@@ -190,6 +190,16 @@ public class SettingsFragment extends Fragment {
                     @Override
                     public void onClick(final View v) {
                         donatePaypal(v);
+                    }
+                });
+            }
+
+            if(position == 6)
+            {
+                row.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(final View v) {
+                        goToTwitterPage(v);
                     }
                 });
             }
@@ -413,6 +423,41 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 String url = "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QW3G6TGKNS9JJ";
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+            }
+        });
+
+        // setup a dialog window
+        alertDialogBuilder
+                .setCancelable(false)
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        // create an alert dialog
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
+    }
+
+    public void goToTwitterPage(View v) {
+        // get prompts.xml view
+        LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+        View promptView = layoutInflater.inflate(R.layout.settings_dialog_twitter, null);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                getActivity());
+        alertDialogBuilder.setView(promptView);
+
+        final Button donateButton = (Button) promptView.findViewById(R.id.twitter_button);
+
+        donateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String url = "https://twitter.com/GymGorillaz";
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
                 startActivity(i);

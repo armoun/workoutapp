@@ -96,6 +96,9 @@ public class SettingsAdmin {
             case 5:
                 settingValue = "Donate €5,00 via paypal";
                 break;
+            case 6:
+                settingValue = "Follow GymGorillaz";
+                break;
             default:
                 settingValue = "No value";
         }

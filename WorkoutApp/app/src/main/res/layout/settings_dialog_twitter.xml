@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/activity_vertical_margin"
+    android:gravity="center_horizontal"
+    android:orientation="horizontal" >
+
+    <ImageView
+        android:layout_width="90dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="48dp"
+        android:background="@color/headcolor"
+        android:src="@drawable/twitter"/>
+    <Button
+        android:id="@+id/twitter_button"
+        android:layout_width="fill_parent"
+        android:background="@color/headcolor"
+        android:textColor="#FFF"
+        android:paddingRight="30dp"
+        android:layout_height="wrap_content"
+        android:gravity="left|center"
+        android:fontFamily="sans-serif-condensed"
+        android:textSize="16dp"
+        android:text="Follow us on Twitter and get a premium workout for free!" />
+
+
+</LinearLayout>
