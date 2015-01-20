@@ -64,10 +64,6 @@
             android:label="@string/title_activity_register"
             android:noHistory="true" >
         </activity>
-        <activity
-            android:name=".errorActivity"
-            android:label="@string/title_activity_error" >
-        </activity>
     </application>
 
 </manifest>
