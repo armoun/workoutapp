@@ -266,7 +266,7 @@ public class Exercises_Musclegroup_Fragment extends Fragment implements LoaderMa
                 projection,
                 selection,
                 whereArgs,
-                Contract.ExerciseColumns._ID + " ASC");
+                Contract.ExerciseColumns.TARGET + " ASC");
 
         return c;
     }

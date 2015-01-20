@@ -36,7 +36,7 @@ public class ExercisesLoader extends AsyncTaskLoader<Cursor> {
                     null,
                     null,
                     null,
-                    Contract.ExerciseColumns._ID + " ASC"
+                    Contract.ExerciseColumns.TARGET + " ASC"
             );
         }else{
 
@@ -50,7 +50,7 @@ public class ExercisesLoader extends AsyncTaskLoader<Cursor> {
                     new String[]{mMuscleGroup.toLowerCase()},
                     null,
                     null,
-                    Contract.ExerciseColumns._ID + " ASC"
+                    Contract.ExerciseColumns.TARGET + " ASC"
             );
         }
 
