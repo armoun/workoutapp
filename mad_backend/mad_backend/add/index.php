@@ -8,7 +8,7 @@
 <br>
 <a href="addexercisetoworkout">Add exercise to workout</a> (http://www.viktordebock.be/mad_backend/add/addexercisetoworkout/?workoutid=1&exerciseid=1)
 <br>
-<a href="addexercisetoworkout">Add planner workout by username workoutid and date</a> (http://www.viktordebock.be/mad_backend/add/addplannerworkoutbyusernameandworkoutidanddate/?username=viktordebock&workoutid=4&date=12-12-2012)
+<a href="addexercisetoworkout">Add planner workout by username workoutname and date</a> (http://www.viktordebock.be/mad_backend/add/addplannerworkoutbyusernameandworkoutidanddate/?username=viktordebock&workoutname=x&date=12-12-2012)
 
 </body>
 </html>
