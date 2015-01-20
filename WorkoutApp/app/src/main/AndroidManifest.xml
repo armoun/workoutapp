@@ -67,14 +67,13 @@
             android:noHistory="true"
             android:screenOrientation="portrait">
         </activity>
-<<<<<<< HEAD
+
         <activity
             android:name=".errorActivity"
             android:label="@string/title_activity_error"
             android:screenOrientation="portrait">
         </activity>
-=======
->>>>>>> FETCH_HEAD
+
     </application>
 
 </manifest>
