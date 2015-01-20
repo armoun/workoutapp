@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="fill_parent"
+    android:background="#ffe9e9e9">
+
+    <GridView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/gridview_musclegroups"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:columnWidth="310dp"
+        android:numColumns="auto_fit"
+        android:stretchMode="columnWidth"
+        android:gravity="center"
+        android:background="#ffe9e9e9"
+        android:horizontalSpacing="1dp"
+        android:verticalSpacing="1dp"
+        />
+
+</RelativeLayout>
