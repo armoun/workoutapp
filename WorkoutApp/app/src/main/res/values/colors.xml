@@ -13,6 +13,8 @@
     <item name="darkred" type="color">#FFCC0000</item>
 
     <item name="headcolor" type="color">#f65d51</item>
+    <item name="headcolorSelect" type="color">#fff68276</item>
+    <item name="white" type="color">#fff</item>
 
     <integer-array name="androidcolors">
         <item>@color/blue</item>

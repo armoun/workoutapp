@@ -4,7 +4,7 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="0dp"
-    android:background="#FFF"
+    android:background="@drawable/selector"
     android:padding="1dp">
 
     <LinearLayout
@@ -33,7 +33,6 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Exercise Title"
-            android:background="#FFF"
             android:padding="5dp"
             android:fontFamily="sans-serif-condensed"
             android:textSize="25dp"
@@ -45,7 +44,6 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="10, 10, 10"
-            android:background="#FFF"
             android:paddingLeft="5dp"
             android:paddingTop="0dp"
             android:paddingBottom="10dp"

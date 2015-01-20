@@ -2,11 +2,11 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/selector">
 
     <TextView
         android:layout_width="fill_parent"
-        android:background="#FFF"
         android:layout_height="fill_parent"
         android:text="New Text"
         android:id="@+id/rep_textview"
