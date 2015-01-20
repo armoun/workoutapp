@@ -249,7 +249,18 @@ public class WorkoutsFragment extends Fragment implements LoaderManager.LoaderCa
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.workouts, menu);
+
+        String username = SettingsAdmin.getInstance(getActivity().getApplicationContext()).getUsername().toString();
+
+        if(username.equals(""))
+        {
+            inflater.inflate(R.menu.workouts_guest, menu);
+        }
+        else
+        {
+            inflater.inflate(R.menu.workouts, menu);
+        }
+
     }
 
     @Override
