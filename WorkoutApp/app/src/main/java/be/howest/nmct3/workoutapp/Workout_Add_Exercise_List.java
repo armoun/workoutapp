@@ -85,7 +85,7 @@ public class Workout_Add_Exercise_List extends Fragment implements LoaderManager
 
                 String type = filteredCursor.getString(filteredCursor.getColumnIndex(Contract.Exercises.MUSCLE_GROUP));
 
-                String target = mCursor.getString(mCursor.getColumnIndex(Contract.Exercises.TARGET));
+                String target = filteredCursor.getString(filteredCursor.getColumnIndex(Contract.Exercises.TARGET));
 
                 TextView targetTextView = (TextView) row.findViewById(R.id.exercises_target);
 
@@ -236,6 +236,7 @@ public class Workout_Add_Exercise_List extends Fragment implements LoaderManager
                 Contract.Exercises._ID,
                 Contract.Exercises.EXERCISE_NAME,
                 Contract.Exercises.DESCRIPTION,
+                Contract.Exercises.TARGET,
                 Contract.Exercises.MUSCLE_GROUP
         };
         Cursor c;
@@ -245,14 +246,14 @@ public class Workout_Add_Exercise_List extends Fragment implements LoaderManager
                     projection,
                     null,
                     null,
-                    Contract.ExerciseColumns.EXERCISE_NAME + " ASC");
+                    Contract.ExerciseColumns.TARGET + " ASC");
         }else {
             c = getActivity().getContentResolver().query(
                     Contract.Exercises.CONTENT_URI,
                     projection,
                     "(" + Contract.Exercises.EXERCISE_NAME + " like ?)",
                     new String[]{"%" + searchTerm + "%"},
-                    Contract.ExerciseColumns.EXERCISE_NAME + " ASC");
+                    Contract.ExerciseColumns.TARGET + " ASC");
         }
 
 
