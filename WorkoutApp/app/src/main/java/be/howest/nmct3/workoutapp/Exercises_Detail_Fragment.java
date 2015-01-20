@@ -80,7 +80,7 @@ public class Exercises_Detail_Fragment extends Fragment {
             exercise_image = (ImageView) root.findViewById(R.id.exercise_detail_photo);
             exercise_image.setImageURI(Uri.parse((c.getString(c.getColumnIndex(Contract.Exercises.IMAGE_NAME)))));
         }catch (Exception e){
-
+            exercise_image.setVisibility(View.GONE);
         }
 
 
