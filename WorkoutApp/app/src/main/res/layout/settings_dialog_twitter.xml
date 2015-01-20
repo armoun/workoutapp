@@ -26,7 +26,7 @@
         android:textColor="#FFF"
         android:paddingRight="30dp"
         android:layout_height="wrap_content"
-        android:gravity="left|center"
+        android:gravity="center"
         android:fontFamily="sans-serif-condensed"
         android:textSize="16dp"
         android:text="Follow us on Twitter!" />
